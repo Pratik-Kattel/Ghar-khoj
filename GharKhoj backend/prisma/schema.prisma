@@ -5,11 +5,41 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL") 
+}
+
+model users{
+  id String @id @default(uuid()) @map("user_id")
+  name String @db.VarChar(60)
+  email String @unique
+  passwordHash String @map("password_hash")
+  role UserRole
+  profilepic String @map("profile_pic")
+  createdAT DateTime @default(now()) @map("created_at")
+  updatedAT DateTime  @updatedAt @map("updated_at")
+
+  location user_locations?
+
+}
+
+model user_locations{
+  id String @id @map("user_id")
+  latutude Float @map("lon")
+  longitude Float @map("lat")
+  updatedAT DateTime @updatedAt @map("updated_at")
+
+user users @relation(fields: [id],references: [id])
+
+}
+
+
+enum UserRole {
+  TENANT
+  LANDLORD
 }
