@@ -1,45 +1,192 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") 
+  url      = env("DATABASE_URL")
 }
-
-model users{
-  id String @id @default(uuid()) @map("user_id")
-  name String @db.VarChar(60)
-  email String @unique
-  passwordHash String @map("password_hash")
-  role UserRole
-  profilepic String @map("profile_pic")
-  createdAT DateTime @default(now()) @map("created_at")
-  updatedAT DateTime  @updatedAt @map("updated_at")
-
-  location user_locations?
-
-}
-
-model user_locations{
-  id String @id @map("user_id")
-  latutude Float @map("lon")
-  longitude Float @map("lat")
-  updatedAT DateTime @updatedAt @map("updated_at")
-
-user users @relation(fields: [id],references: [id])
-
-}
-
 
 enum UserRole {
+  ADMIN
   TENANT
   LANDLORD
+}
+
+model Users {
+  id           String   @id @default(cuid()) @map("user_id")
+  name         String   @db.VarChar(100)
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         UserRole
+  profilePic   String?  @map("profile_pic")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  location          UserLocations?
+  devices           UserDevices[]
+  otps              OTPLogs[]
+  houses            Houses[]       @relation("UserHouses")
+  TenantchatRooms   ChatRooms[]    @relation("TenantChats")
+  LandLordchatRooms ChatRooms[]    @relation("LandlordChats")
+  reviews           Reviews[]
+  wishlist          Wishlist[]
+  bookings          Bookings[]
+  messages          ChatMessage[]  @relation("SentMessages")
+  payments          Payments[]
+
+  @@map("users")
+}
+
+model UserLocations {
+  userId    String   @id @map("user_id")
+  latitude  Float
+  longitude Float
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user Users @relation(fields: [userId], references: [id])
+
+  @@map("user_locations")
+}
+
+model UserDevices {
+  deviceId   String   @id @default(cuid()) @map("device_id")
+  userId     String   @map("user_id")
+  ipAddress  String   @map("ip_address")
+  deviceInfo String   @map("device_info")
+  lastLogin  DateTime @map("last_login") @default(now())
+  isVerified Boolean  @map("is_verified")
+
+  user Users @relation(fields: [userId], references: [id])
+
+  @@map("user_devices")
+}
+
+model OTPLogs {
+  otpId     String   @id @default(cuid()) @map("otp_id")
+  userId    String   @map("user_id")
+  otpCode   String   @map("otp_code")
+  purpose   String
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user Users @relation(fields: [userId], references: [id])
+
+  @@map("otp_logs")
+}
+
+model Houses {
+  houseId     String   @id @default(cuid()) @map("house_id")
+  landlordId  String   @map("landlord_id")
+  title       String   @map("title")
+  description String   @map("description")
+  price       Decimal  @db.Decimal(10, 2) @map("price")
+  latitude    Float    @map("latitude")
+  longitude   Float    @map("longitude")
+  address     String   @map("address")
+  isFeatured  Boolean  @map("is_featured")
+  isApproved  Boolean  @map("is_approved")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  reviews  Reviews[]
+  images   HouseImage[]
+  wishlist Wishlist[]
+  bookings Bookings[]
+
+  landlord Users @relation("UserHouses", fields: [landlordId], references: [id])
+
+  @@map("houses")
+}
+
+model HouseImage {
+  imageId  String @id @default(cuid()) @map("image_id")
+  houseId  String @map("house_id")
+  imageURL String @map("image_url")
+
+  house Houses @relation(fields: [houseId], references: [houseId])
+
+  @@map("house_images")
+}
+
+model Reviews {
+  reviewId  String   @id @default(cuid()) @map("review_id")
+  houseId   String   @map("house_id")
+  tenantId  String   @map("tenant_id")
+  rating    Int      @map("ratings")
+  comment   String   @map("comment")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  tenant Users  @relation(fields: [tenantId], references: [id])
+  house  Houses @relation(fields: [houseId], references: [houseId])
+
+  @@map("reviews")
+}
+
+model Wishlist {
+  wishlistId String @id @default(cuid()) @map("wishlist_id")
+  userId     String @map("user_id")
+  houseId    String @map("house_id")
+
+  user  Users  @relation(fields: [userId], references: [id])
+  house Houses @relation(fields: [houseId], references: [houseId])
+
+  @@map("wishlists")
+}
+
+model Bookings {
+  bookingId String   @id @default(cuid()) @map("booking_id")
+  houseId   String   @map("house_id")
+  tenantId  String   @map("tenant_id")
+  status    String   @map("status")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  house    Houses     @relation(fields: [houseId], references: [houseId])
+  tenant   Users      @relation(fields: [tenantId], references: [id])
+  payments Payments[]
+
+  @@map("bookings")
+}
+
+model Payments {
+  paymentId     String   @id @default(cuid()) @map("payment_id")
+  bookingId     String   @map("booking_id")
+  userId        String   @map("user_id")
+  amount        Decimal  @db.Decimal(10, 2)
+  paymentMethod String   @map("payment_method")
+  paymentStatus String   @map("payment_status")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  booking Bookings @relation(fields: [bookingId], references: [bookingId])
+  user    Users    @relation(fields: [userId], references: [id])
+
+  @@map("payments")
+}
+
+model ChatRooms {
+  chatId     String   @id @default(cuid()) @map("chat_id")
+  tenantId   String   @map("tenant_id")
+  landlordId String   @map("landlord_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  messages ChatMessage[]
+
+  tenant   Users @relation("TenantChats", fields: [tenantId], references: [id])
+  landlord Users @relation("LandlordChats", fields: [landlordId], references: [id])
+
+  @@map("chat_rooms")
+}
+
+model ChatMessage {
+  messageId String   @id @default(cuid()) @map("message_id")
+  chatId    String   @map("chat_id")
+  senderId  String   @map("sender_id")
+  message   String
+  sentAt    DateTime @default(now()) @map("sent_at")
+
+  chat   ChatRooms @relation(fields: [chatId], references: [chatId])
+  sender Users     @relation("SentMessages", fields: [senderId], references: [id])
+
+  @@map("chat_messages")
 }
