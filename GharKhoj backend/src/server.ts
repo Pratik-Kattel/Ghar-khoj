@@ -1,9 +1,12 @@
 import app from './app';
+import {env} from './config/env';
+import logger from './config/logger';
 
-const port = process.env.PORT || 3000;
+const port = env.PORT;
 
 app.listen(port,()=>{
-    console.log(`App Started on port ${port}`);
+    logger.info(`Server started on Port:${port}`);
+    
 })
 
 

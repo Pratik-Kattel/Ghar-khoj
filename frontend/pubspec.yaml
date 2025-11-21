@@ -61,6 +61,10 @@ flutter:
   uses-material-design: true
   assets:
      - Assets/Animations/Home.json
+     - Assets/Images/chat_system.png
+     - Assets/Images/find_home.png
+     - Assets/Images/Online-Booking-System.jpg
+     - Assets/Images/verified.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

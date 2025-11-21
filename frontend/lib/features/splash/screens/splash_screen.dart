@@ -9,7 +9,7 @@ class SplashScreen extends StatelessWidget{
 
   @override
   Widget build (BuildContext context){
-    String path=AssetsPath.splashAnimation;
+    String path=BoardingScreen.splashAnimation;
     return AnimatedSplashScreen(splash: 
         Column(
           children: [
