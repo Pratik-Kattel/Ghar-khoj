@@ -8,22 +8,49 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+/// ENUMS
+
 enum UserRole {
   ADMIN
   TENANT
   LANDLORD
 }
 
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  REFUNDED
+}
+
+enum LandlordRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+
+/// USERS
+
 model Users {
   id           String   @id @default(cuid()) @map("user_id")
   name         String   @db.VarChar(100)
   email        String   @unique
   passwordHash String   @map("password_hash")
-  role         UserRole
+  role         UserRole @default(TENANT) 
   profilePic   String?  @map("profile_pic")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
+  // Relationships
   location          UserLocations?
   devices           UserDevices[]
   otps              OTPLogs[]
@@ -35,9 +62,37 @@ model Users {
   bookings          Bookings[]
   messages          ChatMessage[]  @relation("SentMessages")
   payments          Payments[]
+  landlordRequest   LandlordRequests?
 
   @@map("users")
 }
+
+
+/// LANDLORD REQUESTS
+
+model LandlordRequests {
+  id        String                @id @default(cuid())
+  userId    String                @unique
+  status    LandlordRequestStatus @default(PENDING) // CHANGE: status for verification
+  createdAt DateTime              @default(now())
+  updatedAt DateTime              @updatedAt
+
+  user      Users                  @relation(fields: [userId], references: [id])
+  documents LandlordDocuments[]
+}
+
+
+/// LANDLORD DOCUMENTS 
+
+model LandlordDocuments {
+  id        String            @id @default(cuid())
+  requestId String
+  docName   String
+  docPath   String
+  request   LandlordRequests  @relation(fields: [requestId], references: [id])
+}
+
+/// USER LOCATIONS
 
 model UserLocations {
   userId    String   @id @map("user_id")
@@ -49,6 +104,9 @@ model UserLocations {
 
   @@map("user_locations")
 }
+
+
+/// USER DEVICES
 
 model UserDevices {
   deviceId   String   @id @default(cuid()) @map("device_id")
@@ -63,6 +121,9 @@ model UserDevices {
   @@map("user_devices")
 }
 
+
+/// OTP LOGS
+
 model OTPLogs {
   otpId     String   @id @default(cuid()) @map("otp_id")
   userId    String   @map("user_id")
@@ -76,6 +137,9 @@ model OTPLogs {
   @@map("otp_logs")
 }
 
+
+/// HOUSES
+
 model Houses {
   houseId     String   @id @default(cuid()) @map("house_id")
   landlordId  String   @map("landlord_id")
@@ -86,7 +150,7 @@ model Houses {
   longitude   Float    @map("longitude")
   address     String   @map("address")
   isFeatured  Boolean  @map("is_featured")
-  isApproved  Boolean  @map("is_approved")
+  isApproved  Boolean  @map("is_approved") //  admin must approve
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -100,6 +164,9 @@ model Houses {
   @@map("houses")
 }
 
+
+/// HOUSE IMAGES
+
 model HouseImage {
   imageId  String @id @default(cuid()) @map("image_id")
   houseId  String @map("house_id")
@@ -109,6 +176,9 @@ model HouseImage {
 
   @@map("house_images")
 }
+
+
+/// REVIEWS
 
 model Reviews {
   reviewId  String   @id @default(cuid()) @map("review_id")
@@ -124,6 +194,9 @@ model Reviews {
   @@map("reviews")
 }
 
+
+/// WISHLIST
+
 model Wishlist {
   wishlistId String @id @default(cuid()) @map("wishlist_id")
   userId     String @map("user_id")
@@ -135,34 +208,43 @@ model Wishlist {
   @@map("wishlists")
 }
 
+
+/// BOOKINGS
+
 model Bookings {
-  bookingId String   @id @default(cuid()) @map("booking_id")
-  houseId   String   @map("house_id")
-  tenantId  String   @map("tenant_id")
-  status    String   @map("status")
-  createdAt DateTime @default(now()) @map("created_at")
+  bookingId String        @id @default(cuid()) @map("booking_id")
+  houseId   String        @map("house_id")
+  tenantId  String        @map("tenant_id")
+  status    BookingStatus @default(PENDING) // enum
+  createdAt DateTime      @default(now()) @map("created_at")
 
-  house    Houses     @relation(fields: [houseId], references: [houseId])
-  tenant   Users      @relation(fields: [tenantId], references: [id])
+  house    Houses   @relation(fields: [houseId], references: [houseId])
+  tenant   Users    @relation(fields: [tenantId], references: [id])
   payments Payments[]
-
+  
   @@map("bookings")
 }
 
+
+/// PAYMENTS
+
 model Payments {
-  paymentId     String   @id @default(cuid()) @map("payment_id")
-  bookingId     String   @map("booking_id")
-  userId        String   @map("user_id")
-  amount        Decimal  @db.Decimal(10, 2)
-  paymentMethod String   @map("payment_method")
-  paymentStatus String   @map("payment_status")
-  createdAt     DateTime @default(now()) @map("created_at")
+  paymentId     String        @id @default(cuid()) @map("payment_id")
+  bookingId     String        @map("booking_id")
+  userId        String        @map("user_id")
+  amount        Decimal       @db.Decimal(10, 2)
+  paymentMethod String        @map("payment_method")
+  paymentStatus PaymentStatus @default(PENDING) // enum
+  createdAt     DateTime      @default(now()) @map("created_at")
 
   booking Bookings @relation(fields: [bookingId], references: [bookingId])
   user    Users    @relation(fields: [userId], references: [id])
 
   @@map("payments")
 }
+
+
+/// CHAT ROOMS
 
 model ChatRooms {
   chatId     String   @id @default(cuid()) @map("chat_id")
@@ -177,6 +259,9 @@ model ChatRooms {
 
   @@map("chat_rooms")
 }
+
+
+/// CHAT MESSAGES
 
 model ChatMessage {
   messageId String   @id @default(cuid()) @map("message_id")

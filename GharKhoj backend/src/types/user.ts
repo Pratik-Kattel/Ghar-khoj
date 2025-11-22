@@ -7,7 +7,13 @@ export interface userData{
 }
 
 export enum UserRoles{
-    LANDLORD='landlord',
-    TENANT='tenant',
-    ADMIN='admin'
+    LANDLORD='LANDLORD',
+    TENANT='TENANT',
+    ADMIN='ADMIN'
+}
+
+export interface UserRole{
+    id:String,
+    email:String,
+    role?:String
 }
