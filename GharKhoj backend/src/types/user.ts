@@ -12,7 +12,7 @@ export enum UserRoles{
     ADMIN='ADMIN'
 }
 
-export interface UserRole{
+export interface UserInfo{
     id:String,
     email:String,
     role?:String

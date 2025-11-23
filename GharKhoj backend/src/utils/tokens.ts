@@ -1,8 +1,8 @@
 import  jwt from "jsonwebtoken";
 import {env} from '../config/env';
-import { UserRole } from "../types/user";
+import { UserInfo } from "../types/user";
 
-export const generate_access_token=(user:UserRole)=>{
+export const generate_access_token=(user:UserInfo)=>{
 return jwt.sign({
     id:user.id,
     email:user.email,
