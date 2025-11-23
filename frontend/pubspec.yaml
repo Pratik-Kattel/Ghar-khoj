@@ -38,6 +38,7 @@ dependencies:
   animated_splash_screen: ^1.3.0
   lottie: ^3.3.2
   google_fonts: ^6.3.2
+  smooth_page_indicator: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -62,8 +63,8 @@ flutter:
   uses-material-design: true
   assets:
      - Assets/Animations/Home.json
-     - Assets/Images/chat_system.png
-     - Assets/Images/find_home.png
+     - Assets/Images/chatSystem.jpg
+     - Assets/Images/findHouse.jpg
      - Assets/Images/verified.jpg
      - Assets/Images/welcome_image.jpg
 

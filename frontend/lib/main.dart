@@ -1,7 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/features/Boarding/screens/boarding_screen.dart';
+import 'package:frontend/routes/app_routes.dart';
 import 'package:frontend/features/splash/screens/splash_screen.dart';
+import 'package:frontend/themes/app_themes.dart';
 
 void main(){
   runApp(myApp());
@@ -13,6 +13,8 @@ class myApp extends StatelessWidget{
   Widget build(BuildContext context){
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: AppThemes.purpleTheme,
+      routes: AppRoutes.routes,
       home: SplashScreen()
     );
   }

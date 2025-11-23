@@ -7,7 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 class AppColors{
   static const primary=Color(0xFF7F56D9);
   static const textPrimary=Colors.black;
-  static const subText=Colors.grey;
+  static const grey=Colors.grey;
+  static const redColor=Colors.red;
 }
 
 class FontSizes{
@@ -26,23 +27,25 @@ class AppThemes{
       textTheme: TextTheme(
           titleMedium: GoogleFonts.poppins(
             fontSize: FontSizes.medium,
-            color: Colors.white,
+            color: Colors.black,
           ),
           titleLarge: GoogleFonts.poppins(
             fontSize: FontSizes.large,
-            color: Colors.white,
+            color: Colors.black,
+            fontWeight: FontWeight.w500
+
           ),
           bodySmall: GoogleFonts.poppins(
             fontSize: FontSizes.standardUP,
-            color: Colors.white,
+            color: Colors.black,
           ),
           bodyMedium: GoogleFonts.poppins(
             fontSize: FontSizes.standard,
-            color: Colors.white,
+            color: AppColors.grey,
           ),
           bodyLarge: GoogleFonts.poppins(
             fontSize: FontSizes.standardUP,
-            color: Colors.white,
+            color: AppColors.grey,
           ),
       )
     );
