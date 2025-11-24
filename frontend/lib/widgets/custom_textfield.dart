@@ -1,0 +1,45 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:frontend/themes/app_themes.dart';
+
+class CustomTextField {
+  static Widget textField({required String hintText,
+    required Color borderColor,
+    required FocusNode focus,
+    required TextEditingController controller,
+    required Icon iconData,
+     String? errorMessage,
+    bool obSecureText=false
+  }) {
+    return Container(
+      margin: EdgeInsetsGeometry.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        border: BoxBorder.all(color: borderColor, width: 2),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        color: Colors.white,
+      ),
+      height: 65,
+      width: double.infinity,
+      child: TextFormField(
+        obscureText: obSecureText,
+        focusNode: focus,
+        controller: controller,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: hintText,
+          errorText: errorMessage,
+          contentPadding: EdgeInsetsGeometry.only(top: 38,),
+          hintStyle: TextStyle(
+            fontSize: FontSizes.standardUP,
+            color: AppColors.grey,
+          ),
+          prefixIcon: Padding(
+            padding: EdgeInsetsGeometry.only(right:2,top: 15),
+            child: iconData,
+          ),
+        ),
+      ),
+    );
+  }
+}
+

@@ -8,6 +8,6 @@ class AppRoutes{
 
 static Map<String,WidgetBuilder> routes={
   boarding:(context)=> const BoardingScreen(),
-  login:(context)=> const LoginScreen(),
+  login:(context)=>  LoginScreen(),
 };
 }
