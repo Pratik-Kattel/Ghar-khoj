@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../bloc/login_state.dart';
 import '../bloc/login_bloc.dart';
 import '../bloc/login_event.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_textfield.dart';
+import 'package:frontend/themes/app_themes.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,37 +16,48 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isPasswordVisible = false;
-  bool _isDialogOpen = false; // Track if loader is open
+  bool _isDialogOpen = false;
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final FocusNode emailFocus = FocusNode();
+  final FocusNode passwordFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const Text("Login now"),
+        elevation: 0,
+        toolbarHeight: 70,
+        backgroundColor: Colors.transparent,
+      ),
+      backgroundColor: const Color(0xFFF3E8FF),
       body: SafeArea(
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
-            // Show loader only if submitting and dialog not open
             if (state.isSubmitting && !_isDialogOpen) {
               _isDialogOpen = true;
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (_) => const Center(child: CircularProgressIndicator()),
+                builder: (_) => const Center(
+                  child: CircularProgressIndicator(),
+                ),
               );
             }
 
-            // Close loader only if dialog was open
             if (!state.isSubmitting && _isDialogOpen) {
               _isDialogOpen = false;
-              Navigator.pop(context); // close loader
+              Navigator.pop(context);
             }
 
-            // Show general error
             if (state.generalError != null) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.generalError!)));
             }
 
-            // Navigate on success
             if (state.isSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Login Successful")),
@@ -52,122 +66,128 @@ class _LoginScreenState extends State<LoginScreen> {
             }
           },
           builder: (context, state) {
-            return _buildUI(context, state);
+            return SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text(
+                      "Sign in with your email and password to continue",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Email field
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: CustomTextField.textField(
+                      containerMargin: 10,
+                      contentPadding: 20,
+                      iconPadding: 17,
+                      hintText: "Enter Email",
+                      borderColor: state.emailError != null
+                          ? Colors.red
+                          : Colors.grey.shade400,
+                      focus: emailFocus,
+                      controller: emailController,
+                      iconData: const Icon(Icons.email,),
+                      errorMessage: state.emailError,
+                    ),
+                  ),
+                  const SizedBox(height: 25),
+
+                  // Password field
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: CustomTextField.textField(
+                      containerMargin: 10,
+                      iconPadding: 10,
+                      contentPadding: 20,
+                      hintText: "Enter Password",
+                      borderColor: state.passwordError != null
+                          ? Colors.red
+                          : Colors.grey.shade400,
+                      focus: passwordFocus,
+                      controller: passwordController,
+                      iconData: IconButton(
+                          onPressed: (){
+                        setState(() {
+                          isPasswordVisible=!isPasswordVisible;
+                        });
+                      }, icon:isPasswordVisible?Icon(Icons.visibility,):Icon(Icons.visibility_off,)),
+                      errorMessage: state.passwordError,
+                      obSecureText: !isPasswordVisible,
+                    ),
+                  ),
+
+                  // Padding(
+                  //   padding: const EdgeInsets.only(right: 25, top: 5),
+                  //   child: Align(
+                  //     alignment: Alignment.centerRight,
+                  //     child: TextButton(
+                  //       onPressed: () {
+                  //         setState(() {
+                  //           isPasswordVisible = !isPasswordVisible;
+                  //         });
+                  //       },
+                  //       child: Text(
+                  //         isPasswordVisible ? "Hide" : "Show",
+                  //         style: TextStyle(color: AppColors.primary),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  const SizedBox(height: 65),
+
+                  // Login Button
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: CustomButton.button(
+                      texts: "Login",
+                      context: context,
+                      onPressed: () {
+                        context.read<LoginBloc>().add(
+                          EmailChanged(emailController.text),
+                        );
+                        context.read<LoginBloc>().add(
+                          PasswordChanged(passwordController.text),
+                        );
+                        context.read<LoginBloc>().add(LoginSubmitted());
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+
+                  // Signup Navigation
+
+                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("Don't have an account? "),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(context, "/register");
+                          },
+                          child: const Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              color: Colors.blueAccent,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                  const SizedBox(height: 20),
+                ],
+              ),
+            );
           },
         ),
-      ),
-    );
-  }
-
-  Widget _buildUI(BuildContext context, LoginState state) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Login",
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 30),
-          // Email TextField
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: state.emailError != null ? Colors.red : Colors.grey.shade400,
-              ),
-            ),
-            child: TextField(
-              onChanged: (value) {
-                context.read<LoginBloc>().add(EmailChanged(value));
-              },
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Enter Email",
-                errorText: state.emailError,
-              ),
-            ),
-          ),
-          const SizedBox(height: 15),
-          // Password TextField
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: state.passwordError != null
-                    ? Colors.red
-                    : Colors.grey.shade400,
-              ),
-            ),
-            child: TextField(
-              onChanged: (value) {
-                context.read<LoginBloc>().add(PasswordChanged(value));
-              },
-              obscureText: !isPasswordVisible,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: "Enter Password",
-                errorText: state.passwordError,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isPasswordVisible = !isPasswordVisible;
-                    });
-                  },
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 25),
-          // Login Button
-          SizedBox(
-            width: double.infinity,
-            height: 55,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-              ),
-              onPressed: () {
-                context.read<LoginBloc>().add(LoginSubmitted());
-              },
-              child: const Text(
-                "Login",
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          // Signup Navigation
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text("Don't have an account? "),
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, "/signup");
-                },
-                child: const Text(
-                  "Sign Up",
-                  style: TextStyle(
-                    color: Colors.blueAccent,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              )
-            ],
-          )
-        ],
       ),
     );
   }

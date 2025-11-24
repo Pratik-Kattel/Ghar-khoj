@@ -7,9 +7,12 @@ class CustomTextField {
     required Color borderColor,
     required FocusNode focus,
     required TextEditingController controller,
-    required Icon iconData,
+    required Widget iconData,
      String? errorMessage,
-    bool obSecureText=false
+    bool obSecureText=false,
+    required double containerMargin,
+    required double contentPadding,
+    required double iconPadding,
   }) {
     return Container(
       margin: EdgeInsetsGeometry.symmetric(horizontal: 10),
@@ -28,13 +31,13 @@ class CustomTextField {
           border: InputBorder.none,
           hintText: hintText,
           errorText: errorMessage,
-          contentPadding: EdgeInsetsGeometry.only(top: 38,),
+          contentPadding: EdgeInsetsGeometry.only(top: contentPadding,),
           hintStyle: TextStyle(
             fontSize: FontSizes.standardUP,
             color: AppColors.grey,
           ),
           prefixIcon: Padding(
-            padding: EdgeInsetsGeometry.only(right:2,top: 15),
+            padding: EdgeInsetsGeometry.only(right:2,top: iconPadding),
             child: iconData,
           ),
         ),

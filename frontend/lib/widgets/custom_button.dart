@@ -9,7 +9,7 @@ class CustomButton{
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
           ),
-          padding: EdgeInsetsGeometry.symmetric(vertical: 15,horizontal: 150),
+          padding: EdgeInsetsGeometry.symmetric(vertical: 15,horizontal: 160),
           backgroundColor: AppColors.primary
         ),
         onPressed: onPressed, child: Text(texts,style:TextStyle(
