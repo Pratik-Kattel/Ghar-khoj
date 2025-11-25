@@ -22,6 +22,13 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
+  bool _ischecked=false;
+
+  void initState() {
+    super.initState();
+    emailFocus.addListener(() => setState(() {}));
+    passwordFocus.addListener(() => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +49,8 @@ class _LoginScreenState extends State<LoginScreen> {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (_) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
+                builder: (_) =>
+                    const Center(child: CircularProgressIndicator()),
               );
             }
 
@@ -54,14 +60,15 @@ class _LoginScreenState extends State<LoginScreen> {
             }
 
             if (state.generalError != null) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(state.generalError!)));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.generalError!)));
             }
 
             if (state.isSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Login Successful")),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text("Login Successful")));
               Navigator.pushReplacementNamed(context, "/home");
             }
           },
@@ -88,12 +95,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       contentPadding: 20,
                       iconPadding: 17,
                       hintText: "Enter Email",
-                      borderColor: state.emailError != null
-                          ? Colors.red
-                          : Colors.grey.shade400,
+                      borderColor: emailFocus.hasFocus
+                          ? AppColors.primary
+                          : (state.emailError != null
+                                ? AppColors.redColor
+                                : AppColors.grey),
                       focus: emailFocus,
                       controller: emailController,
-                      iconData: const Icon(Icons.email,),
+                      iconData: const Icon(Icons.email),
                       errorMessage: state.emailError,
                     ),
                   ),
@@ -107,41 +116,44 @@ class _LoginScreenState extends State<LoginScreen> {
                       iconPadding: 10,
                       contentPadding: 20,
                       hintText: "Enter Password",
-                      borderColor: state.passwordError != null
-                          ? Colors.red
-                          : Colors.grey.shade400,
+                      borderColor: passwordFocus.hasFocus
+                          ? AppColors.primary
+                          : (state.passwordError != null
+                                ? AppColors.redColor
+                                : AppColors.grey),
                       focus: passwordFocus,
                       controller: passwordController,
                       iconData: IconButton(
-                          onPressed: (){
-                        setState(() {
-                          isPasswordVisible=!isPasswordVisible;
-                        });
-                      }, icon:isPasswordVisible?Icon(Icons.visibility,):Icon(Icons.visibility_off,)),
+                        onPressed: () {
+                          setState(() {
+                            isPasswordVisible = !isPasswordVisible;
+                          });
+                        },
+                        icon: isPasswordVisible
+                            ? Icon(Icons.visibility)
+                            : Icon(Icons.visibility_off),
+                      ),
                       errorMessage: state.passwordError,
                       obSecureText: !isPasswordVisible,
                     ),
                   ),
 
-                  // Padding(
-                  //   padding: const EdgeInsets.only(right: 25, top: 5),
-                  //   child: Align(
-                  //     alignment: Alignment.centerRight,
-                  //     child: TextButton(
-                  //       onPressed: () {
-                  //         setState(() {
-                  //           isPasswordVisible = !isPasswordVisible;
-                  //         });
-                  //       },
-                  //       child: Text(
-                  //         isPasswordVisible ? "Hide" : "Show",
-                  //         style: TextStyle(color: AppColors.primary),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   const SizedBox(height: 65),
-
+                  // Padding(
+                  //   padding: EdgeInsetsGeometry.only(left: 10),
+                  //   child:
+                  // Row(
+                  //   children: [
+                  //     CheckboxListTile(
+                  //       title: const Text("Remember me?"),
+                  //         value:_ischecked, onChanged: (value){
+                  //       setState(() {
+                  //         value=!_ischecked;
+                  //       });
+                  //     })
+                  //   ],
+                  // ),
+                  // ),
                   // Login Button
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -162,27 +174,32 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 30),
 
                   // Signup Navigation
-
-                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text("Don't have an account? "),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(context, "/register");
-                          },
-                          child: const Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              color: Colors.blueAccent,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account? "),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, "/register");
+                        },
+                        child: const Text(
+                          "Sign Up",
+                          style: TextStyle(
+                            color: Colors.blueAccent,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 320),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "© 2025 Ghar Khoj®. All rights reserved.",
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
-
-                  const SizedBox(height: 20),
+                  ),
                 ],
               ),
             );

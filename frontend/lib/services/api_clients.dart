@@ -22,7 +22,8 @@ class ApiClient {
     try {
       final response = await dio.post(endpoint, data: body);
       return response.data;
-    } on DioError catch (e) {
+    }
+    on DioError catch (e) {
       if (e.response != null) {
         return e.response?.data ?? {"message": "Unknown error from server"};
       } else {
@@ -33,7 +34,7 @@ class ApiClient {
     }
   }
 
-  void setToken(String token){
-    dio.options.headers["Authorization"]="Bearer $token";
+  void setToken(String token) {
+    dio.options.headers["Authorization"] = "Bearer $token";
   }
 }
