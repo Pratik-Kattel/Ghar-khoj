@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController passwordController = TextEditingController();
   final FocusNode emailFocus = FocusNode();
   final FocusNode passwordFocus = FocusNode();
-  bool _ischecked=false;
+  final formKey=GlobalKey<FormState>();
 
   void initState() {
     super.initState();
@@ -73,7 +73,8 @@ class _LoginScreenState extends State<LoginScreen> {
             }
           },
           builder: (context, state) {
-            return SingleChildScrollView(
+            return Form(
+              key: formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -103,7 +104,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       focus: emailFocus,
                       controller: emailController,
                       iconData: const Icon(Icons.email),
-                      errorMessage: state.emailError,
+                      errorMessage: state.emailError, Validator: (value) {
+                        if(value==null || value.isEmpty){
+                          return "Email should not be empty";
+                        }
+                        else if(!value.endsWith('@gmail.com')){
+                          return "Please enter a valid email address";
+                        }
+                    },
                     ),
                   ),
                   const SizedBox(height: 25),
@@ -135,6 +143,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       errorMessage: state.passwordError,
                       obSecureText: !isPasswordVisible,
+                      Validator: (value){
+                        if(value.isEmpty || value==null){
+                          return "Password cannot be empty";
+                        }
+                        else if(value.length <5){
+                          return "Password must be 5 digit long";
+                        }
+                        else if(!RegExp(r'[A-Z]').hasMatch(value)){
+                          return "Password must contain at least one capital letter";
+                        }
+                        else if(!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)){
+                          return "Password must contain at least one special character";
+                        }
+                      }
+
                     ),
                   ),
 
@@ -161,13 +184,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       texts: "Login",
                       context: context,
                       onPressed: () {
-                        context.read<LoginBloc>().add(
-                          EmailChanged(emailController.text),
-                        );
-                        context.read<LoginBloc>().add(
-                          PasswordChanged(passwordController.text),
-                        );
-                        context.read<LoginBloc>().add(LoginSubmitted());
+                        if(formKey.currentState!.validate()) {
+                          context.read<LoginBloc>().add(
+                            EmailChanged(emailController.text),
+                          );
+                          context.read<LoginBloc>().add(
+                            PasswordChanged(passwordController.text),
+                          );
+                          context.read<LoginBloc>().add(LoginSubmitted());
+                        }
                       },
                     ),
                   ),

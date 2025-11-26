@@ -13,6 +13,7 @@ class CustomTextField {
     required double containerMargin,
     required double contentPadding,
     required double iconPadding,
+    required FormFieldValidator Validator,
   }) {
     return Container(
       margin: EdgeInsetsGeometry.symmetric(horizontal: 10),
@@ -25,6 +26,7 @@ class CustomTextField {
       width: double.infinity,
       child: TextFormField(
         obscureText: obSecureText,
+        validator: Validator,
         focusNode: focus,
         controller: controller,
         decoration: InputDecoration(
