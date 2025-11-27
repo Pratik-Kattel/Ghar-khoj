@@ -3,7 +3,7 @@ import 'package:frontend/features/Boarding/screens/boarding_screen_builder.dart'
 import 'package:frontend/routes/app_routes.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:frontend/features/auth/screens/login_screen.dart';
+import '../../../features/auth/screens/login/login_screen.dart';
 
 class BoardingScreen extends StatefulWidget {
   const BoardingScreen({super.key});

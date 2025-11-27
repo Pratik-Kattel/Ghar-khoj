@@ -1,6 +1,6 @@
 import 'package:frontend/services/api_clients.dart';
 import 'package:frontend/constants/api_endpoints.dart';
-import 'package:frontend/features/auth/models/login_response_model.dart';
+import '../../models/login/login_response_model.dart';
 
 class AuthRepository{
   final ApiClient apiClient;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/login_state.dart';
-import '../bloc/login_bloc.dart';
-import '../bloc/login_event.dart';
-import '../../../widgets/custom_button.dart';
-import '../../../widgets/custom_textfield.dart';
+import '../../bloc/login/login_state.dart';
+import '../../bloc/login/login_bloc.dart';
+import '../../bloc/login/login_event.dart';
+import '../../../../widgets/custom_button.dart';
+import '../../../../widgets/custom_textfield.dart';
 import 'package:frontend/themes/app_themes.dart';
 
 class LoginScreen extends StatefulWidget {

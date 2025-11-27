@@ -5,8 +5,8 @@ import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/services/api_clients.dart';
 import 'package:frontend/constants/api_endpoints.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:frontend/features/auth/repository/auth_repository.dart';
-import 'package:frontend/features/auth/bloc/login_bloc.dart';
+import './features/auth/bloc/login/login_bloc.dart';
+import './features/auth/Repository/login/login_repo.dart';
 
 void main() {
   final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);

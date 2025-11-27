@@ -1,5 +1,5 @@
-import 'package:frontend/features/auth/models/user_data_model.dart';
-import 'package:frontend/features/auth/models/user_model.dart';
+import '../../models/login/user_data_model.dart';
+import '../../models/login/user_model.dart';
 
 class LoginResponse{
   String message;
