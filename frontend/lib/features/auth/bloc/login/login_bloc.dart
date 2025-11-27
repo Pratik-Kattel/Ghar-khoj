@@ -4,7 +4,7 @@ import '../login/login_state.dart';
 import '../../Repository/login/login_repo.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final AuthRepository repository;
+  final LoginRepository repository;
 
   LoginBloc({required this.repository}) : super(const LoginState()) {
     on<EmailChanged>((event, emit) {

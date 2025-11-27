@@ -14,12 +14,13 @@ class CustomTextField {
     required double contentPadding,
     required double iconPadding,
     required FormFieldValidator Validator,
+    Widget? suffixIcon
   }) {
     return Container(
       margin: EdgeInsetsGeometry.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         border: BoxBorder.all(color: borderColor, width: 2),
-        borderRadius: BorderRadius.all(Radius.circular(15)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
       ),
       height: 65,
@@ -38,6 +39,7 @@ class CustomTextField {
             fontSize: FontSizes.standardUP,
             color: AppColors.grey,
           ),
+          suffixIcon: suffixIcon,
           prefixIcon: Padding(
             padding: EdgeInsetsGeometry.only(right:2,top: iconPadding),
             child: iconData,

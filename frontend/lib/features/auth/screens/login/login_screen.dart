@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("Login now"),
+        title: const Text("Welcome Back 👋"),
         elevation: 0,
         toolbarHeight: 70,
         backgroundColor: Colors.transparent,
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 35),
 
                   // Email field
                   Padding(
@@ -103,7 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 : AppColors.grey),
                       focus: emailFocus,
                       controller: emailController,
-                      iconData: const Icon(Icons.email),
+                      iconData: const Icon(Icons.email_outlined,color:AppColors.primary,size: 25,),
                       errorMessage: state.emailError, Validator: (value) {
                         if(value==null || value.isEmpty){
                           return "Email should not be empty";
@@ -114,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 30),
 
                   // Password field
                   Padding(
@@ -131,7 +131,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 : AppColors.grey),
                       focus: passwordFocus,
                       controller: passwordController,
-                      iconData: IconButton(
+                      iconData: Icon(Icons.lock_outline,color: AppColors.primary,size: 25,),
+                      errorMessage: state.passwordError,
+                      suffixIcon: Padding(padding: EdgeInsetsGeometry.only(top: 5),child:
+                        IconButton(
+                          color: AppColors.primary,
                         onPressed: () {
                           setState(() {
                             isPasswordVisible = !isPasswordVisible;
@@ -141,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ? Icon(Icons.visibility)
                             : Icon(Icons.visibility_off),
                       ),
-                      errorMessage: state.passwordError,
+                      ),
                       obSecureText: !isPasswordVisible,
                       Validator: (value){
                         if(value.isEmpty || value==null){

@@ -10,29 +10,28 @@ import './features/auth/Repository/login/login_repo.dart';
 
 void main() {
   final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
-  final authRepo = AuthRepository(apiClient: apiClient);
+  final LoginRepo = LoginRepository(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (_) => LoginBloc(repository: authRepo),
-        )
+        BlocProvider(create: (_) => LoginBloc(repository: LoginRepo)),
       ],
       child: const myApp(),
     ),
   );
 }
 
-class myApp extends StatelessWidget{
+class myApp extends StatelessWidget {
   const myApp({super.key});
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.purpleTheme,
       routes: AppRoutes.routes,
-      home: SplashScreen()
+      home: SplashScreen(),
     );
   }
 }

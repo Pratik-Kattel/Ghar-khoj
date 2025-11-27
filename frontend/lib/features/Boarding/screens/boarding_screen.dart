@@ -98,7 +98,8 @@ class BoardingScreenState extends State<BoardingScreen> {
                       _onNext();
                     },
                     child: Text(
-                      "Next",
+                      currentIndex <pages.length-1? "Next"
+            : "Finish",
                       style: TextStyle(color: AppColors.primary, fontSize: 17),
                     ),
                   ),
