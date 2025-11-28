@@ -69,9 +69,11 @@ class BoardingScreenState extends State<BoardingScreen> {
                         style: Theme.of(context).textTheme.titleLarge,
                       ),
                       SizedBox(height: 60),
+                      Padding(padding: EdgeInsetsGeometry.only(left: 15),child:
                       Text(
                         items['description'],
                         style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                       ),
                       SizedBox(height: 90),
                     ],

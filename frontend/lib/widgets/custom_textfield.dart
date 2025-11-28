@@ -7,7 +7,7 @@ class CustomTextField {
     required Color borderColor,
     required FocusNode focus,
     required TextEditingController controller,
-    required Widget iconData,
+    required Widget prefixIcon,
      String? errorMessage,
     bool obSecureText=false,
     required double containerMargin,
@@ -42,7 +42,7 @@ class CustomTextField {
           suffixIcon: suffixIcon,
           prefixIcon: Padding(
             padding: EdgeInsetsGeometry.only(right:2,top: iconPadding),
-            child: iconData,
+            child: prefixIcon,
           ),
         ),
       ),

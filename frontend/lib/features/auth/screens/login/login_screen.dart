@@ -32,12 +32,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height=MediaQuery.of(context).size.height;
+    final width=MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Welcome Back 👋"),
         elevation: 0,
-        toolbarHeight: 70,
+        centerTitle: true,
+        toolbarHeight: 75,
         backgroundColor: Colors.transparent,
       ),
       backgroundColor: const Color(0xFFF3E8FF),
@@ -75,11 +78,14 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (context, state) {
             return Form(
               key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child:
+              SingleChildScrollView(
+                child:
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 10),
-                  const Padding(
+                 SizedBox(height: height*0.002),
+                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
                       "Sign in with your email and password to continue",
@@ -103,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 : AppColors.grey),
                       focus: emailFocus,
                       controller: emailController,
-                      iconData: const Icon(Icons.email_outlined,color:AppColors.primary,size: 25,),
+                      prefixIcon: const Icon(Icons.email_outlined,color:AppColors.primary,size: 25,),
                       errorMessage: state.emailError, Validator: (value) {
                         if(value==null || value.isEmpty){
                           return "Email should not be empty";
@@ -131,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 : AppColors.grey),
                       focus: passwordFocus,
                       controller: passwordController,
-                      iconData: Icon(Icons.lock_outline,color: AppColors.primary,size: 25,),
+                      prefixIcon: Icon(Icons.lock_outline,color: AppColors.primary,size: 25,),
                       errorMessage: state.passwordError,
                       suffixIcon: Padding(padding: EdgeInsetsGeometry.only(top: 5),child:
                         IconButton(
@@ -165,26 +171,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 65),
-                  // Padding(
-                  //   padding: EdgeInsetsGeometry.only(left: 10),
-                  //   child:
-                  // Row(
-                  //   children: [
-                  //     CheckboxListTile(
-                  //       title: const Text("Remember me?"),
-                  //         value:_ischecked, onChanged: (value){
-                  //       setState(() {
-                  //         value=!_ischecked;
-                  //       });
-                  //     })
-                  //   ],
-                  // ),
-                  // ),
-                  // Login Button
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                    child: CustomButton.button(
+                   SizedBox(height: height*0.05),
+
+                    CustomButton.button(
+                      padding: EdgeInsetsGeometry.symmetric(horizontal: width*0.4),
                       texts: "Login",
                       context: context,
                       onPressed: () {
@@ -199,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                     ),
-                  ),
+
                   const SizedBox(height: 30),
 
                   // Signup Navigation
@@ -221,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 320),
+                  SizedBox(height: height*0.3),
                   Align(
                     alignment: Alignment.center,
                     child: Text(
@@ -231,6 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
+              )
             );
           },
         ),
