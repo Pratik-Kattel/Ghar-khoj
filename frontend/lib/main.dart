@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/routes/app_routes.dart';
 import 'package:frontend/features/splash/screens/splash_screen.dart';
 import 'package:frontend/themes/app_themes.dart';
@@ -27,7 +28,9 @@ class myApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ScreenUtilInit(
+        designSize: Size(390, 844),
+      builder: (context,child)=>MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.purpleTheme,
       routes: AppRoutes.routes,
