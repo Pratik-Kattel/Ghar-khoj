@@ -6,6 +6,7 @@ import '../../bloc/login/login_event.dart';
 import '../../../../widgets/custom_button.dart';
 import '../../../../widgets/custom_textfield.dart';
 import 'package:frontend/themes/app_themes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -40,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         title: const Text("Welcome Back 👋"),
         elevation: 0,
         centerTitle: true,
-        toolbarHeight: 75,
+        toolbarHeight: 75.h,
         backgroundColor: Colors.transparent,
       ),
       backgroundColor: const Color(0xFFF3E8FF),
@@ -84,19 +85,19 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                 SizedBox(height: height*0.002),
+                 SizedBox(height: 0.002.sh),
                    Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: EdgeInsets.symmetric(horizontal: 15.w),
                     child: Text(
                       "Sign in with your email and password to continue",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 16.sp),
                     ),
                   ),
-                  const SizedBox(height: 35),
+                   SizedBox(height: 35.h),
 
                   // Email field
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomTextField.textField(
                       containerMargin: 10,
                       contentPadding: 20,
@@ -109,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 : AppColors.grey),
                       focus: emailFocus,
                       controller: emailController,
-                      prefixIcon: const Icon(Icons.email_outlined,color:AppColors.primary,size: 25,),
+                      prefixIcon:  Icon(Icons.email_outlined,color:AppColors.primary,size: 25.sp,),
                       errorMessage: state.emailError, Validator: (value) {
                         if(value==null || value.isEmpty){
                           return "Email should not be empty";
@@ -120,11 +121,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     ),
                   ),
-                  const SizedBox(height: 30),
+                 SizedBox(height: 30.h),
 
                   // Password field
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding:  EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomTextField.textField(
                       containerMargin: 10,
                       iconPadding: 10,
@@ -137,9 +138,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 : AppColors.grey),
                       focus: passwordFocus,
                       controller: passwordController,
-                      prefixIcon: Icon(Icons.lock_outline,color: AppColors.primary,size: 25,),
+                      prefixIcon: Icon(Icons.lock_outline,color: AppColors.primary,size: 25.sp,),
                       errorMessage: state.passwordError,
-                      suffixIcon: Padding(padding: EdgeInsetsGeometry.only(top: 5),child:
+                      suffixIcon: Padding(padding: EdgeInsetsGeometry.only(top: 5.h),child:
                         IconButton(
                           color: AppColors.primary,
                         onPressed: () {
@@ -171,10 +172,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
 
-                   SizedBox(height: height*0.05),
+                   SizedBox(height: 0.05.sh),
 
                     CustomButton.button(
-                      padding: EdgeInsetsGeometry.symmetric(horizontal: width*0.4),
+                      padding: EdgeInsetsGeometry.symmetric(horizontal: 0.4.sw),
                       texts: "Login",
                       context: context,
                       onPressed: () {
@@ -190,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
 
-                  const SizedBox(height: 30),
+                   SizedBox(height: 30.h),
 
                   // Signup Navigation
                   Row(
@@ -211,14 +212,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: height*0.3),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
+                  SizedBox(height: 0.35.sh),
+                     Text(
                       "© 2025 Ghar Khoj®. All rights reserved.",
-                      style: Theme.of(context).textTheme.bodyLarge,
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
-                  ),
                 ],
               ),
               )

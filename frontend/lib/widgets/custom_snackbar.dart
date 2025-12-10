@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/themes/app_themes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomSnackBar{
   static SnackBar buildSnackBar({
@@ -15,7 +16,7 @@ class CustomSnackBar{
       children: [
         Icon(icon,color: iconColor,),
         SizedBox(
-          width:5,
+          width:5.w,
         ),
         Expanded(child: Text(message,style: TextStyle(
           color: messageColor
@@ -26,7 +27,7 @@ class CustomSnackBar{
     behavior: SnackBarBehavior.fixed,
     shape: RoundedSuperellipseBorder(
       side: BorderSide(
-        width: 0.1
+        width: 0.1.w
       )
     ),
     duration: Duration(seconds: 4),

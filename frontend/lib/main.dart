@@ -30,11 +30,15 @@ class myApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
         designSize: Size(390, 844),
+      splitScreenMode: true,
+      minTextAdapt: true,
       builder: (context,child)=>MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.purpleTheme,
       routes: AppRoutes.routes,
       home: SplashScreen(),
+    )
     );
   }
+
 }

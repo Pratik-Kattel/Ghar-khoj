@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frontend/themes/app_themes.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextField {
   static Widget textField({required String hintText,
@@ -17,14 +18,14 @@ class CustomTextField {
     Widget? suffixIcon
   }) {
     return Container(
-      margin: EdgeInsetsGeometry.symmetric(horizontal: 10),
+      margin: EdgeInsetsGeometry.symmetric(horizontal: 10.w),
       decoration: BoxDecoration(
-        border: BoxBorder.all(color: borderColor, width: 2),
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        border: BoxBorder.all(color: borderColor, width: 2.w),
+        borderRadius: BorderRadius.all(Radius.circular(10.r)),
         color: Colors.white,
       ),
-      height: 65,
-      width: double.infinity,
+      height: 65.h,
+      width: double.infinity.w,
       child: TextFormField(
         obscureText: obSecureText,
         validator: Validator,
@@ -34,14 +35,14 @@ class CustomTextField {
           border: InputBorder.none,
           hintText: hintText,
           errorText: errorMessage,
-          contentPadding: EdgeInsetsGeometry.only(top: contentPadding,),
+          contentPadding: EdgeInsetsGeometry.only(top: contentPadding.h,),
           hintStyle: TextStyle(
-            fontSize: FontSizes.standardUP,
+            fontSize: FontSizes.standardUP.sp,
             color: AppColors.grey,
           ),
           suffixIcon: suffixIcon,
           prefixIcon: Padding(
-            padding: EdgeInsetsGeometry.only(right:2,top: iconPadding),
+            padding: EdgeInsetsGeometry.only(right:2.w,top: iconPadding.h),
             child: prefixIcon,
           ),
         ),

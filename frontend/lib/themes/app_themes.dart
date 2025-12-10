@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 ///This class represents the themes that will be used in the overall app
 
 class AppColors{
@@ -26,25 +26,25 @@ class AppThemes{
       scaffoldBackgroundColor: Colors.white,
       textTheme: TextTheme(
           titleMedium: GoogleFonts.poppins(
-            fontSize: FontSizes.medium,
+            fontSize: FontSizes.medium.sp,
             color: Colors.black,
           ),
           titleLarge: GoogleFonts.poppins(
-            fontSize: FontSizes.large,
+            fontSize: FontSizes.large.sp,
             color: Colors.black,
             fontWeight: FontWeight.w500
 
           ),
           bodySmall: GoogleFonts.poppins(
-            fontSize: FontSizes.standardUP,
+            fontSize: FontSizes.standardUP.sp,
             color: Colors.black,
           ),
           bodyMedium: GoogleFonts.poppins(
-            fontSize: FontSizes.standard,
+            fontSize: FontSizes.standard.sp,
             color: AppColors.grey,
           ),
           bodyLarge: GoogleFonts.poppins(
-            fontSize: FontSizes.standardUP,
+            fontSize: FontSizes.standardUP.sp,
             color: AppColors.grey,
           ),
       )
