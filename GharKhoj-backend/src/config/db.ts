@@ -6,6 +6,8 @@ const pool = new Pool({
     connectionString:env.DATABASE_URL
 })
 
+console.log("DATABASE_URL=",env.DATABASE_URL)
+
  export async function testConnection(){
     try{
         await pool.connect();
