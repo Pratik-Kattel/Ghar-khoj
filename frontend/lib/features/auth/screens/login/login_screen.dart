@@ -165,14 +165,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         Validator: (value) {
                           if (value.isEmpty || value == null) {
                             return "Password cannot be empty";
-                            // } else if (value.length < 5) {
-                            //   return "Password must be 5 digit long";
-                            // } else if (!RegExp(r'[A-Z]').hasMatch(value)) {
-                            //   return "Password must contain at least one capital letter";
-                            // } else if (!RegExp(
-                            //   r'[!@#$%^&*(),.?":{}|<>]',
-                            // ).hasMatch(value)) {
-                            //   return "Password must contain at least one special character";
                           }
                         },
                       ),
