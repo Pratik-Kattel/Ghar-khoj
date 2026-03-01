@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode passwordFocus = FocusNode();
   final formKey = GlobalKey<FormState>();
 
+  @override
   void initState() {
     super.initState();
     emailFocus.addListener(() => setState(() {}));

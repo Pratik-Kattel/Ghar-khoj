@@ -1,4 +1,4 @@
-import '../../models/login/user_data_model.dart';
+
 import '../../models/login/user_model.dart';
 
 class LoginResponse {

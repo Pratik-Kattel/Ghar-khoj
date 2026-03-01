@@ -16,7 +16,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     on<LoginSubmitted>((event, emit) async {
-      emit(state.copyWith(isSubmitting: true, emailError: null, passwordError: null, generalError: null));
+      emit(
+        state.copyWith(
+          isSubmitting: true,
+          emailError: null,
+          passwordError: null,
+          generalError: null,
+        ),
+      );
 
       final res = await repository.login(state.email, state.password);
 
