@@ -1,5 +1,4 @@
 import './user_model.dart';
-
 class SignupResponseModel {
   String message;
   UserModel? userModel;
@@ -9,7 +8,6 @@ class SignupResponseModel {
   factory SignupResponseModel.fromJson(Map<String, dynamic> json) {
     return SignupResponseModel(
       message: json['message'] ?? "",
-
       userModel: UserModel.fromJson(json['user'] ?? {}),
     );
   }

@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import './signup_event.dart';
 import './signup_state.dart';
 import '../../Repository/signup/signup_repo.dart';
+import '../../models/signup/Signup_Error_Model.dart';
 
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
   final SignupRepository signupRepository;
@@ -40,7 +41,12 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         ),
       );
       final res=await signupRepository.register(state.email, state.name, state.password);
-
+      // if(res.userModel==null){
+      //   emit(state.CopyWith(
+      //     isSubmitting: false,
+      //     generalError:
+      //   ));
+      // }
       });
     }
   }
