@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/services/Custom_Exception.dart';
 import './signup_event.dart';
 import './signup_state.dart';
 import '../../Repository/signup/signup_repo.dart';
@@ -29,7 +30,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       );
     });
 
-    on<SignupSubmitted>((event, emit) async{
+    on<SignupSubmitted>((event, emit) async {
       emit(
         state.CopyWith(
           isSubmitting: true,
@@ -40,14 +41,47 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
           generalError: null,
         ),
       );
-      final res=await signupRepository.register(state.email, state.name, state.password);
-      // if(res.userModel==null){
-      //   emit(state.CopyWith(
-      //     isSubmitting: false,
-      //     generalError:
-      //   ));
-      // }
-      });
-    }
-  }
+      try {
+        final res = await signupRepository.register(
+          state.email,
+          state.name,
+          state.password,
+        );
+        if (res.userModel == null) {
+          emit(state.CopyWith(isSubmitting: false, isSuccess: true));
+        }
+      } catch (e) {
+        if (e is SignupException) {
+          String? emailError = e.errorModel.errors
+              .firstWhere(
+                (err) => err.path.contains('email'),
+                orElse: () => FieldErrors(code: '', message: '', path: []),
+              )
+              .message;
+          String? passwordError = e.errorModel.errors
+              .firstWhere(
+                (e) => e.path.contains('password'),
+                orElse: () => FieldErrors(code: '', message: '', path: []),
+              )
+              .message;
 
+          String? generalError=e.errorModel.message;
+
+          emit(state.CopyWith(
+            isSubmitting: false,
+            isSuccess: false,
+            emailError: emailError.isNotEmpty? emailError:null,
+            passwordError: passwordError.isNotEmpty?passwordError:null,
+            generalError: generalError
+          ));
+        }
+        else{
+          emit(state.CopyWith(
+            isSubmitting: false,
+            generalError: "Internal error occurred, Please try again later"
+          ));
+        }
+      }
+    });
+  }
+}
