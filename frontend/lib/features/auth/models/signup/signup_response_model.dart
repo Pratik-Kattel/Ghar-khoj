@@ -2,7 +2,7 @@ import './user_model.dart';
 
 class SignupResponseModel {
   String message;
-  UserModel userModel;
+  UserModel? userModel;
 
   SignupResponseModel({required this.message, required this.userModel});
 
