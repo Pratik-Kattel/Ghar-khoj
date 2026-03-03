@@ -4,18 +4,18 @@ import 'package:frontend/themes/app_themes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomTextField {
-  static Widget textField({required String hintText,
+  static Widget textField({
+    required String hintText,
     required Color borderColor,
     required FocusNode focus,
     required TextEditingController controller,
     required Widget prefixIcon,
-     String? errorMessage,
-    bool obSecureText=false,
-    required double containerMargin,
+    String? errorMessage,
+    bool obSecureText = false,
     required double contentPadding,
     required double iconPadding,
     required FormFieldValidator Validator,
-    Widget? suffixIcon
+    Widget? suffixIcon,
   }) {
     return Container(
       margin: EdgeInsetsGeometry.symmetric(horizontal: 10.w),
@@ -35,14 +35,14 @@ class CustomTextField {
           border: InputBorder.none,
           hintText: hintText,
           errorText: errorMessage,
-          contentPadding: EdgeInsetsGeometry.only(top: contentPadding.h,),
+          contentPadding: EdgeInsetsGeometry.only(top: contentPadding.h),
           hintStyle: TextStyle(
             fontSize: FontSizes.standardUP.sp,
             color: AppColors.grey,
           ),
           suffixIcon: suffixIcon,
           prefixIcon: Padding(
-            padding: EdgeInsetsGeometry.only(right:2.w,top: iconPadding.h),
+            padding: EdgeInsetsGeometry.only(right: 2.w, top: iconPadding.h),
             child: prefixIcon,
           ),
         ),
@@ -50,4 +50,3 @@ class CustomTextField {
     );
   }
 }
-

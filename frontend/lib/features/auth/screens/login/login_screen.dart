@@ -34,8 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -45,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
         toolbarHeight: 75.h,
         backgroundColor: Colors.transparent,
       ),
-      backgroundColor: const Color(0xFFF3E8FF),
+      backgroundColor: AppColors.secondaryScaffold,
       body: SafeArea(
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
@@ -98,7 +96,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: CustomTextField.textField(
-                        containerMargin: 10,
                         contentPadding: 20,
                         iconPadding: 17,
                         hintText: "Enter Email",
@@ -130,7 +127,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: CustomTextField.textField(
-                        containerMargin: 10,
                         iconPadding: 10,
                         contentPadding: 20,
                         hintText: "Enter Password",

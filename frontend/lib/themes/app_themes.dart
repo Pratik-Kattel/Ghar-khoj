@@ -9,6 +9,7 @@ class AppColors{
   static const textPrimary=Colors.black;
   static const grey=Colors.grey;
   static const redColor=Colors.red;
+  static const secondaryScaffold= Color(0xFFF3E8FF);
 }
 
 class FontSizes{
