@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/features/auth/Repository/signup/signup_repo.dart';
+import 'package:frontend/features/auth/bloc/signup/signup_bloc.dart';
 import 'package:frontend/routes/app_routes.dart';
 import 'package:frontend/features/splash/screens/splash_screen.dart';
 import 'package:frontend/themes/app_themes.dart';
@@ -11,12 +13,15 @@ import './features/auth/Repository/login/login_repo.dart';
 
 void main() {
   final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
-  final LoginRepo = LoginRepository(apiClient: apiClient);
+  final loginRepo = LoginRepository(apiClient: apiClient);
+  final signUpRepo=SignupRepository(apiClient: apiClient);
+
 
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => LoginBloc(repository: LoginRepo)),
+        BlocProvider(create: (_) => LoginBloc(repository: loginRepo)),
+        BlocProvider(create: (_)=>SignupBloc(signupRepository: signUpRepo))
       ],
       child: const myApp(),
     ),

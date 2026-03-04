@@ -35,7 +35,7 @@ class CustomTextField {
           border: InputBorder.none,
           hintText: hintText,
           errorText: errorMessage,
-          contentPadding: EdgeInsetsGeometry.only(top: contentPadding.h),
+          contentPadding: EdgeInsetsGeometry.only(top: contentPadding.h,left: 20.w),
           hintStyle: TextStyle(
             fontSize: FontSizes.standardUP.sp,
             color: AppColors.grey,

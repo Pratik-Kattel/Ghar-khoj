@@ -22,15 +22,22 @@ class ApiClient {
     try {
       final response = await dio.post(endpoint, data: body);
       return response.data;
-    }
-    on DioError catch (e) {
+    } on DioException catch (e) {
+      // Backend error code like 400,404
       if (e.response != null) {
-        return e.response?.data ?? {"message": "Unknown error from server"};
-      } else {
-        return {"message": e.message};
+        throw e;
       }
-    } catch (e) {
-      return {"message": e.toString()};
+      // Error if not internet or server is unreachable
+      else {
+       throw DioException(requestOptions: e.requestOptions,
+         type: DioExceptionType.connectionError,
+         message: "Couldn't connect to the server please try again"
+       );
+      }
+    }
+    // Any other unexpected errors
+    catch (e) {
+     throw Exception(e.toString());
     }
   }
 

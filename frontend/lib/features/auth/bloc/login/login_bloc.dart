@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../login/login_event.dart';
 import '../login/login_state.dart';
@@ -25,13 +26,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         ),
       );
 
-      final res = await repository.login(state.email, state.password);
+      try {
+        final res = await repository.login(state.email, state.password);
 
-      if (res.user == null) {
-        emit(state.copyWith(isSubmitting: false, generalError: res.message));
-      } else {
-        emit(state.copyWith(isSubmitting: false, isSuccess: true));
-        emit(state.copyWith(isSuccess: false));
+        if (res.user == null) {
+          emit(state.copyWith(isSubmitting: false, generalError: res.message));
+        } else {
+          emit(state.copyWith(isSubmitting: false, isSuccess: true));
+          emit(state.copyWith(isSuccess: false));
+        }
+      }
+      on DioException catch(e){
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            generalError: e.message
+          )
+        );
+      }
+      catch(e){
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            generalError: "Something went wrong, please try again"
+          )
+        );
       }
     });
   }

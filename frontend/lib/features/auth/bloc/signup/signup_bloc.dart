@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/services/Custom_Exception.dart';
 import './signup_event.dart';
@@ -31,6 +32,16 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     });
 
     on<SignupSubmitted>((event, emit) async {
+      if (state.password != state.confirmPassword) {
+        emit(
+          state.CopyWith(
+            isSubmitting: false,
+            confirmError: "Password didn't match",
+          ),
+        );
+        return;
+      }
+
       emit(
         state.CopyWith(
           isSubmitting: true,
@@ -47,9 +58,13 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
           state.name,
           state.password,
         );
-        if (res.userModel == null) {
-          emit(state.CopyWith(isSubmitting: false, isSuccess: true));
+        if (kDebugMode) {
+          print(res);
         }
+        if (kDebugMode) {
+          print(res.userModel);
+        }
+          emit(state.CopyWith(isSubmitting: false, isSuccess: true));
       } catch (e) {
         if (e is SignupException) {
           String? emailError = e.errorModel.errors
@@ -65,21 +80,24 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               )
               .message;
 
-          String? generalError=e.errorModel.message;
+          String? generalError = e.errorModel.message;
 
-          emit(state.CopyWith(
-            isSubmitting: false,
-            isSuccess: false,
-            emailError: emailError.isNotEmpty? emailError:null,
-            passwordError: passwordError.isNotEmpty?passwordError:null,
-            generalError: generalError
-          ));
-        }
-        else{
-          emit(state.CopyWith(
-            isSubmitting: false,
-            generalError: "Internal error occurred, Please try again later"
-          ));
+          emit(
+            state.CopyWith(
+              isSubmitting: false,
+              isSuccess: false,
+              emailError: emailError.isNotEmpty ? emailError : null,
+              passwordError: passwordError.isNotEmpty ? passwordError : null,
+              generalError: generalError,
+            ),
+          );
+        } else {
+          emit(
+            state.CopyWith(
+              isSubmitting: false,
+              generalError: "Internal error occurred, Please try again later",
+            ),
+          );
         }
       }
     });
