@@ -25,7 +25,7 @@ class ApiClient {
     } on DioException catch (e) {
       // Backend error code like 400,404
       if (e.response != null) {
-        throw e;
+        rethrow;
       }
       // Error if not internet or server is unreachable
       else {

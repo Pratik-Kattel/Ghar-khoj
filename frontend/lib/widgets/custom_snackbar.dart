@@ -5,11 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class CustomSnackBar{
   static SnackBar buildSnackBar({
     IconData?icon,
-    required String message,
+    required String? message,
     required BuildContext context,
     required Color bgColor,
     Color? iconColor,
-    Color? messageColor
+    Color? messageColor,
+    double ? fontSize
 }){
   return SnackBar(
     content: Row(
@@ -18,8 +19,9 @@ class CustomSnackBar{
         SizedBox(
           width:5.w,
         ),
-        Expanded(child: Text(message,style: TextStyle(
-          color: messageColor
+        Expanded(child: Text(message!,style: TextStyle(
+          color: messageColor,
+          fontSize: fontSize
         ),))
       ],
     ),
@@ -27,7 +29,7 @@ class CustomSnackBar{
     behavior: SnackBarBehavior.fixed,
     shape: RoundedSuperellipseBorder(
       side: BorderSide(
-        width: 0.1.w
+        width: 0.005.w
       )
     ),
     duration: Duration(seconds: 4),

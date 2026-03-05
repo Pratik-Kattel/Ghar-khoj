@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/services/Custom_Exception.dart';
@@ -64,9 +65,11 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         if (kDebugMode) {
           print(res.userModel);
         }
-          emit(state.CopyWith(isSubmitting: false, isSuccess: true));
+        emit(state.CopyWith(isSubmitting: false, isSuccess: true));
       } catch (e) {
-        if (e is SignupException) {
+        if (e is DioException) {
+          emit(state.CopyWith(isSubmitting: false, generalError: e.message));
+        } else if (e is SignupException) {
           String? emailError = e.errorModel.errors
               .firstWhere(
                 (err) => err.path.contains('email'),
@@ -81,6 +84,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               .message;
 
           String? generalError = e.errorModel.message;
+          print("General error: $generalError");
 
           emit(
             state.CopyWith(

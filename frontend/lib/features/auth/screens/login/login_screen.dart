@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
 import '../../bloc/login/login_state.dart';
 import '../../bloc/login/login_bloc.dart';
 import '../../bloc/login/login_event.dart';
@@ -63,9 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
             }
 
             if (state.generalError != null) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(state.generalError!)));
+              CustomSnackBar.buildSnackBar(message: state.generalError, context: context, bgColor: Colors.white,messageColor: Colors.red);
             }
 
             if (state.isSuccess) {

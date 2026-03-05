@@ -48,13 +48,13 @@ class SignupState extends Equatable {
       email: email??this.email,
       password: password??this.password,
       confirmPassword: confirmPassword?? this.confirmPassword,
-      nameError: nameError,
-      passwordError: passwordError,
-      emailError: emailError,
-      confirmError: confirmError,
+      nameError: nameError ,
+      passwordError: passwordError ,
+      emailError: emailError ,
+      confirmError: confirmError ,
       isSubmitting: isSubmitting??this.isSubmitting,
       isSuccess: isSuccess??this.isSuccess,
-      generalError: generalError??this.generalError
+      generalError: generalError
     );
   }
 

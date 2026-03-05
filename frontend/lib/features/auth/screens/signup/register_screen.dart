@@ -65,6 +65,36 @@ class RegisterScreenState extends State<RegisterScreen> {
       body: SafeArea(
         child: BlocConsumer<SignupBloc, SignupState>(
           listener: (context, state) {
+            if (!state.isSubmitting && _isDialougeOpen) {
+              _isDialougeOpen = false;
+              Navigator.pop(context);
+            }
+            print("From UI:${state.generalError}");
+
+            if (state.generalError != null && state.generalError!.isNotEmpty) {
+              ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar.buildSnackBar(
+                message: state.generalError!,
+                context: context,
+                bgColor: Colors.white,
+                messageColor: AppColors.redColor,
+                fontSize: FontSizes.medium
+              )
+              );
+            }
+            if (state.isSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar.buildSnackBar(
+                message: "Registration successful, Please login to continue",
+                context: context,
+                bgColor: Colors.white,
+                messageColor: Colors.green,
+                icon: Icons.verified_user_outlined,
+                iconColor: Colors.green,
+              )
+              );
+              Navigator.pushNamed(context, '/login');
+            }
             if (state.isSubmitting && !_isDialougeOpen) {
               _isDialougeOpen = true;
               showDialog(
@@ -73,32 +103,6 @@ class RegisterScreenState extends State<RegisterScreen> {
                 builder: (_) =>
                     const Center(child: CircularProgressIndicator()),
               );
-            }
-
-            if (!state.isSubmitting && _isDialougeOpen) {
-              _isDialougeOpen = false;
-              Navigator.pop(context);
-            }
-
-            if (state.generalError != null) {
-              CustomSnackBar.buildSnackBar(
-                message: state.generalError!,
-                context: context,
-                bgColor: Colors.white,
-                messageColor: AppColors.redColor,
-              );
-            }
-
-            if (state.isSuccess) {
-              CustomSnackBar.buildSnackBar(
-                message: "Registration successful, Please login to continue",
-                context: context,
-                bgColor: Colors.white,
-                messageColor: Colors.green,
-                icon: Icons.verified_user_outlined,
-                iconColor: Colors.green,
-              );
-              Navigator.pushNamed(context, '/login');
             }
           },
           builder: (BuildContext context, SignupState state) {
@@ -183,10 +187,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                             contentPadding: 20,
                             iconPadding: 20,
                             Validator: (value) {
-                              if(value==null || value.isEmpty){
+                              if (value == null || value.isEmpty) {
                                 return "Please enter email";
                               }
-                              if(!value.endsWith('@gmail.com')){
+                              if (!value.endsWith('@gmail.com')) {
                                 return "Please enter valid email address";
                               }
                             },
@@ -210,7 +214,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             contentPadding: 20,
                             iconPadding: 20,
                             Validator: (value) {
-                              if(value==null || value.isEmpty){
+                              if (value == null || value.isEmpty) {
                                 return "Please enter password";
                               }
                             },
@@ -219,7 +223,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           CustomTextField.textField(
                             hintText: "Confirm Password",
                             errorMessage: state.confirmError,
-                            borderColor: state.passwordError != null
+                            borderColor: state.confirmError != null
                                 ? AppColors.redColor
                                 : (confirmPasswordFocus.hasFocus
                                       ? AppColors.primary
@@ -234,7 +238,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                             contentPadding: 20,
                             iconPadding: 20,
                             Validator: (value) {
-                              if(value==null || value.isEmpty){
+                              if (value == null || value.isEmpty) {
                                 return "Please re-enter password here";
                               }
                             },
@@ -253,21 +257,27 @@ class RegisterScreenState extends State<RegisterScreen> {
                               texts: "Sign Up",
                               backgroundColor: Colors.transparent,
                               onPressed: () {
-
-                                if(formKey.currentState!.validate()) {
+                                if (formKey.currentState!.validate()) {
                                   context.read<SignupBloc>().add(
-                                      NameChanged(name: nameController.text));
-                                  context.read<SignupBloc>().add(EmailChanged(
-                                      email: emailController.text));
+                                    NameChanged(name: nameController.text),
+                                  );
                                   context.read<SignupBloc>().add(
-                                      PasswordChanged(
-                                          password: passwordController.text));
+                                    EmailChanged(email: emailController.text),
+                                  );
                                   context.read<SignupBloc>().add(
-                                      PasswordConfirm(
-                                          confirmPassword: confirmPasswordController
-                                              .text));
+                                    PasswordChanged(
+                                      password: passwordController.text,
+                                    ),
+                                  );
                                   context.read<SignupBloc>().add(
-                                      SignupSubmitted());
+                                    PasswordConfirm(
+                                      confirmPassword:
+                                          confirmPasswordController.text,
+                                    ),
+                                  );
+                                  context.read<SignupBloc>().add(
+                                    SignupSubmitted(),
+                                  );
                                 }
                               },
                               context: context,
