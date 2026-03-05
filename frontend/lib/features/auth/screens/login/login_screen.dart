@@ -64,13 +64,27 @@ class _LoginScreenState extends State<LoginScreen> {
             }
 
             if (state.generalError != null) {
-              CustomSnackBar.buildSnackBar(message: state.generalError, context: context, bgColor: Colors.white,messageColor: Colors.red);
+              ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar.buildSnackBar(
+                  message: state.generalError,
+                  context: context,
+                  bgColor: Colors.white,
+                  messageColor: Colors.red,
+                ),
+              );
             }
 
             if (state.isSuccess) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text("Login Successful")));
+              ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar.buildSnackBar(
+                  message: "Login successful",
+                  context: context,
+                  bgColor: Colors.black,
+                  messageColor: Colors.green,
+                  icon: Icons.verified,
+                  iconColor: Colors.green,
+                ),
+              );
               Navigator.pushReplacementNamed(context, "/home");
             }
           },
@@ -193,7 +207,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         const Text("Don't have an account? "),
                         InkWell(
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, "/register");
+                            Navigator.pushReplacementNamed(
+                              context,
+                              "/register",
+                            );
                           },
                           child: const Text(
                             "Sign Up",
