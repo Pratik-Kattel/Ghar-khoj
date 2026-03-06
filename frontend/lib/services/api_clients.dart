@@ -28,16 +28,10 @@ class ApiClient {
         rethrow;
       }
       // Error if not internet or server is unreachable
-      else {
        throw DioException(requestOptions: e.requestOptions,
          type: DioExceptionType.connectionError,
          message: "Couldn't connect to the server please try again"
        );
-      }
-    }
-    // Any other unexpected errors
-    catch (e) {
-     throw Exception(e.toString());
     }
   }
 
