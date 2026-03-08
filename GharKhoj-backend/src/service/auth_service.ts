@@ -12,8 +12,7 @@ import { generate_access_token  } from "../utils/tokens";
 export const registerUserService=async({name,email,password,role}:userData)=>{
     const existingUser=await pool.query("SELECT * FROM users where email= $1",[email])
     if(existingUser.rows.length>0){
-        logger.error("User with this email already exists, please login to continue");
-        return null;
+        return logger.error("User with this email already exists, please login to continue");
     }
     const hash= await hashedPassword(password);
     const id =cuid();
@@ -31,7 +30,7 @@ export const loginUserService=async({email,password}:userData)=>{
     );
     if(user.rows.length===0){
         logger.error("User with this email doesn't exists, please register to continue");
-        return null;
+        throw new Error("User with this email doesn't exists, please register to continue")
     }
     const  userData= user.rows[0];
     const isMatch=await comparePassword(password,userData.password_hash);

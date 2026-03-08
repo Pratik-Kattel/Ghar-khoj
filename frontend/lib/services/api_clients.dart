@@ -25,7 +25,12 @@ class ApiClient {
     } on DioException catch (e) {
       // Backend error code like 400,404
       if (e.response != null) {
-        rethrow;
+        final message = e.response?.data['message'] ?? "Something went wrong";
+        throw DioException(requestOptions: e.requestOptions,
+        type: DioExceptionType.badResponse,
+          error: message,
+          message: message
+        );
       }
       // Error if not internet or server is unreachable
        throw DioException(requestOptions: e.requestOptions,

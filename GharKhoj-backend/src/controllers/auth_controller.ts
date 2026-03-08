@@ -20,19 +20,20 @@ export const registerUserController = async (req: Request, res: Response) => {
     // Attempt to register the user after validation passes
     const user = await registerUserService(data);
 
-    // If user already exists or creation fails, return 409 Conflict
-    if (!user) {
-      return res.status(409).json({
-        message: "User with this email already exixsts, please login to continue",
-      });
-    }
+    // // If user already exists or creation fails, return 409 Conflict
+    // if (!user) {
+    //   return res.status(409).json({
+    //     message: "User with this email already exists, please login to continue",
+    //   });
+    // }
 
     // Return 201 Created on successful user registration
-    res.status(201).json({ message: "User created sucessfully", user });
-  } catch (error) {
-    // Return 500 Internal Server Error for unexpected failures
-    res.status(500).json({ error: `Internal error ocurred ${error}` });
-  }
+    res.status(201).json({ message: "User created successfully", user });
+  } catch (error:any) {
+  res.status(400).json({
+    message: error.message
+  });
+}
 };
 
 export const loginUserController = async (req: Request, res: Response) => {
@@ -41,14 +42,17 @@ export const loginUserController = async (req: Request, res: Response) => {
     const user = await loginUserService(req.body);
 
     // Invalid credentials should return 401 Unauthorized
-    if (!user) {
-      return res.status(401).json({ message: "Invalid credidentals" });
-    }
+    // if (!user) {
+    //   return res.status(401).json({ message: "Invalid credentials" });
+    // }
 
     // Return 200 OK on successful login
-    res.status(200).json({ message: "Login successful", user });
-  } catch (error) {
+    res.status(200).json({ message: "Login successful", user }) ;
+  } catch (error:any) {
     // Return 500 Internal Server Error for unexpected failures
-    res.status(500).json({ message: "Internal server error", error });
+    // res.status(500).json({ message: "Internal server error", error });
+  res.status(400).json({
+    message: error.message
+  });
   }
 };
