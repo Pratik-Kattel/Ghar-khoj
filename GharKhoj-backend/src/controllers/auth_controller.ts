@@ -19,14 +19,6 @@ export const registerUserController = async (req: Request, res: Response) => {
 
     // Attempt to register the user after validation passes
     const user = await registerUserService(data);
-
-    // // If user already exists or creation fails, return 409 Conflict
-    // if (!user) {
-    //   return res.status(409).json({
-    //     message: "User with this email already exists, please login to continue",
-    //   });
-    // }
-
     // Return 201 Created on successful user registration
     res.status(201).json({ message: "User created successfully", user });
   } catch (error:any) {

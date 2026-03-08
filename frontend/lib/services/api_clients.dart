@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import '../services/Custom_Exception.dart';
 
 class ApiClient {
   final String baseUrl;
@@ -21,10 +22,17 @@ class ApiClient {
   ) async {
     try {
       final response = await dio.post(endpoint, data: body);
+      print("Sending request...");
+      print("SUCCESS RESPONSE: ${response.data}");
       return response.data;
     } on DioException catch (e) {
+      print("DIO ERROR: ${e.response?.data}");
       // Backend error code like 400,404
       if (e.response != null) {
+        final validationError=e.response?.data;
+        if(validationError!=null && validationError['errors']!=null){
+         throw ValidationException(validationError);
+        }
         final message = e.response?.data['message'] ?? "Something went wrong";
         throw DioException(requestOptions: e.requestOptions,
         type: DioExceptionType.badResponse,

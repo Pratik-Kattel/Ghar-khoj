@@ -2,7 +2,7 @@ class UserModel {
   String name;
   String email;
   String role;
-  String profilePic;
+  String? profilePic;
 
   UserModel({
     required this.name,

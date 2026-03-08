@@ -66,24 +66,26 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
           print(res.userModel);
         }
         emit(state.CopyWith(isSubmitting: false, isSuccess: true));
-      } catch (e) {
+      }
+      catch (e) {
         if (e is DioException) {
           emit(state.CopyWith(isSubmitting: false, generalError: e.message));
-        } else if (e is SignupException) {
-          String? emailError = e.errorModel.errors
+        } else if (e is ValidationException) {
+          final errorModel = SignupErrorModel.fromJson(e.data);
+          String? emailError = errorModel.errors
               .firstWhere(
                 (err) => err.path.contains('email'),
-                orElse: () => FieldErrors(code: '', message: '', path: []),
-              )
+            orElse: () => FieldErrors(code: '', message: '', path: []),
+          )
               .message;
-          String? passwordError = e.errorModel.errors
+          String? passwordError = errorModel.errors
               .firstWhere(
                 (e) => e.path.contains('password'),
-                orElse: () => FieldErrors(code: '', message: '', path: []),
-              )
+            orElse: () => FieldErrors(code: '', message: '', path: []),
+          )
               .message;
 
-          String? generalError = e.errorModel.message;
+          String? generalError = errorModel.message;
           print("General error: $generalError");
 
           emit(
@@ -95,14 +97,16 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               generalError: generalError,
             ),
           );
-        } else {
-          emit(
-            state.CopyWith(
-              isSubmitting: false,
-              generalError: "Internal error occurred, Please try again later",
-            ),
-          );
         }
+        // } else {
+        //   emit(
+        //     state.CopyWith(
+        //       isSubmitting: false,
+        //       isSuccess: false,
+        //       generalError: "Internal error occurred, Please try again later",
+        //     ),
+        //   );
+        // }
       }
     });
   }
