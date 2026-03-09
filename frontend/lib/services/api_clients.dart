@@ -44,7 +44,7 @@ class ApiClient {
         throw DioException(requestOptions: e.requestOptions,
         type: DioExceptionType.badResponse,
           error: message,
-          message: message
+          message: message,
         );
       }
       // Error if not internet or server is unreachable

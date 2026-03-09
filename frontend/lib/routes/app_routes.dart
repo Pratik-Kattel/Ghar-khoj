@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/features/Boarding/screens/boarding_screen.dart';
-import 'package:frontend/features/auth/screens/forgot_password/forgot_password.dart';
+import 'package:frontend/features/auth/screens/forgot_password/validate_email_screen.dart';
 import '../features/auth/screens/login/login_screen.dart';
 import '../features/auth/screens/signup/register_screen.dart';
 
