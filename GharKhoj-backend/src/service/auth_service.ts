@@ -37,7 +37,7 @@ export const loginUserService=async({email,password}:userData)=>{
     const isMatch=await comparePassword(password,userData.password_hash);
     if(!isMatch){
         logger.error("Wrong password please check your password and try again");
-        return new Error("Wrong password please check your password and try again")
+        throw new Error("Wrong password please check your password and try again")
     }
     const token=generate_access_token(userData);
     return{
