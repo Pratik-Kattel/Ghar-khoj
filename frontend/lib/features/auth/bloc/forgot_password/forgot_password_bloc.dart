@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_email_repo.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_event.dart';
@@ -22,10 +23,17 @@ class ForgotPasswordBloc
       );
       try{
         final res= await validateEmailRepository.validateEmail(state.email);
-        emit(state.copyWith(isSubmitting:false,isSuccess: true));
+        if(res.message!=null) {
+          emit(state.copyWith(isSubmitting: false, isSuccess: true));
+          emit(state.copyWith(isSuccess: false));
+        }
+        else{
+          emit(state.copyWith(isSubmitting: false, isSuccess: false));
+        }
       }
-      catch(e){
-        emit(state.copyWith(isSubmitting: false,generalError: e.toString()));
+      on DioException catch(e){
+        print(e.message);
+        emit(state.copyWith(isSubmitting: false,generalError: e.message));
       }
     });
   }

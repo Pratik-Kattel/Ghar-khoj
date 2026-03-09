@@ -1,5 +1,5 @@
 class ValidateEmailModel {
-  final String message;
+  final String ?message;
 
   ValidateEmailModel({required this.message});
 

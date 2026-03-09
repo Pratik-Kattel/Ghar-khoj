@@ -11,6 +11,7 @@ class ValidateEmailRepository {
     final res = await apiClient.post(ApiEndpoints.validateEmail, {
       "email": email,
     });
+    print("From repo:$res");
     return ValidateEmailModel.fromJson(res);
   }
 }

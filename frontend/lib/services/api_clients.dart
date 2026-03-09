@@ -23,12 +23,12 @@ class ApiClient {
   ) async {
     try {
       final response = await dio.post(endpoint, data: body);
-      if (kDebugMode) {
-        print("Sending request...");
-      }
-      if (kDebugMode) {
-        print("SUCCESS RESPONSE: ${response.data}");
-      }
+        if (kDebugMode) {
+          print("Sending request...");
+        }
+        if (kDebugMode) {
+          print("SUCCESS RESPONSE: ${response.data}");
+        }
       return response.data;
     } on DioException catch (e) {
       if (kDebugMode) {
