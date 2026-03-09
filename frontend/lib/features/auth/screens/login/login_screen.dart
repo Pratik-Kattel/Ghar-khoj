@@ -178,9 +178,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                     ),
-
-                    SizedBox(height: 0.05.sh),
-
+                    SizedBox(height: 0.003.sh),
+                    Align(
+                      alignment: Alignment(0.8,0),
+                      child:
+                      TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/forgotPassword');
+                      },
+                      child: Text("Forgot password?",style: TextStyle(fontSize: 17),),
+                    ),
+                    ),
                     CustomButton.button(
                       padding: EdgeInsetsGeometry.symmetric(horizontal: 0.4.sw),
                       texts: "Login",
@@ -204,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("Don't have an account? "),
+                        Text("Don't have an account? ",style: Theme.of(context).textTheme.bodyLarge,),
                         InkWell(
                           onTap: () {
                             Navigator.pushReplacementNamed(
@@ -217,6 +225,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                               color: Colors.blueAccent,
                               fontWeight: FontWeight.bold,
+                              fontSize: 17
                             ),
                           ),
                         ),

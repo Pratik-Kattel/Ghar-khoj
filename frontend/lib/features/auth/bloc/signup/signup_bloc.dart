@@ -86,7 +86,9 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               .message;
 
           String? generalError = errorModel.message;
-          print("General error: $generalError");
+          if (kDebugMode) {
+            print("General error: $generalError");
+          }
 
           emit(
             state.CopyWith(
@@ -98,15 +100,15 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
             ),
           );
         }
-        // } else {
-        //   emit(
-        //     state.CopyWith(
-        //       isSubmitting: false,
-        //       isSuccess: false,
-        //       generalError: "Internal error occurred, Please try again later",
-        //     ),
-        //   );
-        // }
+        else {
+          emit(
+            state.CopyWith(
+              isSubmitting: false,
+              isSuccess: false,
+              generalError: "Internal error occurred, Please try again later",
+            ),
+          );
+        }
       }
     });
   }

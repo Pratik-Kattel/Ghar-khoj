@@ -88,7 +88,7 @@ class BoardingScreenState extends State<BoardingScreen> {
                     },
                     child: Text(
                       "Skip",
-                      style: TextStyle(color: AppColors.redColor, fontSize: 17),
+                      style: TextStyle(color: AppColors.redColor, fontSize: 20),
                     ),
                   ),
                 ),
@@ -102,7 +102,7 @@ class BoardingScreenState extends State<BoardingScreen> {
                     child: Text(
                       currentIndex <pages.length-1? "Next"
             : "Finish",
-                      style: TextStyle(color: AppColors.primary, fontSize: 17),
+                      style: TextStyle(color: AppColors.primary, fontSize: 20),
                     ),
                   ),
                 ),

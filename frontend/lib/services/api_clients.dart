@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import '../services/Custom_Exception.dart';
 
 class ApiClient {
@@ -22,11 +23,17 @@ class ApiClient {
   ) async {
     try {
       final response = await dio.post(endpoint, data: body);
-      print("Sending request...");
-      print("SUCCESS RESPONSE: ${response.data}");
+      if (kDebugMode) {
+        print("Sending request...");
+      }
+      if (kDebugMode) {
+        print("SUCCESS RESPONSE: ${response.data}");
+      }
       return response.data;
     } on DioException catch (e) {
-      print("DIO ERROR: ${e.response?.data}");
+      if (kDebugMode) {
+        print("DIO ERROR: ${e.response?.data}");
+      }
       // Backend error code like 400,404
       if (e.response != null) {
         final validationError=e.response?.data;
