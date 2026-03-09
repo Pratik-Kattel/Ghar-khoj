@@ -1,0 +1,16 @@
+import { validateEmailService } from "../service/password_change_service";
+import { Request, Response } from "express";
+
+export const validateEmailController=async(req:Request,res:Response)=>{
+    try{
+const email=req.body;
+const validityStatus=await validateEmailService(email);
+
+res.status(201).json({message:"User verified successfully"});
+
+    }
+    catch(error:any){
+        res.status(400).json({message:error.message})
+
+    }
+}

@@ -1,9 +1,11 @@
 import { registerUserController,loginUserController } from "../controllers/auth_controller";
 import  express  from "express";
+import { validateEmailController } from "../controllers/change_password_controller";
 
 const router=express.Router();
 
 router.post('/registerUser',registerUserController);
 router.post('/loginUser',loginUserController);
+router.post('/validateEmail',validateEmailController)
 
 export default router;
