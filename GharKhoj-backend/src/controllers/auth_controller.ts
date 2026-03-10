@@ -32,17 +32,10 @@ export const loginUserController = async (req: Request, res: Response) => {
   try {
     // Authenticate user with provided credentials
     const user = await loginUserService(req.body);
-
-    // Invalid credentials should return 401 Unauthorized
-    // if (!user) {
-    //   return res.status(401).json({ message: "Invalid credentials" });
-    // }
-
     // Return 200 OK on successful login
     res.status(200).json({ message: "Login successful", user }) ;
   } catch (error:any) {
-    // Return 500 Internal Server Error for unexpected failures
-    // res.status(500).json({ message: "Internal server error", error });
+        // res.status(500).json({ message: "Internal server error", error });
   res.status(400).json({
     message: error.message
   });
