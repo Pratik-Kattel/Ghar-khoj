@@ -1,12 +1,13 @@
 import '../../models/login/user_data_model.dart';
+import '../../../../services/secure_storage.dart';
 
 class User{
   final UserData userData;
-  final String token;
+   final String token;
   
   User({required this.userData,required this.token});
   
-  factory User.fromJson(Map<String,dynamic> json){
+  factory User.fromJson(Map<String,dynamic> json) {
     return User(userData:UserData.fromJson(json['userData']??{}) , token:
     json['token'] ?? ""
     );
