@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../login/login_event.dart';
 import '../login/login_state.dart';
@@ -45,7 +46,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
       }
       catch(e){
-        print(e.toString());
+        if (kDebugMode) {
+          print(e.toString());
+        }
         emit(
           state.copyWith(
             isSubmitting: false,

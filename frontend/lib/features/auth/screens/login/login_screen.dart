@@ -85,7 +85,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   iconColor: Colors.green,
                 ),
               );
-              Navigator.pushReplacementNamed(context, "/home");
             }
           },
           builder: (context, state) {
@@ -97,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     SizedBox(height: 0.002.sh),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15.w),
+                      padding: EdgeInsets.symmetric(horizontal: 25.w),
                       child: Text(
                         "Sign in with your email and password to continue",
                         style: TextStyle(fontSize: 16.sp),
@@ -157,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         errorMessage: state.passwordError,
                         suffixIcon: Padding(
-                          padding: EdgeInsetsGeometry.only(top: 5.h),
+                          padding: EdgeInsetsGeometry.only(top: 8.h),
                           child: IconButton(
                             color: AppColors.primary,
                             onPressed: () {

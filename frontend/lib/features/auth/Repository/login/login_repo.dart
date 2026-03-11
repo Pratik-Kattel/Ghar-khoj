@@ -13,7 +13,7 @@ class LoginRepository {
       "email": email,
       "password": password,
     });
-    await SecureStorage.saveToken(res['token']);
+    await SecureStorage.saveToken(res['user']['token']);
     return LoginResponse.fromJson(res);
   }
 }

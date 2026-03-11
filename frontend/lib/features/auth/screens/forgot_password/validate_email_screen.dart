@@ -68,11 +68,14 @@ class ForgotPassword_State extends State<ForgotPassword> {
               ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.buildSnackBar(
                   message: "Validation successful",
+                  icon: Icons.verified_user,
+                  iconColor: Colors.green,
                   context: context,
                   bgColor: Colors.white,
                   messageColor: Colors.green,
                 ),
               );
+              Navigator.pushReplacementNamed(context, '/otpScreen');
             }
           },
           builder: (context, state) {
@@ -116,7 +119,6 @@ class ForgotPassword_State extends State<ForgotPassword> {
                     context: context,
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
-                        print(emailController.text.trim());
                         context.read<ForgotPasswordBloc>().add(
                           EmailChanged(emailController.text.trim()),
                         );

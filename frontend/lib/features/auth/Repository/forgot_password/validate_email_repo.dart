@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:frontend/constants/api_endpoints.dart';
 import 'package:frontend/features/auth/models/forgot_password/validate_email_model.dart';
 import 'package:frontend/services/api_clients.dart';
@@ -11,7 +12,9 @@ class ValidateEmailRepository {
     final res = await apiClient.post(ApiEndpoints.validateEmail, {
       "email": email,
     });
-    print("From repo:$res");
+    if (kDebugMode) {
+      print("From repo:$res");
+    }
     return ValidateEmailModel.fromJson(res);
   }
 }

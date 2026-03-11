@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,6 +68,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
           print(res.userModel);
         }
         emit(state.CopyWith(isSubmitting: false, isSuccess: true));
+        emit(state.CopyWith(isSubmitting: false,isSuccess: false));
       }
       catch (e) {
         if (e is DioException) {

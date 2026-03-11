@@ -9,11 +9,11 @@ class SecureStorage {
     await _storage.write(key: _token, value: value);
   }
 
-  static Future<String> readData(String key) async {
-    return await _storage.read(key: key) ?? "No data found";
+  static Future<String> getToken() async {
+    return await _storage.read(key: _token) ?? "No data found";
   }
 
-  static Future<void> deleteData(String key) async {
-    await _storage.delete(key: key);
+  static Future<void> deleteToken() async {
+    await _storage.delete(key: _token);
   }
 }

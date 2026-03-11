@@ -16,16 +16,19 @@ import './features/auth/Repository/login/login_repo.dart';
 void main() {
   final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
   final loginRepo = LoginRepository(apiClient: apiClient);
-  final signUpRepo=SignupRepository(apiClient: apiClient);
-  final validateEmailRepository=ValidateEmailRepository(apiClient: apiClient);
-
+  final signUpRepo = SignupRepository(apiClient: apiClient);
+  final validateEmailRepository = ValidateEmailRepository(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => LoginBloc(repository: loginRepo)),
-        BlocProvider(create: (_)=>SignupBloc(signupRepository: signUpRepo)),
-        BlocProvider(create: (_)=>ForgotPasswordBloc(validateEmailRepository: validateEmailRepository))
+        BlocProvider(create: (_) => SignupBloc(signupRepository: signUpRepo)),
+        BlocProvider(
+          create: (_) => ForgotPasswordBloc(
+            validateEmailRepository: validateEmailRepository,
+          ),
+        ),
       ],
       child: const myApp(),
     ),
@@ -38,16 +41,15 @@ class myApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-        designSize: Size(390, 844),
+      designSize: Size(390, 844),
       splitScreenMode: true,
       minTextAdapt: true,
-      builder: (context,child)=>MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppThemes.purpleTheme,
-      routes: AppRoutes.routes,
-      home: SplashScreen(),
-    )
+      builder: (context, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: AppThemes.purpleTheme,
+        routes: AppRoutes.routes,
+        home: SplashScreen(),
+      ),
     );
   }
-
 }
