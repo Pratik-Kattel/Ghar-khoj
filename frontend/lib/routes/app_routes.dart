@@ -17,6 +17,5 @@ static Map<String,WidgetBuilder> routes={
   login:(context)=>  LoginScreen(),
   register:(context)=>RegisterScreen(),
   forgotPassword:(context)=>ForgotPassword(),
-  otp:(context)=>ValidateOtpScreen(),
 };
 }

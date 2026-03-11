@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_email_repo.dart';
+import 'package:frontend/features/auth/Repository/forgot_password/validate_otp_repo.dart';
 import 'package:frontend/features/auth/Repository/signup/signup_repo.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:frontend/features/auth/bloc/signup/signup_bloc.dart';
@@ -18,6 +19,7 @@ void main() {
   final loginRepo = LoginRepository(apiClient: apiClient);
   final signUpRepo = SignupRepository(apiClient: apiClient);
   final validateEmailRepository = ValidateEmailRepository(apiClient: apiClient);
+  final validateOTPRepository=ValidateOtpRepo(apiClient:apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -29,6 +31,7 @@ void main() {
             validateEmailRepository: validateEmailRepository,
           ),
         ),
+        BlocProvider(create: (_)=>OTPValidationBloc(validateOtpRepo: validateOTPRepository))
       ],
       child: const myApp(),
     ),

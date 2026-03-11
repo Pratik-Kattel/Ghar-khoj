@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_event.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_state.dart';
+import 'package:frontend/features/auth/screens/forgot_password/validate_otp_screen.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/widgets/custom_snackbar.dart';
@@ -27,8 +28,9 @@ class ForgotPassword_State extends State<ForgotPassword> {
     super.initState();
     emailFocus.addListener(() => setState(() {}));
   }
+
   @override
-  void dispose(){
+  void dispose() {
     emailController.dispose();
     emailFocus.dispose();
     super.dispose();
@@ -75,7 +77,13 @@ class ForgotPassword_State extends State<ForgotPassword> {
                   messageColor: Colors.green,
                 ),
               );
-              Navigator.pushReplacementNamed(context, '/otpScreen');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      ValidateOtpScreen(email: emailController.text),
+                ),
+              );
             }
           },
           builder: (context, state) {
