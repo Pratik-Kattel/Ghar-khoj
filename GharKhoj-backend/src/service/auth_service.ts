@@ -7,6 +7,7 @@ import { hashedPassword,comparePassword } from "../utils/hash_password";
 import {UserRoles} from '../types/user';
 import cuid from 'cuid';
 import { generate_access_token  } from "../utils/tokens";
+import { sendEmail } from "../utils/mailer";
 
 // Service to register the new user
 export const registerUserService=async({name,email,password,role}:userData)=>{
@@ -31,7 +32,7 @@ export const loginUserService=async({email,password}:userData)=>{
     );
     if(user.rows.length===0){
         logger.error("User with this email doesn't exists, please register to continue");
-        throw new Error("User with this email doesn't exists, please register to continue")
+        throw new Error("User with this email doesn't exists, please register to continue");
     }
     const  userData= user.rows[0];
     const isMatch=await comparePassword(password,userData.password_hash);

@@ -34,6 +34,7 @@ export const loginUserController = async (req: Request, res: Response) => {
     const user = await loginUserService(req.body);
     // Return 200 OK on successful login
     res.status(200).json({ message: "Login successful", user }) ;
+       
   } catch (error:any) {
         // res.status(500).json({ message: "Internal server error", error });
   res.status(400).json({
