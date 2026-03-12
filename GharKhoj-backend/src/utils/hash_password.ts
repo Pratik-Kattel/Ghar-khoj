@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-/// This class will return the passowrd in the hashed format and compares the hashed password with the plain password.
+/// This class will return the password in the hashed format and compares the hashed password with the plain password.
 
 // takes a password and return it in hash format
 export const hashedPassword=async(password:string)=>{

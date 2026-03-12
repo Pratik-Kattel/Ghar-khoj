@@ -2,7 +2,7 @@ import { userData } from "../types/user";
 
 const nodemailer=require('nodemailer');
 
-export async function sendEmail(email:String,otp:number,userName:String){
+export async function sendEmail(email:String,otp:String,userName:String){
 const transporter=await nodemailer.createTransport(
     {
     secure:false,
