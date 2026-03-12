@@ -32,7 +32,8 @@ class RegisterScreenState extends State<RegisterScreen> {
       TextEditingController();
 
   bool _isDialougeOpen = false;
-
+  bool _isPasswordVisible = false;
+  bool _isRePasswordVisible=false;
   final formKey = GlobalKey<FormState>();
 
   void initState() {
@@ -73,25 +74,25 @@ class RegisterScreenState extends State<RegisterScreen> {
 
             if (state.generalError != null && state.generalError!.isNotEmpty) {
               ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackBar.buildSnackBar(
-                message: state.generalError!,
-                context: context,
-                bgColor: Colors.white,
-                messageColor: AppColors.redColor,
-                fontSize: FontSizes.medium
-              )
+                CustomSnackBar.buildSnackBar(
+                  message: state.generalError!,
+                  context: context,
+                  bgColor: Colors.white,
+                  messageColor: AppColors.redColor,
+                  fontSize: FontSizes.medium,
+                ),
               );
             }
             if (state.isSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
-              CustomSnackBar.buildSnackBar(
-                message: "Registration successful, Please login to continue",
-                context: context,
-                bgColor: Colors.white,
-                messageColor: Colors.green,
-                icon: Icons.verified_user_outlined,
-                iconColor: Colors.green,
-              )
+                CustomSnackBar.buildSnackBar(
+                  message: "Registration successful, Please login to continue",
+                  context: context,
+                  bgColor: Colors.white,
+                  messageColor: Colors.green,
+                  icon: Icons.verified_user_outlined,
+                  iconColor: Colors.green,
+                ),
               );
               Navigator.pushNamed(context, '/login');
             }
@@ -197,6 +198,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 20.h),
                           CustomTextField.textField(
+                            obSecureText: !_isPasswordVisible,
                             hintText: "Enter Password",
                             errorMessage: state.passwordError,
                             borderColor: state.passwordError != null
@@ -211,6 +213,20 @@ class RegisterScreenState extends State<RegisterScreen> {
                               color: AppColors.primary,
                               size: 25.sp,
                             ),
+                            suffixIcon: Padding(
+                              padding: EdgeInsetsGeometry.only(top: 10.h),
+                              child: IconButton(
+                                color: AppColors.primary,
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                                icon: _isPasswordVisible
+                                    ? Icon(Icons.visibility)
+                                    : Icon(Icons.visibility_off),
+                              ),
+                            ),
                             contentPadding: 20,
                             iconPadding: 20,
                             Validator: (value) {
@@ -221,6 +237,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 20.h),
                           CustomTextField.textField(
+                            obSecureText: !_isRePasswordVisible,
                             hintText: "Confirm Password",
                             errorMessage: state.confirmError,
                             borderColor: state.confirmError != null
@@ -237,6 +254,18 @@ class RegisterScreenState extends State<RegisterScreen> {
                             ),
                             contentPadding: 20,
                             iconPadding: 20,
+                            suffixIcon: Padding(
+                              padding: EdgeInsetsGeometry.only(top: 10.h),
+                              child: IconButton(
+                                  color: AppColors.primary,
+                                  onPressed: () {
+                                setState(() {
+                                  _isRePasswordVisible=!_isRePasswordVisible;
+                                });
+                              }, icon: _isRePasswordVisible?Icon(Icons.visibility):
+                              Icon(Icons.visibility_off)
+                              ),
+                            ),
                             Validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return "Please re-enter password here";

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_event.dart';
+import 'package:frontend/features/auth/screens/forgot_password/enter_new_password_screen.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import 'package:frontend/widgets/custom_snackbar.dart';
@@ -13,7 +14,8 @@ import '../../bloc/forgot_password/forgot_password_state.dart';
 
 class ValidateOtpScreen extends StatefulWidget {
   final String email;
-  const ValidateOtpScreen({required this.email,super.key});
+
+  const ValidateOtpScreen({required this.email, super.key});
 
   @override
   ValidateOtpScreenState createState() => ValidateOtpScreenState();
@@ -64,16 +66,23 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
             );
           }
 
-            if (state.isSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                CustomSnackBar.buildSnackBar(
-                  message: "OTP Validation successful",
-                  context: context,
-                  bgColor: Colors.white,
-                  messageColor: Colors.green,
-                ),
-              );
-            }
+          if (state.isSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar.buildSnackBar(
+                message: "OTP Validation successful",
+                context: context,
+                bgColor: Colors.white,
+                messageColor: Colors.green,
+              ),
+            );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    EnterNewPasswordScreen(email: widget.email),
+              ),
+            );
+          }
         },
         builder: (context, state) {
           return SafeArea(
@@ -102,7 +111,7 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
                     contentPadding: 20,
                     iconPadding: 20,
                     Validator: (value) {
-                      if(value.isEmpty || value==null){
+                      if (value.isEmpty || value == null) {
                         return "Please enter OTP first";
                       }
                     },
@@ -111,18 +120,25 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
                   CustomButton.button(
                     texts: "Submit",
                     onPressed: () {
-                      if(formKey.currentState!.validate()){
-                        context.read<OTPValidationBloc>().add(
-                          OTPChangedEvent(otpController.text.trim())
-                        );
-                        context.read<OTPValidationBloc>().add(
-                          EmailChangedEvent(widget.email)
-                        );
-
-                        context.read<OTPValidationBloc>().add(
-                          OTPSubmittedEvent()
-                        );
-                      }
+                    //   if (formKey.currentState!.validate()) {
+                    //     context.read<OTPValidationBloc>().add(
+                    //       OTPChangedEvent(otpController.text.trim()),
+                    //     );
+                    //     context.read<OTPValidationBloc>().add(
+                    //       EmailChangedEvent(widget.email),
+                    //     );
+                    //
+                    //     context.read<OTPValidationBloc>().add(
+                    //       OTPSubmittedEvent(),
+                    //     );
+                    //   }
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              EnterNewPasswordScreen(email: widget.email),
+                        ),
+                      );
                     },
                     context: context,
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 0.4.sw),

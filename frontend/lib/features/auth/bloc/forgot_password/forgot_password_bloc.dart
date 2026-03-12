@@ -69,3 +69,8 @@ class OTPValidationBloc extends Bloc<OTPValidationEvent, OTPValidationState> {
     });
   }
 }
+
+// class PasswordChangeBloc extends Bloc<PasswordChangeEvent,PasswordChangeState>{
+//
+//   PasswordChangeBloc()
+// }

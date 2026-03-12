@@ -4,4 +4,5 @@ class ApiEndpoints{
   static String register="$baseUrl/registerUser";
   static String validateEmail="$baseUrl/validateEmail";
   static String validateOTP="$baseUrl/validateOTP";
+  static String changePassword="$baseUrl/changePassword";
 }

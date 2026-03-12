@@ -1,6 +1,5 @@
 import 'package:frontend/features/auth/models/signup/Signup_Error_Model.dart';
 import 'package:frontend/services/Custom_Exception.dart';
-
 import '../../../../services/api_clients.dart';
 import '../../../../constants/api_endpoints.dart';
 import '../../models/signup/signup_response_model.dart';
