@@ -9,7 +9,6 @@ import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import 'package:frontend/widgets/custom_snackbar.dart';
 import 'package:frontend/widgets/custom_textfield.dart';
-
 import '../../bloc/forgot_password/forgot_password_state.dart';
 
 class ValidateOtpScreen extends StatefulWidget {
@@ -120,25 +119,18 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
                   CustomButton.button(
                     texts: "Submit",
                     onPressed: () {
-                    //   if (formKey.currentState!.validate()) {
-                    //     context.read<OTPValidationBloc>().add(
-                    //       OTPChangedEvent(otpController.text.trim()),
-                    //     );
-                    //     context.read<OTPValidationBloc>().add(
-                    //       EmailChangedEvent(widget.email),
-                    //     );
-                    //
-                    //     context.read<OTPValidationBloc>().add(
-                    //       OTPSubmittedEvent(),
-                    //     );
-                    //   }
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              EnterNewPasswordScreen(email: widget.email),
-                        ),
-                      );
+                      if (formKey.currentState!.validate()) {
+                        context.read<OTPValidationBloc>().add(
+                          OTPChangedEvent(otpController.text.trim()),
+                        );
+                        context.read<OTPValidationBloc>().add(
+                          EmailChangedEvent(widget.email),
+                        );
+
+                        context.read<OTPValidationBloc>().add(
+                          OTPSubmittedEvent(),
+                        );
+                      }
                     },
                     context: context,
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 0.4.sw),

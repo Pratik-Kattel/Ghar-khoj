@@ -2,6 +2,7 @@ export interface userData{
     name:string,
     email:string,
     password:string,
+    otp:string,
     role?:UserRoles,
 
 }

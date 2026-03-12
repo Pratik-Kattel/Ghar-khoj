@@ -39,6 +39,8 @@ class EmailChangedEvent extends OTPValidationEvent{
 
 class OTPSubmittedEvent extends OTPValidationEvent{}
 
+
+
 class PasswordChangeEvent extends Equatable{
   @override
   List<Object?> get props =>[];
@@ -47,7 +49,7 @@ class PasswordChangeEvent extends Equatable{
 class PasswordChangedEvent extends PasswordChangeEvent{
   String password;
 
-  PasswordChangedEvent(this.password);
+  PasswordChangedEvent({required this.password});
 
   @override
   List<Object?> get props =>[password];
@@ -55,7 +57,7 @@ class PasswordChangedEvent extends PasswordChangeEvent{
 class ConfirmPasswordChangedEvent extends PasswordChangeEvent{
   String confirmPassword;
 
- ConfirmPasswordChangedEvent(this.confirmPassword);
+ ConfirmPasswordChangedEvent({required this.confirmPassword});
 
   @override
   List<Object?> get props =>[confirmPassword];
@@ -63,8 +65,9 @@ class ConfirmPasswordChangedEvent extends PasswordChangeEvent{
 class ForgotPasswordEmailChanged extends PasswordChangeEvent{
   String email;
 
-  ForgotPasswordEmailChanged(this.email);
+  ForgotPasswordEmailChanged({required this.email});
 
   @override
   List<Object?> get props =>[email];
 }
+class PasswordSubmittedEvent extends PasswordChangeEvent{}

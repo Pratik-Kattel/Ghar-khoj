@@ -54,3 +54,43 @@ import z from 'zod';
       return;
     }
   });
+
+export const passwordChangeSchema=z.object({
+  password:z.string().trim()
+}).superRefine((data,ctx)=>{
+  const {password}=data;
+
+  if(password.length<5){
+    ctx.addIssue({
+      code:z.ZodIssueCode.custom,
+      message:"Password must be greater than 5 digits",
+      path:["password"]
+    });
+    return;
+  }
+  if(!/[A-Z]/.test(password)){
+    ctx.addIssue({
+      code:z.ZodIssueCode.custom,
+      message:"Password must include a capital letter",
+      path:["password"]
+    });
+    return;
+  }
+  if(!/[0-9]/.test(password)){
+    ctx.addIssue({
+      code:z.ZodIssueCode.custom,
+      message:"Password must include a numeric digit",
+      path:["password"]
+    });
+    return;
+  }
+   if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Password must include a special character",
+        path: ["password"],
+      });
+      return;
+    }
+
+})

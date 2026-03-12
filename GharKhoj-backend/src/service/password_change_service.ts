@@ -22,7 +22,7 @@ export const validateEmailService=async({email}:userData)=>{
     const expiry=await pool.query("Insert into otp_logs(otp_id,user_id,otp_code,purpose,expires_at,email) VALUES ($1,$2,$3,$4,$5,$6) RETURNING *",[otp_id,user_id,otp,"Password_change",expires_at,email]);
 }
 
-export const validateOTPService=async(email:String,otp:String)=>{
+export const validateOTPService=async({email,otp}:userData)=>{
     const otpQuery=await pool.query("Select * from otp_logs where email=$1 AND otp_code=$2 ORDER BY created_at DESC LIMIT 1",[email,otp]);
     if(otpQuery.rows.length===0){
         throw new Error("Please enter valid otp number");
@@ -40,7 +40,7 @@ export const validateOTPService=async(email:String,otp:String)=>{
 }
 
 export const saveNewPasswordService=async(password:string,email:String)=>{
-    const existingPasswordData=await pool.query("Select password_hash from user where email=$1",[email]);
+    const existingPasswordData=await pool.query("Select password_hash from users where email=$1",[email]);
     if(existingPasswordData.rows.length===0){
         throw new Error("User not found");
     }
@@ -50,8 +50,5 @@ export const saveNewPasswordService=async(password:string,email:String)=>{
         throw new Error("Please enter a different password than previously used")
     }
     const newHashedPassword=await hashedPassword(password);
-    const dbStore=await pool.query("Update users set password_hash=$1 where email=$2",[newHashedPassword,email]);
-    if(dbStore.rows.length===0){
-        throw new Error("User not found please try again later")
-    }   
+    const dbStore=await pool.query("Update users set password_hash=$1 where email=$2",[newHashedPassword,email]);  
 }
