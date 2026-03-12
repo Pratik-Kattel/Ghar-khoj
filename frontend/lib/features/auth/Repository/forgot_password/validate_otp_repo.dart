@@ -8,7 +8,7 @@ class ValidateOtpRepo {
   
   ValidateOtpRepo({required this.apiClient});
   
-  Future<ValidateOtpModel> validateOTP(String email,int otp) async{
+  Future<ValidateOtpModel> validateOTP(String email,String otp) async{
     final res=await apiClient.post(ApiEndpoints.validateOTP, {
       "email":email,
       "otp":otp

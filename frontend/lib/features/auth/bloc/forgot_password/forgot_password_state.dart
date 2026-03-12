@@ -51,8 +51,8 @@ class OTPValidationState extends Equatable {
   final String? generalError;
 
   const OTPValidationState({
-    this.otp = '',
-    this.email='',
+    this.otp = "",
+    this.email="",
     this.otpError,
     this.isSubmitting = false,
     this.isSuccess = false,
@@ -70,10 +70,10 @@ class OTPValidationState extends Equatable {
     return OTPValidationState(
       otp: otp ?? this.otp,
       email: email ?? this.email,
-      otpError: otpError ?? this.otpError,
+      otpError: otpError ,
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
-      generalError: generalError ?? this.generalError,
+      generalError: generalError
     );
   }
 

@@ -45,28 +45,26 @@ class OTPValidationBloc extends Bloc<OTPValidationEvent, OTPValidationState> {
   OTPValidationBloc({required this.validateOtpRepo})
     : super(const OTPValidationState()) {
     on<OTPChangedEvent>((event, emit) {
-      emit(state.copyWith(otp: state.otp, otpError: null));
+      emit(state.copyWith(otp: event.OTP, otpError: null));
     });
 
-    on<EmailChangedEvent>((event,emit){
-      emit(state.copyWith(email: state.email));
+    on<EmailChangedEvent>((event, emit) {
+      emit(state.copyWith(email: event.email));
     });
-    on<OTPSubmittedEvent>((event, emit) async{
+    on<OTPSubmittedEvent>((event, emit) async {
       emit(
         state.copyWith(isSubmitting: true, generalError: null, otpError: null),
       );
-      try{
-        final res=await validateOtpRepo.validateOTP(state.email, state.otp as int);
-        if(res.message!=null){
-          emit(state.copyWith(isSubmitting: false,isSuccess: true));
+      try {
+        final res = await validateOtpRepo.validateOTP(state.email, state.otp);
+        if (res.message != null) {
+          emit(state.copyWith(isSubmitting: false, isSuccess: true));
           emit(state.copyWith(isSuccess: false));
+        } else {
+          emit(state.copyWith(isSubmitting: false, isSuccess: true));
         }
-        else{
-          emit(state.copyWith(isSubmitting: false,isSuccess: true));
-        }
-      }
-      on DioException catch (e){
-        emit(state.copyWith(isSubmitting: false,generalError: e.message));
+      } on DioException catch (e) {
+        emit(state.copyWith(isSubmitting: false, generalError: e.message));
       }
     });
   }

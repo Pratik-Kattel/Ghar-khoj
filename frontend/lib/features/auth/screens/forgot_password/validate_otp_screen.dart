@@ -21,7 +21,7 @@ class ValidateOtpScreen extends StatefulWidget {
 
 class ValidateOtpScreenState extends State<ValidateOtpScreen> {
   final FocusNode otpFocus = FocusNode();
-  final TextEditingController optController = TextEditingController();
+  final TextEditingController otpController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   bool _isDialouge = false;
 
@@ -33,6 +33,8 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.email);
+    print(otpController.text.trim());
     return Scaffold(
       backgroundColor: AppColors.secondaryScaffold,
       body: BlocConsumer<OTPValidationBloc, OTPValidationState>(
@@ -60,18 +62,18 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
                 messageColor: Colors.red,
               ),
             );
+          }
 
             if (state.isSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.buildSnackBar(
-                  message: "Validation successful",
+                  message: "OTP Validation successful",
                   context: context,
                   bgColor: Colors.white,
                   messageColor: Colors.green,
                 ),
               );
             }
-          }
         },
         builder: (context, state) {
           return SafeArea(
@@ -95,12 +97,12 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
                         : Colors.grey,
                     focus: otpFocus,
                     errorMessage: state.otpError,
-                    controller: optController,
+                    controller: otpController,
                     prefixIcon: Icon(Icons.sms),
                     contentPadding: 20,
                     iconPadding: 20,
                     Validator: (value) {
-                      if(value.isEmpty && value==null){
+                      if(value.isEmpty || value==null){
                         return "Please enter OTP first";
                       }
                     },
@@ -111,7 +113,7 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
                     onPressed: () {
                       if(formKey.currentState!.validate()){
                         context.read<OTPValidationBloc>().add(
-                          OTPChangedEvent(optController.text)
+                          OTPChangedEvent(otpController.text.trim())
                         );
                         context.read<OTPValidationBloc>().add(
                           EmailChangedEvent(widget.email)
