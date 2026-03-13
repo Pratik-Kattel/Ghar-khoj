@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/constants/api_endpoints.dart';
 import 'package:frontend/services/api_clients.dart';
 import 'package:frontend/services/get_user_data.dart';
+import 'package:frontend/themes/app_themes.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -37,6 +38,7 @@ class HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.secondaryScaffold,
       body: SafeArea(
         child: Column(
           children: [

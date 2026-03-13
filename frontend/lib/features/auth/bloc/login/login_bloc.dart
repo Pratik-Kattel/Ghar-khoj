@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/services/location_service.dart';
+import 'package:geolocator/geolocator.dart';
 import '../login/login_event.dart';
 import '../login/login_state.dart';
 import '../../Repository/login/login_repo.dart';
@@ -28,6 +30,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       try {
+        Position position=await LocationService.getUserLocation();
+        double lat=position.latitude;
+        double long=position.longitude;
         final res = await repository.login(state.email, state.password);
 
         if (res.user == null) {
@@ -45,6 +50,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           )
         );
       }
+      on PermissionDeniedException catch(e){
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            generalError: e.message
+          )
+        );
+      }
       catch(e){
         if (kDebugMode) {
           print(e.toString());
@@ -52,7 +65,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(
           state.copyWith(
             isSubmitting: false,
-            generalError: "Something went wrong, please try again"
+            generalError:e.toString()
           )
         );
       }

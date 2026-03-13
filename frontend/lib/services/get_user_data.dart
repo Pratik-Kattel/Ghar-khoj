@@ -53,6 +53,6 @@ class GetUserName {
       return "Guest";
     }
     final name = await getUserDataRepo.getUserData(email);
-    return name.name;
+    return name.name.split(" ")[0];
   }
 }

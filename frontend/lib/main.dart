@@ -59,7 +59,7 @@ class myApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppThemes.purpleTheme,
         routes: AppRoutes.routes,
-        home: isLoggedIn?Homescreen():SplashScreen()
+        home: SplashScreen()
       ),
     );
   }
