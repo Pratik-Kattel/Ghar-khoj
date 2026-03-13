@@ -85,6 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   iconColor: Colors.green,
                 ),
               );
+              Navigator.pushReplacementNamed(context, '/homeScreen');
             }
           },
           builder: (context, state) {

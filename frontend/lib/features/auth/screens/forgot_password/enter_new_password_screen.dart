@@ -79,6 +79,7 @@ class EnterNewPasswordScreenState extends State<EnterNewPasswordScreen> {
                   messageColor: Colors.green,
                 ),
               );
+              Navigator.pushReplacementNamed(context, '/login');
             }
           },
           builder: (context, PasswordChangeState state) {

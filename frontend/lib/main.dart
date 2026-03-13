@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/change_password_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_email_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_otp_repo.dart';
@@ -8,6 +9,7 @@ import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_bloc
 import 'package:frontend/features/auth/bloc/signup/signup_bloc.dart';
 import 'package:frontend/routes/app_routes.dart';
 import 'package:frontend/features/splash/screens/splash_screen.dart';
+import 'package:frontend/services/secure_storage.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/services/api_clients.dart';
 import 'package:frontend/constants/api_endpoints.dart';
@@ -15,7 +17,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import './features/auth/bloc/login/login_bloc.dart';
 import './features/auth/Repository/login/login_repo.dart';
 
-void main() {
+void main() async{
+  await WidgetsFlutterBinding.ensureInitialized();
+  String?token=await SecureStorage.getToken();
   final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
   final loginRepo = LoginRepository(apiClient: apiClient);
   final signUpRepo = SignupRepository(apiClient: apiClient);
@@ -36,13 +40,14 @@ void main() {
         BlocProvider(create: (_)=>OTPValidationBloc(validateOtpRepo: validateOTPRepository)),
         BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo))
       ],
-      child: const myApp(),
+      child:  myApp(isLoggedIn:token!=null),
     ),
   );
 }
 
 class myApp extends StatelessWidget {
-  const myApp({super.key});
+  final bool isLoggedIn;
+  myApp({super.key,required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +59,7 @@ class myApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppThemes.purpleTheme,
         routes: AppRoutes.routes,
-        home: SplashScreen(),
+        home: isLoggedIn?Homescreen():SplashScreen()
       ),
     );
   }

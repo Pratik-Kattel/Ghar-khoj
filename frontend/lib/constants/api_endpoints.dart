@@ -5,4 +5,6 @@ class ApiEndpoints{
   static String validateEmail="$baseUrl/validateEmail";
   static String validateOTP="$baseUrl/validateOTP";
   static String changePassword="$baseUrl/changePassword";
+  static String getUserName="$baseUrl/getUsername";
+
 }
