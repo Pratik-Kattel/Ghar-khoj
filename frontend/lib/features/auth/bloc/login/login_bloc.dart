@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/features/auth/Repository/login/location_response_repo.dart';
+import 'package:frontend/services/get_user_data.dart';
 import 'package:frontend/services/location_service.dart';
 import 'package:geolocator/geolocator.dart';
 import '../login/login_event.dart';
@@ -9,8 +11,9 @@ import '../../Repository/login/login_repo.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginRepository repository;
+  final LocationResponseRepo locationResponseRepo;
 
-  LoginBloc({required this.repository}) : super(const LoginState()) {
+  LoginBloc({required this.repository,required this.locationResponseRepo}) : super(const LoginState()) {
     on<EmailChanged>((event, emit) {
       emit(state.copyWith(email: event.email, emailError: null));
     });
@@ -33,6 +36,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         Position position=await LocationService.getUserLocation();
         double lat=position.latitude;
         double long=position.longitude;
+        String? email=await GetUserDataRepo.getUserEmail();
+        await locationResponseRepo.sendLocation(long, lat, email);
+        String? place=await PlaceName.getPlace(long, lat);
+        print("Place:$place");
         final res = await repository.login(state.email, state.password);
 
         if (res.user == null) {

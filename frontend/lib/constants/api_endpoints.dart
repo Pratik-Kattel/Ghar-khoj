@@ -1,10 +1,10 @@
 class ApiEndpoints{
-  static final String baseUrl="http://192.168.100.111:5000/api/gharKhoj";
+  static final String baseUrl="http://10.0.2.2:5000/api/gharKhoj";
   static  String login="$baseUrl/loginUser";
   static String register="$baseUrl/registerUser";
   static String validateEmail="$baseUrl/validateEmail";
   static String validateOTP="$baseUrl/validateOTP";
   static String changePassword="$baseUrl/changePassword";
   static String getUserName="$baseUrl/getUsername";
-
+  static String sendLocation="$baseUrl/storeUserLocation";
 }

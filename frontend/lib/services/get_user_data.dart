@@ -27,14 +27,14 @@ class GetUserDataRepo {
     }
     Map<String, dynamic> jwtPayload = Jwt.parseJwt(token);
 
-    final userEmail = jwtPayload['email'] as String?;
+    final String ?userEmail = jwtPayload['email'] as String?;
     if (kDebugMode) {
       print(jwtPayload['email']);
     }
     return userEmail;
   }
 
-   Future<GetUserDataModel> getUserData(String userEmail) async {
+   Future<GetUserDataModel> getUserData(String? userEmail) async {
     final res = await apiClient.post(ApiEndpoints.getUserName, {
       "email": userEmail,
     });

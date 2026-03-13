@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/features/HomeScreen/Bloc/home_screen_bloc.dart';
 import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/change_password_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_email_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_otp_repo.dart';
+import 'package:frontend/features/auth/Repository/login/location_response_repo.dart';
 import 'package:frontend/features/auth/Repository/signup/signup_repo.dart';
 import 'package:frontend/features/auth/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:frontend/features/auth/bloc/signup/signup_bloc.dart';
 import 'package:frontend/routes/app_routes.dart';
 import 'package:frontend/features/splash/screens/splash_screen.dart';
+import 'package:frontend/services/get_user_data.dart';
 import 'package:frontend/services/secure_storage.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/services/api_clients.dart';
@@ -26,11 +29,13 @@ void main() async{
   final validateEmailRepository = ValidateEmailRepository(apiClient: apiClient);
   final validateOTPRepository=ValidateOtpRepo(apiClient:apiClient);
   final changePasswordRepo=ChangePasswordRepo(apiClient: apiClient);
+  final locationResponseRepo=LocationResponseRepo(apiClient: apiClient);
+  final getUserDataRepo=GetUserDataRepo(apiClient);
 
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => LoginBloc(repository: loginRepo)),
+        BlocProvider(create: (_) => LoginBloc(repository: loginRepo,locationResponseRepo: locationResponseRepo)),
         BlocProvider(create: (_) => SignupBloc(signupRepository: signUpRepo)),
         BlocProvider(
           create: (_) => ForgotPasswordBloc(
@@ -38,7 +43,8 @@ void main() async{
           ),
         ),
         BlocProvider(create: (_)=>OTPValidationBloc(validateOtpRepo: validateOTPRepository)),
-        BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo))
+        BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo)),
+        BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo))
       ],
       child:  myApp(isLoggedIn:token!=null),
     ),
@@ -59,7 +65,7 @@ class myApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppThemes.purpleTheme,
         routes: AppRoutes.routes,
-        home: SplashScreen()
+        home: isLoggedIn?Homescreen():SplashScreen()
       ),
     );
   }

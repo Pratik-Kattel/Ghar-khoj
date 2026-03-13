@@ -1,3 +1,4 @@
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {
@@ -18,10 +19,18 @@ class LocationService {
       return Future.error("Location permission is denied");
     }
     if (permission == LocationPermission.deniedForever) {
-      return Future.error("Location permission is denied permanently");
+      return Future.error("Location permission is denied permanently. Please enable from settings to continue.");
     }
     return await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
+  }
+}
+
+class PlaceName{
+  static Future<String?> getPlace(double longitude,double latitude) async{
+    List<Placemark> placemarks=await placemarkFromCoordinates(latitude, longitude);
+    Placemark place=placemarks[0];
+    return place.locality;
   }
 }
