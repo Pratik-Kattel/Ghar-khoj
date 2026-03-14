@@ -109,6 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: CustomTextField.textField(
+                        width: 2,
                         contentPadding: 20,
                         iconPadding: 17,
                         hintText: "Enter Email",
@@ -140,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.w),
                       child: CustomTextField.textField(
+                        width: 2,
                         iconPadding: 10,
                         contentPadding: 20,
                         hintText: "Enter Password",

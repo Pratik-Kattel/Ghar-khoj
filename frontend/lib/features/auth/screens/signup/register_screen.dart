@@ -148,6 +148,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           SizedBox(height: 20.h),
                           CustomTextField.textField(
                             hintText: "Enter Name",
+                            width: 2,
                             errorMessage: state.nameError,
                             borderColor: state.nameError != null
                                 ? AppColors.redColor
@@ -171,6 +172,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 20.h),
                           CustomTextField.textField(
+                            width: 2,
                             hintText: "Enter Email",
                             errorMessage: state.emailError,
                             borderColor: state.emailError != null
@@ -198,6 +200,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 20.h),
                           CustomTextField.textField(
+                            width: 2,
                             obSecureText: !_isPasswordVisible,
                             hintText: "Enter Password",
                             errorMessage: state.passwordError,
@@ -237,6 +240,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                           ),
                           SizedBox(height: 20.h),
                           CustomTextField.textField(
+                            width: 2,
                             obSecureText: !_isRePasswordVisible,
                             hintText: "Confirm Password",
                             errorMessage: state.confirmError,

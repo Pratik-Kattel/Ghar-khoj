@@ -101,6 +101,7 @@ class ForgotPassword_State extends State<ForgotPassword> {
                   ),
                   SizedBox(height: 20.h),
                   CustomTextField.textField(
+                    width: 2,
                     hintText: "Enter email here",
                     borderColor: emailFocus.hasFocus
                         ? AppColors.primary

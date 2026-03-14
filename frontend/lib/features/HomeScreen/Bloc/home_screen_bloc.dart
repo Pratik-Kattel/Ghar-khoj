@@ -27,7 +27,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         Position position=await LocationService.getUserLocation();
         double lat=position.latitude;
         double long=position.longitude;
-        await locationResponseRepo.sendLocation(long, lat, email);
+        await locationResponseRepo.sendLocation(long, lat, email!);
 
         // Fetching placename from longitude and latitude
         String? place=await PlaceName.getPlace(long, lat);
@@ -42,8 +42,8 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       catch(e){
         emit(state.copyWith(
           isLoading: false,
-          name: "Loading...",
-            place: "Location Not Available"
+          name: "Guest !",
+            place: "Location Not found"
         ));
       }
     });

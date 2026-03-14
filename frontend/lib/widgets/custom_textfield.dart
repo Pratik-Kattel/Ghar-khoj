@@ -16,11 +16,12 @@ class CustomTextField {
     required double iconPadding,
     required FormFieldValidator Validator,
     Widget? suffixIcon,
+    required double width,
   }) {
     return Container(
       margin: EdgeInsetsGeometry.symmetric(horizontal: 10.w),
       decoration: BoxDecoration(
-        border: BoxBorder.all(color: borderColor, width: 2.w),
+        border: BoxBorder.all(color: borderColor, width: width.w),
         borderRadius: BorderRadius.all(Radius.circular(10.r)),
         color: Colors.white,
       ),

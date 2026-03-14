@@ -99,6 +99,7 @@ class ValidateOtpScreenState extends State<ValidateOtpScreen> {
                   ),
                   SizedBox(height: 30.h),
                   CustomTextField.textField(
+                    width: 2,
                     hintText: "Enter the otp here",
                     borderColor: otpFocus.hasFocus
                         ? AppColors.primary

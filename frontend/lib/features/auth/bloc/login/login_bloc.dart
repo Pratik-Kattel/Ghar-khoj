@@ -33,13 +33,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       try {
-        Position position=await LocationService.getUserLocation();
-        double lat=position.latitude;
-        double long=position.longitude;
-        String? email=await GetUserDataRepo.getUserEmail();
-        await locationResponseRepo.sendLocation(long, lat, email);
-        String? place=await PlaceName.getPlace(long, lat);
-        print("Place:$place");
         final res = await repository.login(state.email, state.password);
 
         if (res.user == null) {
@@ -48,6 +41,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(state.copyWith(isSubmitting: false, isSuccess: true));
           emit(state.copyWith(isSuccess: false));
         }
+        Position position=await LocationService.getUserLocation();
+        double lat=position.latitude;
+        double long=position.longitude;
+        String? email=await GetUserDataRepo.getUserEmail();
+        await locationResponseRepo.sendLocation(long, lat, email!);
+        String? place=await PlaceName.getPlace(long, lat);
+        print("Place:$place");
       }
       on DioException catch(e){
         emit(

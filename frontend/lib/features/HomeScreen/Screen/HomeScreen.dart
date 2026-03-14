@@ -8,6 +8,7 @@ import 'package:frontend/features/HomeScreen/Bloc/home_screen_event.dart';
 import 'package:frontend/services/api_clients.dart';
 import 'package:frontend/services/get_user_data.dart';
 import 'package:frontend/themes/app_themes.dart';
+import 'package:frontend/widgets/custom_textfield.dart';
 
 import '../Bloc/home_screen_state.dart';
 
@@ -19,22 +20,6 @@ class Homescreen extends StatefulWidget {
 }
 
 class HomescreenState extends State<Homescreen> {
-  // late bool _isLoading = true;
-  // late String name;
-  //
-  // void fetchUsername() async {
-  //   final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
-  //   final getUserDataRepo = GetUserDataRepo(apiClient);
-  //   final getUsername = GetUserName(getUserDataRepo: getUserDataRepo);
-  //   var userName = await getUsername.getuserName();
-  //   if (userName != null) {
-  //     setState(() {
-  //       _isLoading = false;
-  //       name = userName;
-  //     });
-  //   }
-  // }
-
   void initState() {
     super.initState();
     context.read<HomeScreenBloc>().add(HomeStarted());
@@ -42,12 +27,18 @@ class HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> houses = [
+      "Assets/Images/house 2.jpg",
+      "Assets/Images/house 3.jpg",
+      "Assets/Images/house 4.jpg",
+      "Assets/Images/house5.jpeg",
+    ];
+    final FocusNode searchFocus = FocusNode();
+    final TextEditingController searchController = TextEditingController();
     return Scaffold(
-      backgroundColor: AppColors.secondaryScaffold,
       body: SafeArea(
         child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
-          listener: (context, state) {
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             return Column(
               children: [
@@ -68,9 +59,12 @@ class HomescreenState extends State<Homescreen> {
                       children: [
                         Icon(Icons.location_on, color: AppColors.primary),
                         Padding(
-                          padding: EdgeInsetsGeometry.only(right: 10.w),
+                          padding: EdgeInsetsGeometry.only(
+                            right: 10.w,
+                            top: 5.h,
+                          ),
                           child: Text(
-                            state.place??"Loading..",
+                            state.place ?? "Loading..",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w600,
@@ -81,6 +75,67 @@ class HomescreenState extends State<Homescreen> {
                       ],
                     ),
                   ],
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 40.h),
+                      InkWell(
+                        onTap: () {},
+                        child: CustomTextField.textField(
+                          width: 1.5,
+                          hintText: "Search property",
+                          borderColor: Colors.grey,
+                          focus: searchFocus,
+                          controller: searchController,
+                          prefixIcon: Icon(
+                            Icons.search_outlined,
+                            color: AppColors.primary,
+                          ),
+                          contentPadding: 19,
+                          iconPadding: 10,
+                          suffixIcon: Padding(
+                            padding: EdgeInsetsGeometry.only(top: 5.h),
+                            child: IconButton(
+                              color: AppColors.primary,
+                              onPressed: () {},
+                              icon: Icon(Icons.tune),
+                            ),
+                          ),
+                          Validator: (value) {},
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: EdgeInsetsGeometry.only(left: 10.w),
+                            child: Text(
+                              "Recommended",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ),
+                          TextButton(onPressed: () {}, child: Text("See all")),
+                        ],
+                      ),
+                      SizedBox(height: 5.h),
+                      Container(
+                        height: 200.h,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: houses.length,
+                          separatorBuilder: (context,index)=>SizedBox(width: 10.w,),
+                          itemBuilder: (context,index){
+                            return ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(12.r),
+                              child: Image.asset(houses[index]),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             );

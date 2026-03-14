@@ -96,6 +96,7 @@ class EnterNewPasswordScreenState extends State<EnterNewPasswordScreen> {
                   ),
                   SizedBox(height: 30.h),
                   CustomTextField.textField(
+                    width: 2,
                     obSecureText: !_isPasswordVisible,
                     errorMessage: state.passwordError,
                     hintText: "Enter password here",
@@ -131,6 +132,7 @@ class EnterNewPasswordScreenState extends State<EnterNewPasswordScreen> {
                   ),
                   SizedBox(height: 30.h),
                   CustomTextField.textField(
+                    width: 2,
                     obSecureText: !_isRePasswordVisible,
                     errorMessage: state.confirmPasswordError,
                     hintText: "Re-enter password here",
