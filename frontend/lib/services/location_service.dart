@@ -35,6 +35,7 @@ class LocationService {
   }
 }
 
+
 class PlaceName {
   static Future<String?> getPlace(double longitude, double latitude) async {
     List<Placemark> placemarks = await placemarkFromCoordinates(

@@ -1,3 +1,4 @@
+// lib/features/house/bloc/house_upload_event.dart
 import 'dart:io';
 
 sealed class HouseUploadEvent {}
@@ -21,5 +22,16 @@ class HouseImagePicked extends HouseUploadEvent {
   final File image;
   HouseImagePicked(this.image);
 }
+
+class HouseCountryChanged extends HouseUploadEvent {
+  final String country;
+  HouseCountryChanged(this.country);
+}
+
+class HousePlaceChanged extends HouseUploadEvent {
+  final String place;
+  HousePlaceChanged(this.place);
+}
+class HouseResetState extends HouseUploadEvent {}
 
 class HouseUploadSubmitted extends HouseUploadEvent {}

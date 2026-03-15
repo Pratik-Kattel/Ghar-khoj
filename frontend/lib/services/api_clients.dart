@@ -10,22 +10,26 @@ class ApiClient {
     dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
-        connectTimeout: Duration(milliseconds: 10000),
-        receiveTimeout: Duration(milliseconds: 10000),
+        connectTimeout: const Duration(milliseconds: 10000),
+        receiveTimeout: const Duration(milliseconds: 10000),
         headers: {"Content-Type": "application/json"},
       ),
     );
   }
 
+  // Updated post method
   Future<Map<String, dynamic>> post(
-    String endpoint,
-    Map<String, dynamic> body,
-  ) async {
+      String endpoint,
+      dynamic body, //
+      ) async {
     try {
-      final response = await dio.post(endpoint, data: body);
-      if (kDebugMode) {
-        print("Sending request...");
-      }
+      final response = await dio.post(
+        endpoint,
+        data: body,
+        options: body is FormData
+            ? Options(contentType: "multipart/form-data")
+            : null,
+      );
       if (kDebugMode) {
         print("SUCCESS RESPONSE: ${response.data}");
       }
@@ -34,7 +38,6 @@ class ApiClient {
       if (kDebugMode) {
         print("DIO ERROR: ${e.response?.data}");
       }
-      // Backend error code like 400,404
       if (e.response != null) {
         final validationError = e.response?.data;
         if (validationError != null && validationError['errors'] != null) {
@@ -48,7 +51,6 @@ class ApiClient {
           message: message,
         );
       }
-      // Error if not internet or server is unreachable
       throw DioException(
         requestOptions: e.requestOptions,
         type: DioExceptionType.connectionError,
@@ -82,5 +84,4 @@ class ApiClient {
       );
     }
   }
-
 }

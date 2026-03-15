@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:io';
+import '../../../services/get_user_data.dart';
+import '../../../services/location_service.dart';
 import '../Model/add_house_model.dart';
 import '../Repository/upload_house-repo.dart';
 import 'add_house_event.dart';
@@ -8,31 +9,76 @@ import 'add_house_state.dart';
 class HouseUploadBloc extends Bloc<HouseUploadEvent, HouseUploadState> {
   final HouseRepository repository;
 
-  HouseUploadBloc({required this.repository}) : super(const HouseUploadState()) {
-    on<HouseTitleChanged>((event, emit) => emit(state.copyWith(title: event.title)));
-    on<HouseDescriptionChanged>((event, emit) => emit(state.copyWith(description: event.description)));
-    on<HousePriceChanged>((event, emit) => emit(state.copyWith(price: event.price)));
-    on<HouseImagePicked>((event, emit) => emit(state.copyWith(imageFile: event.image)));
+  HouseUploadBloc({required this.repository})
+    : super(const HouseUploadState()) {
+    on<HouseTitleChanged>(
+      (event, emit) => emit(state.copyWith(title: event.title)),
+    );
+    on<HouseDescriptionChanged>(
+      (event, emit) => emit(state.copyWith(description: event.description)),
+    );
+    on<HousePriceChanged>(
+      (event, emit) => emit(state.copyWith(price: event.price)),
+    );
+    on<HouseImagePicked>(
+      (event, emit) => emit(state.copyWith(imageFile: event.image)),
+    );
+    on<HouseResetState>((event, emit) {
+      emit(HouseUploadState.initial());
+    });
+    on<HouseCountryChanged>(
+      (event, emit) => emit(state.copyWith(country: event.country)),
+    );
+    on<HousePlaceChanged>(
+      (event, emit) => emit(state.copyWith(place: event.place)),
+    );
 
     on<HouseUploadSubmitted>((event, emit) async {
-      if (state.title.isEmpty || state.imageFile == null) {
-        emit(state.copyWith(errorMessage: "Title and image are required"));
+      if (state.title.isEmpty ||
+          state.imageFile == null ||
+          state.country.isEmpty ||
+          state.place.isEmpty) {
+        emit(
+          state.copyWith(
+            errorMessage:
+                "All fields including image, country, and place are required",
+          ),
+        );
         return;
       }
 
       emit(state.copyWith(isSubmitting: true, errorMessage: null));
 
       try {
+        final userEmail = await GetUserDataRepo.getUserEmail();
+        if (userEmail == null) {
+          emit(state.copyWith(isSubmitting: false, errorMessage: "User email not found!"));
+          return;
+        }
+        List<double> latLong = await LocationService.getLatLongFromAddress(
+          state.country,
+          state.place,
+        );
+        double latitude = latLong[0];
+        double longitude = latLong[1];
+
         HouseUploadResponse res = await repository.uploadHouse(
           title: state.title,
+          email:userEmail ,
           description: state.description,
           price: state.price,
-          latitude: 27.675,
-          longitude: 84.428,
+          latitude: latitude,
+          longitude: longitude,
           imageFile: state.imageFile!,
         );
 
-        emit(state.copyWith(isSubmitting: false, isSuccess: true, message: res.message));
+        emit(
+          state.copyWith(
+            isSubmitting: false,
+            isSuccess: true,
+            message: res.message,
+          ),
+        );
       } catch (e) {
         emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
       }

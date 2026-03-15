@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/features/Add_house/bloc/add_house_bloc.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Bloc/home_screen_bloc.dart';
 import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
@@ -22,6 +23,7 @@ import 'package:frontend/constants/api_endpoints.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import './features/auth/bloc/login/login_bloc.dart';
 import './features/auth/Repository/login/login_repo.dart';
+import 'features/Add_house/Repository/upload_house-repo.dart';
 
 void main() async{
   await WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +37,7 @@ void main() async{
   final locationResponseRepo=LocationResponseRepo(apiClient: apiClient);
   final getUserDataRepo=GetUserDataRepo(apiClient);
   final changeUsernameRepo=ChangeUserNameRepo(apiClient: apiClient);
+  final houseRepo = HouseRepository(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -49,7 +52,8 @@ void main() async{
         BlocProvider(create: (_)=>OTPValidationBloc(validateOtpRepo: validateOTPRepository)),
         BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo)),
         BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo)),
-        BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo)
+        BlocProvider(create: (_)=>HouseUploadBloc(repository: houseRepo)),
+        BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo),
         )],
       child:  myApp(isLoggedIn:token!=null),
     ),

@@ -112,7 +112,9 @@ class SettingsScreenState extends State<SettingsScreen> {
             ),
             SizedBox(height: 15.h),
             CustomListTile.listTile(
-              onTap: (){},
+              onTap: (){
+                Navigator.pushNamed(context, '/addHouse');
+              },
               icon: Icons.home,
               title: "Add home",
               trailing: Icons.arrow_forward_ios_outlined,

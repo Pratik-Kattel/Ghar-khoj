@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:frontend/features/Add_house/Screen/add_house_screen.dart';
 import 'package:frontend/features/Boarding/screens/boarding_screen.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
@@ -15,6 +16,7 @@ class AppRoutes{
   static const homeScreen='/homeScreen';
   static const editProfile='/editProfile';
   static const bottomNavigator='/bottomNavigator';
+  static const addHouseScreen='/addHouse';
 
 
 static Map<String,WidgetBuilder> routes={
@@ -24,6 +26,7 @@ static Map<String,WidgetBuilder> routes={
   forgotPassword:(context)=>ForgotPassword(),
   homeScreen:(context)=>Homescreen(),
   editProfile:(context)=>EditProfilePage(),
-  bottomNavigator:(context)=>BottomNavigator()
+  bottomNavigator:(context)=>BottomNavigator(),
+  addHouseScreen:(context)=>UploadHouseScreen()
 };
 }
