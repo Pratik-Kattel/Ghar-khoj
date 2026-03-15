@@ -7,4 +7,5 @@ class ApiEndpoints{
   static String changePassword="$baseUrl/changePassword";
   static String getUserName="$baseUrl/getUsername";
   static String sendLocation="$baseUrl/storeUserLocation";
+  static String changeName="$baseUrl/changeName";
 }

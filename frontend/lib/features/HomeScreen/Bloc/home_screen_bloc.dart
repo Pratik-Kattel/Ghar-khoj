@@ -36,14 +36,16 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         emit(state.copyWith(
           isLoading: false,
           name: name,
-          place: place
+          place: place,
+          email: email
         ));
       }
       catch(e){
         emit(state.copyWith(
           isLoading: false,
           name: "Guest !",
-            place: "Location Not found"
+            place: "Location Not found",
+          email: "Loading"
         ));
       }
     });

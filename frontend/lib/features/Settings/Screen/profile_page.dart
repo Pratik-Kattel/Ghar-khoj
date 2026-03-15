@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_list_tile.dart';
+import '../../HomeScreen/Bloc/home_screen_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -12,12 +14,23 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
+ late String name;
+ late String email;
+  void initState(){
+    super.initState();
+    final homeState = context.read<HomeScreenBloc>().state;
+    setState(() {
+      name=homeState.name ?? " ";
+      email=homeState.email ?? " ";
+
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 15.h),
             Center(
@@ -58,8 +71,22 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 80.h),
-            Divider(thickness: 0.78, color: Colors.grey),
+            SizedBox(
+              height: 20.h,
+            ),
+            Text(name,style: TextStyle(
+              fontSize: 17.sp,
+              color: Colors.black
+            ),),
+            SizedBox(
+              height: 5.h,
+            ),
+            Text(email,style: TextStyle(
+              fontSize: 17.sp,
+              color: Colors.black
+            ),),
+            SizedBox(height: 70.h),
+            Divider(thickness: 1, color: Colors.grey),
             SizedBox(height: 10.h),
             CustomListTile.listTile(
               onTap: (){
@@ -81,6 +108,13 @@ class SettingsScreenState extends State<SettingsScreen> {
               onTap: (){},
               icon: Icons.perm_contact_cal_outlined,
               title: "Contact Us",
+              trailing: Icons.arrow_forward_ios_outlined,
+            ),
+            SizedBox(height: 15.h),
+            CustomListTile.listTile(
+              onTap: (){},
+              icon: Icons.home,
+              title: "Add home",
               trailing: Icons.arrow_forward_ios_outlined,
             ),
             SizedBox(height: 15.h),

@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Bloc/home_screen_bloc.dart';
 import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
+import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_bloc.dart';
+import 'package:frontend/features/Settings/Repository/change_user_name_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/change_password_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_email_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_otp_repo.dart';
@@ -32,6 +34,7 @@ void main() async{
   final changePasswordRepo=ChangePasswordRepo(apiClient: apiClient);
   final locationResponseRepo=LocationResponseRepo(apiClient: apiClient);
   final getUserDataRepo=GetUserDataRepo(apiClient);
+  final changeUsernameRepo=ChangeUserNameRepo(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -45,8 +48,9 @@ void main() async{
         ),
         BlocProvider(create: (_)=>OTPValidationBloc(validateOtpRepo: validateOTPRepository)),
         BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo)),
-        BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo))
-      ],
+        BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo)),
+        BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo)
+        )],
       child:  myApp(isLoggedIn:token!=null),
     ),
   );

@@ -15,6 +15,7 @@ class CustomTextField {
     required double contentPadding,
     required double iconPadding,
     required FormFieldValidator Validator,
+    bool readonly=false,
     Widget? suffixIcon,
     required double width,
   }) {
@@ -29,6 +30,7 @@ class CustomTextField {
       width: double.infinity.w,
       child: TextFormField(
         obscureText: obSecureText,
+        readOnly: readonly,
         validator: Validator,
         focusNode: focus,
         controller: controller,

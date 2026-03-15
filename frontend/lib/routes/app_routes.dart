@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:frontend/features/Boarding/screens/boarding_screen.dart';
+import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
 import 'package:frontend/features/Settings/Screen/edit_profile_page.dart';
 import 'package:frontend/features/auth/screens/forgot_password/validate_email_screen.dart';
@@ -13,6 +14,7 @@ class AppRoutes{
   static const forgotPassword='/forgotPassword';
   static const homeScreen='/homeScreen';
   static const editProfile='/editProfile';
+  static const bottomNavigator='/bottomNavigator';
 
 
 static Map<String,WidgetBuilder> routes={
@@ -21,6 +23,7 @@ static Map<String,WidgetBuilder> routes={
   register:(context)=>RegisterScreen(),
   forgotPassword:(context)=>ForgotPassword(),
   homeScreen:(context)=>Homescreen(),
-  editProfile:(context)=>EditProfilePage()
+  editProfile:(context)=>EditProfilePage(),
+  bottomNavigator:(context)=>BottomNavigator()
 };
 }

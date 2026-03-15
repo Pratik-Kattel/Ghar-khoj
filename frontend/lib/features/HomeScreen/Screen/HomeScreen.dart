@@ -51,7 +51,7 @@ class HomescreenState extends State<Homescreen> {
                       child: state.isLoading
                           ? Text("Loading...")
                           : Text(
-                              "Hello ${state.name}!",
+                              "Hello ${state.name?.split(" ")[0]}!",
                               style: Theme.of(context).textTheme.titleMedium,
                             ),
                     ),
