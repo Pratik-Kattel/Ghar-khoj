@@ -14,7 +14,7 @@ export enum UserRoles{
 }
 
 export interface UserInfo{
-    id:String,
-    email:String,
-    role?:String
+    id:string,
+    email:string,
+    role?:string
 }

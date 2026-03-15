@@ -52,7 +52,6 @@ model Users {
   updatedAt    DateTime? @updatedAt @map("updated_at")
 
   // Relationships
-  location          UserLocations?
   devices           UserDevices[]
   otps              OTPLogs[]
   houses            Houses[]       @relation("UserHouses")
@@ -96,12 +95,11 @@ model LandlordDocuments {
 /// USER LOCATIONS
 
 model UserLocations {
-  userId    String   @id @map("user_id")
+  Location_id String @id @default(cuid()) @map("location_id")
+  email String @unique
   latitude  Float
   longitude Float
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  user Users @relation(fields: [userId], references: [id])
 
   @@map("user_locations")
 }
@@ -144,15 +142,13 @@ model OTPLogs {
 
 model Houses {
   houseId     String   @id @default(cuid()) @map("house_id")
-  landlordId  String   @map("landlord_id")
+  landlordEmail  String   @map("landlord_email")
   title       String   @map("title")
   description String   @map("description")
   price       Decimal  @db.Decimal(10, 2) @map("price")
   latitude    Float    @map("latitude")
   longitude   Float    @map("longitude")
-  address     String   @map("address")
-  isFeatured  Boolean  @map("is_featured")
-  isApproved  Boolean  @map("is_approved") //  admin must approve
+  image_url   String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
@@ -161,7 +157,7 @@ model Houses {
   wishlist Wishlist[]
   bookings Bookings[]
 
-  landlord Users @relation("UserHouses", fields: [landlordId], references: [id])
+  landlord Users @relation("UserHouses", fields: [landlordEmail], references: [email])
 
   @@map("houses")
 }

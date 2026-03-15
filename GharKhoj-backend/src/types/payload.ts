@@ -1,4 +1,4 @@
-import { JwtPayload } from "jsonwebtoken";
+import { UserInfo } from "../types/user";
 
 
 // This class declares 'express-serve-static-core' module in which Request type is defined
@@ -6,6 +6,6 @@ import { JwtPayload } from "jsonwebtoken";
 // So, we are telling that Request object can optionally have the user property
 declare module 'express-serve-static-core'{
     interface Request{
-        user?:string | JwtPayload
+        user:UserInfo
     }
 }

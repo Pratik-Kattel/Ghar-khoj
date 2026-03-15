@@ -10,7 +10,7 @@ return jwt.sign({
 },
 env.ACCESS_TOKEN_SECRET!,
 {
-    expiresIn:'7d' 
+    expiresIn:'30d' 
 }
 )
 }
