@@ -276,7 +276,6 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
                       contentPadding: 20,
                       iconPadding: 17,
                       hintText: "Enter Description",
-                      maxLines: 3,
                       borderColor: descriptionFocus.hasFocus
                           ? AppColors.primary
                           : AppColors.grey,

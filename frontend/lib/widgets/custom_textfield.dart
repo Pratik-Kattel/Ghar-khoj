@@ -16,7 +16,6 @@ class CustomTextField {
     required double iconPadding,
     required FormFieldValidator Validator,
     TextInputType keyboardType = TextInputType.text,
-    int? maxLines,
     bool readonly=false,
     Widget? suffixIcon,
     required double width,
@@ -32,7 +31,6 @@ class CustomTextField {
       width: double.infinity.w,
       child: TextFormField(
         keyboardType: keyboardType,
-        maxLines: maxLines,
         obscureText: obSecureText,
         readOnly: readonly,
         validator: Validator,
