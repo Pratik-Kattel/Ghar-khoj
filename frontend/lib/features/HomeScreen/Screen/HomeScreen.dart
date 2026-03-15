@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/HomeScreen/Bloc/home_screen_bloc.dart';
 import 'package:frontend/features/HomeScreen/Bloc/home_screen_event.dart';
 import 'package:frontend/themes/app_themes.dart';
+import 'package:frontend/widgets/custom_hot_deals_houses_cart.dart';
 import 'package:frontend/widgets/custom_house_nearby_cart.dart';
 import 'package:frontend/widgets/custom_house_recommended_cart.dart';
 import 'package:frontend/widgets/custom_textfield.dart';
@@ -172,6 +173,26 @@ class HomescreenState extends State<Homescreen> {
                           houses: houses,
                           ItemCount: houses.length,
                         ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: EdgeInsetsGeometry.only(left: 10.w),
+                            child: Text(
+                              "Hot Deals:",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                color: AppColors.redColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Container(
+                          child:
+                        CustomHotDealsHousesCart.customHotDeals(houses: houses, ItemCount: houses.length)
+                        )
                       ],
                     ),
                   ),

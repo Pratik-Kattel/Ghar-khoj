@@ -17,6 +17,7 @@ class CustomHouseCart {
     return SizedBox(
       height: 200.h,
       child: ListView.builder(
+        shrinkWrap: true,
         scrollDirection: Axis.horizontal,
         itemCount: ItemCount,
         itemBuilder: (context, index) {

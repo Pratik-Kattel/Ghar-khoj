@@ -14,6 +14,7 @@ class CustomHouseNearbyCart {
       ),
       child:
       ListView.builder(
+        shrinkWrap: true,
           scrollDirection: Axis.horizontal,
           itemCount: ItemCount,
           itemBuilder: (context, index) {
