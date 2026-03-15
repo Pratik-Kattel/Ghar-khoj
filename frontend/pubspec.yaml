@@ -80,6 +80,7 @@ flutter:
      - Assets/Images/house 3.jpg
      - Assets/Images/house 4.jpg
      - Assets/Images/house5.jpeg
+     - Assets/Images/ronaldo.webp
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

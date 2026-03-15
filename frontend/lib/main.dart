@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Bloc/home_screen_bloc.dart';
 import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/change_password_repo.dart';
@@ -65,7 +66,7 @@ class myApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppThemes.purpleTheme,
         routes: AppRoutes.routes,
-        home: isLoggedIn?Homescreen():SplashScreen()
+        home: isLoggedIn?BottomNavigator():SplashScreen()
       ),
     );
   }
