@@ -8,4 +8,5 @@ class ApiEndpoints{
   static String getUserName="$baseUrl/getUsername";
   static String sendLocation="$baseUrl/storeUserLocation";
   static String changeName="$baseUrl/changeName";
+  static String upladHouse="$baseUrl/uplaodHouse";
 }

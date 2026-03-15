@@ -19,18 +19,27 @@ class LocationService {
       return Future.error("Location permission is denied");
     }
     if (permission == LocationPermission.deniedForever) {
-      return Future.error("Location permission is denied permanently. Please enable from settings to continue.");
+      return Future.error(
+          "Location permission is denied permanently. Please enable from settings to continue.");
     }
     return await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );
   }
+
+  static Future<List<double>> getLatLongFromAddress(String country,
+      String place) async {
+    List<Location> locations = await locationFromAddress("$place, $country");
+    if (locations.isEmpty) return [0, 0];
+    return [locations[0].latitude, locations[0].longitude];
+  }
 }
 
-class PlaceName{
-  static Future<String?> getPlace(double longitude,double latitude) async{
-    List<Placemark> placemarks=await placemarkFromCoordinates(latitude, longitude);
-    Placemark place=placemarks[0];
+class PlaceName {
+  static Future<String?> getPlace(double longitude, double latitude) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+        latitude, longitude);
+    Placemark place = placemarks[0];
     return place.locality;
   }
 }
