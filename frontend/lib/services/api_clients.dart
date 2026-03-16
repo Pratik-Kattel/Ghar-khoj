@@ -63,13 +63,23 @@ class ApiClient {
     dio.options.headers["Authorization"] = "Bearer $token";
   }
 
-  Future<Map<String, dynamic>> get(String endpoint) async {
+  Future<dynamic> get(String endpoint) async {
     try {
       final res = await dio.get(endpoint);
+      print("GET RAW RESPONSE: ${res.data}");
+      print("GET RESPONSE TYPE: ${res.data.runtimeType}");
       return res.data;
     } on DioException catch (e) {
+      print("DIO GET ERROR: ${e.response?.statusCode} | ${e.response?.data}");
       if (e.response != null) {
-        final error = e.response?.data['message'] ?? "Something went wrong";
+        // Safely extract message — response could be a List or Map
+        String error = "Something went wrong";
+        final data = e.response?.data;
+        if (data is Map) {
+          error = data['message'] ?? "Something went wrong";
+        } else if (data is String) {
+          error = data;
+        }
         throw DioException(
           requestOptions: e.requestOptions,
           type: DioExceptionType.badResponse,
@@ -81,6 +91,7 @@ class ApiClient {
         requestOptions: e.requestOptions,
         type: DioExceptionType.connectionError,
         error: "Couldn't connect to the server try again later",
+        message: "Couldn't connect to the server try again later",
       );
     }
   }

@@ -11,19 +11,19 @@ class HomeScreenState extends Equatable{
     this.name,
     this.place,
     this.email
-});
+  });
 
   HomeScreenState copyWith({
     bool? isLoading,
     String? name,
     String? place,
     String? email
-}){
+  }){
     return HomeScreenState(
-      isLoading: isLoading??this.isLoading,
-      name: name??this.name,
-      place: place??this.place,
-      email: email ?? this.email
+        isLoading: isLoading??this.isLoading,
+        name: name??this.name,
+        place: place??this.place,
+        email: email ?? this.email
     );
   }
 

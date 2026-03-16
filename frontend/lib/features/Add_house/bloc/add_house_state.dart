@@ -71,30 +71,3 @@ class HouseUploadState {
 
 
 
-class HomeScreenState {
-
-  final bool isLoading;
-  final List<NearbyHouseModel> nearbyHouses;
-
-  HomeScreenState({
-    required this.isLoading,
-    required this.nearbyHouses,
-  });
-
-  factory HomeScreenState.initial(){
-    return HomeScreenState(
-      isLoading: false,
-      nearbyHouses: [],
-    );
-  }
-
-  HomeScreenState copyWith({
-    bool? isLoading,
-    List<NearbyHouseModel>? nearbyHouses
-  }){
-    return HomeScreenState(
-      isLoading: isLoading ?? this.isLoading,
-      nearbyHouses: nearbyHouses ?? this.nearbyHouses,
-    );
-  }
-}

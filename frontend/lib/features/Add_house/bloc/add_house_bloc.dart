@@ -89,27 +89,3 @@ class HouseUploadBloc extends Bloc<HouseUploadEvent, HouseUploadState> {
 
 
 
-class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
-
-  final NearbyHouseRepo repo;
-
-  HomeScreenBloc(this.repo) : super(HomeScreenState.initial()) {
-
-    on<FetchNearbyHouses>((event, emit) async {
-
-      emit(state.copyWith(isLoading: true));
-
-      final houses = await repo.fetchNearbyHouses(
-        event.lat,
-        event.lng,
-      );
-
-      emit(state.copyWith(
-        isLoading: false,
-        nearbyHouses: houses,
-      ));
-
-    });
-
-  }
-}

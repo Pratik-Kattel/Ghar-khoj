@@ -2,8 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:frontend/features/auth/Repository/login/location_response_repo.dart';
 import 'package:frontend/services/get_user_data.dart';
 import 'package:geolocator/geolocator.dart';
-import '../../../services/location_service.dart';
-import '../Screen/HomeScreen.dart';
+import '../../../../services/location_service.dart';
 import 'home_screen_event.dart';
 import 'home_screen_state.dart';
 
@@ -34,18 +33,18 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         print("Place:$place");
 
         emit(state.copyWith(
-          isLoading: false,
-          name: name,
-          place: place,
-          email: email
+            isLoading: false,
+            name: name,
+            place: place,
+            email: email
         ));
       }
       catch(e){
         emit(state.copyWith(
-          isLoading: false,
-          name: "Guest !",
+            isLoading: false,
+            name: "Guest !",
             place: "Location Not found",
-          email: "Loading"
+            email: "Loading"
         ));
       }
     });

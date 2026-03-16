@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/services/secure_storage.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_list_tile.dart';
-import '../../HomeScreen/Bloc/home_screen_bloc.dart';
+import '../../HomeScreen/Bloc/home_screen/home_screen_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

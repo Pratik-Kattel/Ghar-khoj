@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/Add_house/bloc/add_house_bloc.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
-import 'package:frontend/features/HomeScreen/Bloc/home_screen_bloc.dart';
-import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
+import 'package:frontend/features/HomeScreen/Repository/nearby_house_repo.dart';
 import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_bloc.dart';
 import 'package:frontend/features/Settings/Repository/change_user_name_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/change_password_repo.dart';
@@ -24,6 +23,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import './features/auth/bloc/login/login_bloc.dart';
 import './features/auth/Repository/login/login_repo.dart';
 import 'features/Add_house/Repository/upload_house-repo.dart';
+import 'package:frontend/features/HomeScreen/Bloc/home_screen/home_screen_bloc.dart';
+import 'features/HomeScreen/Bloc/fetch_nearby_house/nearby_house_bloc.dart';
 
 void main() async{
   await WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +39,7 @@ void main() async{
   final getUserDataRepo=GetUserDataRepo(apiClient);
   final changeUsernameRepo=ChangeUserNameRepo(apiClient: apiClient);
   final houseRepo = HouseRepository(apiClient: apiClient);
+  final nearbyHouserepo=NearbyHouseRepo(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -51,8 +53,9 @@ void main() async{
         ),
         BlocProvider(create: (_)=>OTPValidationBloc(validateOtpRepo: validateOTPRepository)),
         BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo)),
-        BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo)),
+        BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo, )),
         BlocProvider(create: (_)=>HouseUploadBloc(repository: houseRepo)),
+        BlocProvider(create: (_) => NearbyHouseBloc(repo: nearbyHouserepo)),
         BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo),
         )],
       child:  myApp(isLoggedIn:token!=null),
