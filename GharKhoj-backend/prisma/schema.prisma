@@ -197,10 +197,10 @@ model Reviews {
 
 model Wishlist {
   wishlistId String @id @default(cuid()) @map("wishlist_id")
-  userId     String @map("user_id")
+  userEmail     String @map("user_email")
   houseId    String @map("house_id")
 
-  user  Users  @relation(fields: [userId], references: [id])
+  user  Users  @relation(fields: [userEmail], references: [email])
   house Houses @relation(fields: [houseId], references: [houseId])
 
   @@map("wishlists")

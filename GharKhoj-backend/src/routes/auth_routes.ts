@@ -7,7 +7,7 @@ import { changeUsernameController } from "../controllers/change_user_name_contro
 import { uploadHouseController } from "../controllers/upload_house_controller";
 import { getNearbyHousesController } from "../controllers/nearby_house_controller";
 import { upload } from "../utils/multer";
-import { getHotDetailsController } from "../controllers/get_hot_deals_controller";
+import { getHotDealsController } from "../controllers/get_hot_deals_controller";
 
 const router=express.Router();
 
@@ -21,7 +21,7 @@ router.post('/storeUserLocation',storeUserLocationController);
 router.post('/changeName',changeUsernameController);
 router.post("/uploadHouse", upload.single("image"), uploadHouseController);
 router.get('/nearbyHouses/:latitude/:longitude', getNearbyHousesController);
-router.post('/getHotDetails',getHotDetailsController);
+router.get('/hotDeals',getHotDealsController);
 
 
 export default router;

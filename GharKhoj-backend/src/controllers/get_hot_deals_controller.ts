@@ -1,8 +1,8 @@
 import { Request,Response } from "express"
-import { getHotDetailsService } from "../service/get_hot_deals_service"
-export const getHotDetailsController=async(req:Request,res:Response)=>{
+import { getHotDealsService } from "../service/get_hot_deals_service"
+export const getHotDealsController=async(req:Request,res:Response)=>{
     try{
-    const houses=await getHotDetailsService();
+    const houses=await getHotDealsService();
     res.status(200).json({
         houses
     })
