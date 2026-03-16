@@ -1,11 +1,11 @@
-class NearbyHouseModel {
+class HotDealModel {
   final String houseId;
   final String title;
   final String imageUrl;
   final String place;
   final double price;
 
-  NearbyHouseModel({
+  HotDealModel({
     required this.houseId,
     required this.title,
     required this.imageUrl,
@@ -13,9 +13,8 @@ class NearbyHouseModel {
     required this.price,
   });
 
-
-  factory NearbyHouseModel.fromJson(Map<String, dynamic> json, {String place = "Unknown"}) {
-    return NearbyHouseModel(
+  factory HotDealModel.fromJson(Map<String, dynamic> json, {String place = "Unknown"}) {
+    return HotDealModel(
       houseId: json["house_id"] ?? "",
       title: json["title"] ?? "",
       imageUrl: json["image_url"] ?? "",

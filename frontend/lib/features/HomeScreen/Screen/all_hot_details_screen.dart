@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../widgets/custom_house_nearby_cart.dart';
-import '../Model/nearby_house_model.dart';
+import '../../../widgets/custom_hot_deals_houses_cart.dart';
+import '../Model/hotdeals_model.dart';
 
-class AllNearbyHousesScreen extends StatelessWidget {
-  final List<NearbyHouseModel> houses;
+class AllHotDealsScreen extends StatelessWidget {
+  final List<HotDealModel> houses;
 
-  const AllNearbyHousesScreen({super.key, required this.houses});
+  const AllHotDealsScreen({super.key, required this.houses});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Nearby Houses",
+          "Hot Deals",
           style: TextStyle(
             fontSize: 18.sp,
             fontWeight: FontWeight.w600,
@@ -32,10 +32,10 @@ class AllNearbyHousesScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.home_outlined, size: 60, color: Colors.grey),
+            Icon(Icons.local_offer_outlined, size: 60, color: Colors.grey),
             SizedBox(height: 10.h),
             Text(
-              "No nearby houses found",
+              "No hot deals available",
               style: TextStyle(fontSize: 16.sp, color: Colors.grey),
             ),
           ],
@@ -49,14 +49,11 @@ class AllNearbyHousesScreen extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 15.w, bottom: 10.h),
               child: Text(
-                "${houses.length} houses found nearby",
-                style: TextStyle(
-                  fontSize: 14.sp,
-                  color: Colors.grey,
-                ),
+                "${houses.length} deals under \$100",
+                style: TextStyle(fontSize: 14.sp, color: Colors.grey),
               ),
             ),
-            CustomHouseNearbyCart.customNearbyCartVertical(
+            CustomHotDealsHousesCart.customHotDealsVertical(
               houses: houses,
             ),
           ],

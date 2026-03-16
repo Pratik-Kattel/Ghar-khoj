@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/Add_house/bloc/add_house_bloc.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
+import 'package:frontend/features/HomeScreen/Bloc/hot_deals/hot_deals_bloc.dart';
+import 'package:frontend/features/HomeScreen/Repository/hotdeals_repo.dart';
 import 'package:frontend/features/HomeScreen/Repository/nearby_house_repo.dart';
 import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_bloc.dart';
 import 'package:frontend/features/Settings/Repository/change_user_name_repo.dart';
@@ -40,6 +42,7 @@ void main() async{
   final changeUsernameRepo=ChangeUserNameRepo(apiClient: apiClient);
   final houseRepo = HouseRepository(apiClient: apiClient);
   final nearbyHouserepo=NearbyHouseRepo(apiClient: apiClient);
+  final hotDealsRepo=HotDealsRepo(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -56,8 +59,9 @@ void main() async{
         BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo, )),
         BlocProvider(create: (_)=>HouseUploadBloc(repository: houseRepo)),
         BlocProvider(create: (_) => NearbyHouseBloc(repo: nearbyHouserepo)),
-        BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo),
-        )],
+        BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo)),
+        BlocProvider(create: (_)=>HotDealsBloc(repo: hotDealsRepo))
+      ],
       child:  myApp(isLoggedIn:token!=null),
     ),
   );

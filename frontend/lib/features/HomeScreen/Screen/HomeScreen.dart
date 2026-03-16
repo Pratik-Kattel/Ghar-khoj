@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,7 +13,13 @@ import '../Bloc/fetch_nearby_house/nearby_house_state.dart';
 import '../Bloc/home_screen/home_screen_bloc.dart';
 import '../Bloc/home_screen/home_screen_event.dart';
 import '../Bloc/home_screen/home_screen_state.dart';
+import '../Bloc/hot_deals/hot_deals_bloc.dart';
+import '../Bloc/hot_deals/hot_deals_event.dart';
+import '../Bloc/hot_deals/hot_deals_state.dart';
+import '../Screen/all_nearby_houses_screen.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'all_hot_details_screen.dart';
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -33,30 +37,23 @@ class HomescreenState extends State<Homescreen> {
     super.initState();
     print("HomeScreen initialized");
     context.read<HomeScreenBloc>().add(HomeStarted());
+    context.read<HotDealsBloc>().add(FetchHotDeals());
     _fetchNearbyHouses();
   }
 
   void _fetchNearbyHouses() async {
     try {
-      if (kDebugMode) {
-        print("Fetching user location...");
-      }
+      print("Fetching user location...");
       Position position = await LocationService.getUserLocation();
       double lat = position.latitude;
       double long = position.longitude;
-      if (kDebugMode) {
-        print("User location: lat=$lat, long=$long");
-      }
+      print("User location: lat=$lat, long=$long");
 
       final nearbyBloc = context.read<NearbyHouseBloc>();
-      if (kDebugMode) {
-        print("Dispatching FetchNearbyHouses event to NearbyHouseBloc");
-      }
+      print("Dispatching FetchNearbyHouses event to NearbyHouseBloc");
       nearbyBloc.add(FetchNearbyHouses(latitude: lat, longitude: long));
     } catch (e) {
-      if (kDebugMode) {
-        print("Nearby fetch error: $e");
-      }
+      print("Nearby fetch error: $e");
     }
   }
 
@@ -74,9 +71,9 @@ class HomescreenState extends State<Homescreen> {
         child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
           listener: (context, state) {},
           builder: (context, state) {
-            if (kDebugMode) {
-              print("HomeScreenState rebuilt: isLoading=${state.isLoading}, name=${state.name}, place=${state.place}");
-            }
+            print(
+              "HomeScreenState rebuilt: isLoading=${state.isLoading}, name=${state.name}, place=${state.place}",
+            );
             return Column(
               children: [
                 SizedBox(height: 5.h),
@@ -88,9 +85,9 @@ class HomescreenState extends State<Homescreen> {
                       child: state.isLoading
                           ? Text("Loading...")
                           : Text(
-                        "Hello ${state.name?.split(" ")[0]}!",
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
+                              "Hello ${state.name?.split(" ")[0]}!",
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
                     ),
                     Row(
                       children: [
@@ -142,7 +139,8 @@ class HomescreenState extends State<Homescreen> {
                           ),
                         ),
                         SizedBox(height: 10.h),
-                        // Recommended Section
+
+                        // ── Recommended Section ──
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -174,7 +172,8 @@ class HomescreenState extends State<Homescreen> {
                           price: "\$300",
                         ),
                         SizedBox(height: 10.h),
-                        // Nearby Section
+
+                        // ── Nearby Section ──
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -189,7 +188,19 @@ class HomescreenState extends State<Homescreen> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                final houses = context
+                                    .read<NearbyHouseBloc>()
+                                    .state
+                                    .houses;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        AllNearbyHousesScreen(houses: houses),
+                                  ),
+                                );
+                              },
                               child: Text(
                                 "See all",
                                 style: TextStyle(fontSize: 15.sp),
@@ -199,9 +210,9 @@ class HomescreenState extends State<Homescreen> {
                         ),
                         BlocBuilder<NearbyHouseBloc, NearbyHouseState>(
                           builder: (context, state) {
-                            if (kDebugMode) {
-                              print("NearbyHouseState: isLoading=${state.isLoading}, houses=${state.houses.length}, error=${state.error}");
-                            }
+                            print(
+                              "NearbyHouseState: isLoading=${state.isLoading}, houses=${state.houses.length}, error=${state.error}",
+                            );
                             if (state.isLoading) {
                               return Center(child: CircularProgressIndicator());
                             } else if (state.error != null) {
@@ -212,30 +223,76 @@ class HomescreenState extends State<Homescreen> {
                               return CustomHouseNearbyCart.customNearbyCart(
                                 houses: state.houses,
                                 ItemCount: state.houses.length,
+                                limit: 5,
                               );
                             }
                           },
                         ),
                         SizedBox(height: 10.h),
-                        // Hot Deals Section
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 10.w),
-                            child: Text(
-                              "Hot Deals:",
-                              style: TextStyle(
-                                fontSize: 16.sp,
-                                color: AppColors.redColor,
+
+                        // ── Hot Deals Section ──
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 10.w),
+                              child: Text(
+                                "Hot Deals:",
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  color: AppColors.redColor,
+                                ),
                               ),
                             ),
-                          ),
+                            TextButton(
+                              onPressed: () {
+                                final houses = context
+                                    .read<HotDealsBloc>()
+                                    .state
+                                    .houses;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        AllHotDealsScreen(houses: houses),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "See all",
+                                style: TextStyle(fontSize: 15.sp),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 10.h),
-                        CustomHotDealsHousesCart.customHotDeals(
-                          houses: dummyHouses,
-                          ItemCount: dummyHouses.length,
-                        )
+                        BlocBuilder<HotDealsBloc, HotDealsState>(
+                          builder: (context, state) {
+                            if (state.isLoading) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (state.error != null) {
+                              return Text("Error: ${state.error}");
+                            } else if (state.houses.isEmpty) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20.h),
+                                child: Text(
+                                  "No hot deals available",
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return CustomHotDealsHousesCart.customHotDeals(
+                                houses: state.houses,
+                                ItemCount: state.houses.length,
+                                limit: 5,
+                              );
+                            }
+                          },
+                        ),
+                        SizedBox(height: 20.h),
                       ],
                     ),
                   ),

@@ -17,7 +17,7 @@ class ApiClient {
     );
   }
 
-  // Updated post method
+
   Future<Map<String, dynamic>> post(
       String endpoint,
       dynamic body, //
@@ -66,13 +66,18 @@ class ApiClient {
   Future<dynamic> get(String endpoint) async {
     try {
       final res = await dio.get(endpoint);
-      print("GET RAW RESPONSE: ${res.data}");
-      print("GET RESPONSE TYPE: ${res.data.runtimeType}");
+      if (kDebugMode) {
+        print("GET RAW RESPONSE: ${res.data}");
+      }
+      if (kDebugMode) {
+        print("GET RESPONSE TYPE: ${res.data.runtimeType}");
+      }
       return res.data;
     } on DioException catch (e) {
-      print("DIO GET ERROR: ${e.response?.statusCode} | ${e.response?.data}");
+      if (kDebugMode) {
+        print("DIO GET ERROR: ${e.response?.statusCode} | ${e.response?.data}");
+      }
       if (e.response != null) {
-        // Safely extract message — response could be a List or Map
         String error = "Something went wrong";
         final data = e.response?.data;
         if (data is Map) {
