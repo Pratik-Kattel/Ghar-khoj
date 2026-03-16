@@ -35,3 +35,16 @@ class HousePlaceChanged extends HouseUploadEvent {
 class HouseResetState extends HouseUploadEvent {}
 
 class HouseUploadSubmitted extends HouseUploadEvent {}
+
+abstract class HomeScreenEvent {}
+
+class HomeStarted extends HomeScreenEvent {}
+
+class FetchNearbyHouses extends HomeScreenEvent {
+
+  final double lat;
+  final double lng;
+
+  FetchNearbyHouses(this.lat,this.lng);
+
+}

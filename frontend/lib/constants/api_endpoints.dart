@@ -9,4 +9,5 @@ class ApiEndpoints{
   static String sendLocation="$baseUrl/storeUserLocation";
   static String changeName="$baseUrl/changeName";
   static String uploadHouse="$baseUrl/uploadHouse";
+  static String nearByHouses="$baseUrl/nearby-houses";
 }

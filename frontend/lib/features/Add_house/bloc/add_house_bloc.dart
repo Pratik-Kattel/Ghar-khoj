@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../services/get_user_data.dart';
 import '../../../services/location_service.dart';
+import '../../HomeScreen/Repository/nearby_house_repo.dart';
 import '../Model/add_house_model.dart';
 import '../Repository/upload_house-repo.dart';
 import 'add_house_event.dart';
@@ -83,5 +84,32 @@ class HouseUploadBloc extends Bloc<HouseUploadEvent, HouseUploadState> {
         emit(state.copyWith(isSubmitting: false, errorMessage: e.toString()));
       }
     });
+  }
+}
+
+
+
+class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
+
+  final NearbyHouseRepo repo;
+
+  HomeScreenBloc(this.repo) : super(HomeScreenState.initial()) {
+
+    on<FetchNearbyHouses>((event, emit) async {
+
+      emit(state.copyWith(isLoading: true));
+
+      final houses = await repo.fetchNearbyHouses(
+        event.lat,
+        event.lng,
+      );
+
+      emit(state.copyWith(
+        isLoading: false,
+        nearbyHouses: houses,
+      ));
+
+    });
+
   }
 }

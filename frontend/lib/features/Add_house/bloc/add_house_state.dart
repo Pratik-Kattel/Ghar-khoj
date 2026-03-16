@@ -1,6 +1,8 @@
 // lib/features/house/bloc/house_upload_state.dart
 import 'dart:io';
 
+import '../../HomeScreen/Model/nearby_house_model.dart';
+
 class HouseUploadState {
   final String title;
   final String description;
@@ -63,6 +65,36 @@ class HouseUploadState {
       isSuccess: false,
       errorMessage: null,
       message: null,
+    );
+  }
+}
+
+
+
+class HomeScreenState {
+
+  final bool isLoading;
+  final List<NearbyHouseModel> nearbyHouses;
+
+  HomeScreenState({
+    required this.isLoading,
+    required this.nearbyHouses,
+  });
+
+  factory HomeScreenState.initial(){
+    return HomeScreenState(
+      isLoading: false,
+      nearbyHouses: [],
+    );
+  }
+
+  HomeScreenState copyWith({
+    bool? isLoading,
+    List<NearbyHouseModel>? nearbyHouses
+  }){
+    return HomeScreenState(
+      isLoading: isLoading ?? this.isLoading,
+      nearbyHouses: nearbyHouses ?? this.nearbyHouses,
     );
   }
 }
