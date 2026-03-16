@@ -1,15 +1,23 @@
-import { Request,Response } from "express"
-import { addWishListService,getWishlistService } from "../service/wishlist_service";
-export const addWishListController=async(req:Request,res:Response)=>{
-    try{
-        const {email,house_id}=req.body;
-        const result=await addWishListService(email,house_id);
-        res.status(200).json(result);
+import { Request, Response } from "express";
+import {
+  addToWishListService,
+  getWishlistService,
+  checkWishlistStatusService,
+} from "../service/wishlist_service";
+
+export const addToWishListController = async (req: Request, res: Response) => {
+  try {
+    const { email, house_id } = req.body;
+    if (!email || !house_id) {
+      return res.status(400).json({ message: "email and house_id are required" });
     }
-    catch(error:any){
-        res.status(400).json({message:error.message});
-    }
-}
+    const result = await addToWishListService(email, house_id);
+    res.status(200).json(result);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
 export const getWishlistController = async (req: Request, res: Response) => {
   try {
     const { userEmail } = req.params;
@@ -18,4 +26,17 @@ export const getWishlistController = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
-}
+};
+
+export const checkWishlistStatusController = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { userEmail, houseId } = req.params;
+    const result = await checkWishlistStatusService(userEmail, houseId);
+    res.status(200).json(result);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
