@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/api_endpoints.dart';
 import '../features/HomeScreen/Model/hotdeals_model.dart';
+import 'custom_house_details_screen.dart';
 
 class CustomHotDealsHousesCart {
   static Widget customHotDeals({
@@ -32,7 +33,7 @@ class CustomHotDealsHousesCart {
       itemBuilder: (context, index) {
         return Padding(
           padding: EdgeInsets.only(bottom: 10.h),
-          child: _buildHotDealItem(displayHouses[index]),
+          child: _buildHotDealItem(displayHouses[index], context),
         );
       },
     );
@@ -60,13 +61,13 @@ class CustomHotDealsHousesCart {
       itemBuilder: (context, index) {
         return Padding(
           padding: EdgeInsets.only(bottom: 10.h),
-          child: _buildHotDealItem(houses[index]),
+          child: _buildHotDealItem(houses[index], context),
         );
       },
     );
   }
 
-  static Widget _buildHotDealItem(HotDealModel house) {
+  static Widget _buildHotDealItem(HotDealModel house, BuildContext context) {
     final imageUrl = house.imageUrl.isNotEmpty
         ? (house.imageUrl.startsWith("http")
         ? house.imageUrl
@@ -82,8 +83,25 @@ class CustomHotDealsHousesCart {
         : "\$${house.price.toStringAsFixed(2)}/month";
 
     final title = house.title.isNotEmpty ? house.title : "No title";
-
-    return Row(
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => CustomHouseDetailScreen(
+                houseId: house.houseId,
+                title: house.title,
+                imageUrl: house.imageUrl,
+                place: house.place,
+                price: house.price,
+                latitude: house.latitude,
+                longitude: house.longitude,
+                description: house.description,
+              ),
+            ),
+          );
+        },
+    child:  Row(
       children: [
         SizedBox(
           height: 75.h,
@@ -164,6 +182,7 @@ class CustomHotDealsHousesCart {
           ),
         ),
       ],
+    )
     );
   }
 
