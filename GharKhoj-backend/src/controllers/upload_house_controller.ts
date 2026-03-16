@@ -4,7 +4,7 @@ import { uploadHouseService } from "../service/upload_house_service";
 export const uploadHouseController = async (req: Request, res: Response) => {
   try {
 
-    const { title, latitude, longitude } = req.body;
+    const { title, latitude, longitude,landlord_email ,description,price} = req.body;
 
     const image_url = req.file?.filename;
 
@@ -16,7 +16,10 @@ export const uploadHouseController = async (req: Request, res: Response) => {
       title,
       Number(latitude),
       Number(longitude),
-      image_url
+      image_url,
+      landlord_email,
+      description,
+      price
     );
 
     res.status(200).json({

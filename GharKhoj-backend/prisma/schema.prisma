@@ -150,7 +150,7 @@ model Houses {
   longitude   Float    @map("longitude")
   image_url   String
   createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  updatedAt   DateTime? @updatedAt @map("updated_at")
 
   reviews  Reviews[]
   images   HouseImage[]

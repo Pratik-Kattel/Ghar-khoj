@@ -5,6 +5,7 @@ import { getUserDataController } from "../controllers/get_user_data_controller";
 import { storeUserLocationController } from "../controllers/store_user_location_controller";
 import { changeUsernameController } from "../controllers/change_user_name_controller";
 import { uploadHouseController } from "../controllers/upload_house_controller";
+import { getNearbyHousesController } from "../controllers/nearby_house_controller";
 import { upload } from "../utils/multer";
 
 const router=express.Router();
@@ -17,6 +18,7 @@ router.post('/changePassword',saveNewPasswordController);
 router.post('/getUsername',getUserDataController);
 router.post('/storeUserLocation',storeUserLocationController);
 router.post('/changeName',changeUsernameController);
-router.post("/upload", upload.single("image"), uploadHouseController);
+router.post("/uploadHouse", upload.single("image"), uploadHouseController);
+router.get("/nearby-houses", getNearbyHousesController);
 
 export default router;
