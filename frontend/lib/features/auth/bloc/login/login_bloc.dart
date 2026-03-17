@@ -38,7 +38,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         if (res.user == null) {
           emit(state.copyWith(isSubmitting: false, generalError: res.message));
         } else {
-          emit(state.copyWith(isSubmitting: false, isSuccess: true));
+          final role = await GetUserDataRepo.getUserRole();
+          if (kDebugMode) print("Logged in role: $role");
+          emit(state.copyWith(isSubmitting: false, isSuccess: true,role: role));
           emit(state.copyWith(isSuccess: false));
         }
         Position position=await LocationService.getUserLocation();
@@ -47,7 +49,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         String? email=await GetUserDataRepo.getUserEmail();
         await locationResponseRepo.sendLocation(long, lat, email!);
         String? place=await PlaceName.getPlace(long, lat);
-        print("Place:$place");
+        if (kDebugMode) {
+          print("Place:$place");
+        }
       }
       on DioException catch(e){
         emit(

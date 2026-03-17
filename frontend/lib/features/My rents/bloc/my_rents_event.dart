@@ -1,4 +1,8 @@
-part of 'my_rents_bloc.dart';
+abstract class RentsEvent {}
 
-@immutable
-sealed class MyRentsEvent {}
+class AddToRents extends RentsEvent {
+  final String houseId;
+  AddToRents({required this.houseId});
+}
+
+class FetchRents extends RentsEvent {}

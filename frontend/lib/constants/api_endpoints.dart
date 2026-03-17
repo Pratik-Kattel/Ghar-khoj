@@ -1,7 +1,7 @@
 class ApiEndpoints{
-  static final String baseUrl="http://10.0.2.2:5000/api/gharKhoj";
-  // static final String imageBaseUrl = "http://192.168.1.66:5000/uploads/";
-  static const String imageBaseUrl = "http://10.0.2.2:5000/uploads/";
+  static final String baseUrl="http://192.168.100.111:5000/api/gharKhoj";
+  static final String imageBaseUrl = "http://192.168.100.111:5000/uploads/";
+  // static const String imageBaseUrl = "http://10.0.2.2:5000/uploads/";
   static  String login="$baseUrl/loginUser";
   static String register="$baseUrl/registerUser";
   static String validateEmail="$baseUrl/validateEmail";
@@ -22,4 +22,6 @@ class ApiEndpoints{
   static String checkReview = "$baseUrl/checkReview";
   static String recommendedHouses = "$baseUrl/recommendedHouses";
   static String searchHouses = "$baseUrl/searchHouses";
+  static String addRent = "$baseUrl/addRent";
+  static String getRents = "$baseUrl/getRents";
 }

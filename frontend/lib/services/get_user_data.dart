@@ -34,6 +34,14 @@ class GetUserDataRepo {
     return userEmail;
   }
 
+  static Future<String?> getUserRole() async {
+    final token = await SecureStorage.getToken();
+    if (token == null) return null;
+    Map<String, dynamic> jwtPayload = Jwt.parseJwt(token);
+    if (kDebugMode) print("Role: ${jwtPayload['role']}");
+    return jwtPayload['role'] as String?;
+  }
+
    Future<GetUserDataModel> getUserData(String? userEmail) async {
     final res = await apiClient.post(ApiEndpoints.getUserName, {
       "email": userEmail,

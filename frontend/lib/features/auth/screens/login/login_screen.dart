@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frontend/widgets/custom_snackbar.dart';
+import '../../../Bottom_Navigator/Bottom_Navigator.dart';
 import '../../bloc/login/login_state.dart';
 import '../../bloc/login/login_bloc.dart';
 import '../../bloc/login/login_event.dart';
@@ -85,7 +86,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   iconColor: Colors.green,
                 ),
               );
-              Navigator.pushReplacementNamed(context, '/bottomNavigator');
+              Navigator.push(context,  MaterialPageRoute(
+                builder: (_) => BottomNavigator(role: state.role ?? 'TENANT'),
+              ),
+              );
             }
           },
           builder: (context, state) {

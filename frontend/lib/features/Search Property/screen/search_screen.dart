@@ -209,7 +209,7 @@ class _SearchScreenState extends State<SearchScreen> {
       ),
       body: Column(
         children: [
-          // ── Active Filter Chip ──
+
           if (_selectedSort != "none")
             Padding(
               padding: EdgeInsets.only(left: 16.w, top: 8.h, bottom: 4.h),
@@ -234,7 +234,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
 
-          // ── Results ──
+
           Expanded(
             child: BlocBuilder<SearchBloc, SearchState>(
               builder: (context, state) {

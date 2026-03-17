@@ -5,6 +5,8 @@ import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Bloc/hot_deals/hot_deals_bloc.dart';
 import 'package:frontend/features/HomeScreen/Repository/hotdeals_repo.dart';
 import 'package:frontend/features/HomeScreen/Repository/nearby_house_repo.dart';
+import 'package:frontend/features/My%20rents/Repository/rents_repo.dart';
+import 'package:frontend/features/My%20rents/bloc/my_rents_bloc.dart';
 import 'package:frontend/features/Recommendation/Repository/recommendation_repo.dart';
 import 'package:frontend/features/Recommendation/bloc/recommendation_bloc.dart';
 import 'package:frontend/features/Review%20and%20ratings/Repository/review_repo.dart';
@@ -39,6 +41,10 @@ import 'features/HomeScreen/Bloc/fetch_nearby_house/nearby_house_bloc.dart';
 void main() async{
   await WidgetsFlutterBinding.ensureInitialized();
   String?token=await SecureStorage.getToken();
+  String? role;
+  if(token!=null){
+      role = await GetUserDataRepo.getUserRole();
+  }
   final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
   final loginRepo = LoginRepository(apiClient: apiClient);
   final signUpRepo = SignupRepository(apiClient: apiClient);
@@ -55,37 +61,35 @@ void main() async{
   final reviewRepo=ReviewRepo(apiClient: apiClient);
   final recommendedRepo=RecommendedRepo(apiClient: apiClient);
   final searchSystemRepo=SearchRepo(apiClient: apiClient);
+  final myRentsRepo=RentsRepo(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => LoginBloc(repository: loginRepo,locationResponseRepo: locationResponseRepo)),
-        BlocProvider(create: (_) => SignupBloc(signupRepository: signUpRepo)),
-        BlocProvider(
-          create: (_) => ForgotPasswordBloc(
-            validateEmailRepository: validateEmailRepository,
-          ),
-        ),
-        BlocProvider(create: (_)=>OTPValidationBloc(validateOtpRepo: validateOTPRepository)),
+        BlocProvider(create: (_)=> LoginBloc(repository: loginRepo,locationResponseRepo: locationResponseRepo)),
+        BlocProvider(create: (_)=> SignupBloc(signupRepository: signUpRepo)),
+        BlocProvider(create: (_)=> ForgotPasswordBloc(validateEmailRepository: validateEmailRepository,),),
         BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo)),
         BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo, )),
         BlocProvider(create: (_)=>HouseUploadBloc(repository: houseRepo)),
-        BlocProvider(create: (_) => NearbyHouseBloc(repo: nearbyHouserepo)),
+        BlocProvider(create: (_)=> NearbyHouseBloc(repo: nearbyHouserepo)),
         BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo)),
         BlocProvider(create: (_)=>HotDealsBloc(repo: hotDealsRepo)),
         BlocProvider(create: (_)=>ReviewBloc(repo: reviewRepo)),
         BlocProvider(create: (_)=>WishlistBloc(repo: wishlistrepo)),
         BlocProvider(create: (_)=>RecommendedBloc(repo: recommendedRepo)),
         BlocProvider(create: (_)=>SearchBloc(repo: searchSystemRepo)),
+        BlocProvider(create: (_)=>RentsBloc(repo: myRentsRepo)),
       ],
-      child:  myApp(isLoggedIn:token!=null),
+      child: myApp(isLoggedIn: token != null, role: role ?? 'TENANT'),
     ),
   );
 }
 
 class myApp extends StatelessWidget {
   final bool isLoggedIn;
-  myApp({super.key,required this.isLoggedIn});
+  final String role;
+  myApp({super.key,required this.isLoggedIn,required this.role});
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +101,9 @@ class myApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppThemes.purpleTheme,
         routes: AppRoutes.routes,
-        home: isLoggedIn?BottomNavigator():SplashScreen()
+        home: isLoggedIn
+          ? BottomNavigator(role: role)
+            : SplashScreen(),
       ),
     );
   }

@@ -7,6 +7,9 @@ import 'package:frontend/features/WishList/bloc/wishlist_event.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_state.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
+import '../features/My rents/bloc/my_rents_bloc.dart';
+import '../features/My rents/bloc/my_rents_event.dart';
+import '../features/My rents/bloc/my_rents_state.dart';
 import 'custom_snackbar.dart';
 import '../features/Review and ratings/Model/review_model.dart';
 import '../features/Review and ratings/bloc/reviews_bloc.dart';
@@ -76,124 +79,129 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              content:
-              SizedBox(
+              content: SizedBox(
                 height: 230.h,
-              width: 400.w,
-              child:
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Rating",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                  Row(
-                    children: List.generate(5, (i) {
-                      return GestureDetector(
-                        onTap: () {
-                          setDialogState(() {
-                            selectedRating = i + 1;
-                          });
-                        },
-                        child: Icon(
-                          i < selectedRating
-                              ? Icons.star
-                              : Icons.star_border,
-                          color: Color(0xFFFFC107),
-                          size: 32,
-                        ),
-                      );
-                    }),
-                  ),
-                  SizedBox(height: 16.h),
-                  Text(
-                    "Comment",
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  SizedBox(height: 8.h),
-                  TextField(
-                    controller: commentController,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      hintText: "Write your review...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                width: 400.w,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Rating",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ),
-                ],
-              ),
+                    SizedBox(height: 10.h),
+                    Row(
+                      children: List.generate(5, (i) {
+                        return GestureDetector(
+                          onTap: () {
+                            setDialogState(() {
+                              selectedRating = i + 1;
+                            });
+                          },
+                          child: Icon(
+                            i < selectedRating
+                                ? Icons.star
+                                : Icons.star_border,
+                            color: Color(0xFFFFC107),
+                            size: 32,
+                          ),
+                        );
+                      }),
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      "Comment",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    TextField(
+                      controller: commentController,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                        hintText: "Write your review...",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               actions: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
-                  child: Text("Cancel"),
-                ),
-                BlocBuilder<ReviewBloc, ReviewState>(
-                  builder: (context, state) {
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                      ),
-                      onPressed: state.isSubmitting
-                          ? null
-                          : () {
-                        if (selectedRating == 0) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Please select a rating"),
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: Text("Cancel"),
+                    ),
+                    BlocBuilder<ReviewBloc, ReviewState>(
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                          ),
+                          onPressed: state.isSubmitting
+                              ? null
+                              : () {
+                            if (selectedRating == 0) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Please select a rating"),
+                                ),
+                              );
+                              return;
+                            }
+                            if (commentController.text
+                                .trim()
+                                .isEmpty) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      "Please write a comment"),
+                                ),
+                              );
+                              return;
+                            }
+                            context.read<ReviewBloc>().add(
+                              SubmitReview(
+                                houseId: widget.houseId,
+                                rating: selectedRating,
+                                comment: commentController.text
+                                    .trim(),
+                              ),
+                            );
+                            Navigator.pop(dialogContext);
+                          },
+                          child: state.isSubmitting
+                              ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
                             ),
-                          );
-                          return;
-                        }
-                        if (commentController.text.trim().isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Please write a comment"),
-                            ),
-                          );
-                          return;
-                        }
-                        context.read<ReviewBloc>().add(
-                          SubmitReview(
-                            houseId: widget.houseId,
-                            rating: selectedRating,
-                            comment: commentController.text.trim(),
+                          )
+                              : Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white),
                           ),
                         );
-                        Navigator.pop(dialogContext);
                       },
-                      child: state.isSubmitting
-                          ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                          : Text(
-                        "Submit",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  },
-                ),
+                    ),
+                  ],
+                )
               ],
-            )
-            ]
             );
           },
         );
@@ -366,7 +374,8 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Colors.black12, blurRadius: 6),
+                                          color: Colors.black12,
+                                          blurRadius: 6),
                                     ],
                                   ),
                                   child: state.isLoading
@@ -401,7 +410,6 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -430,8 +438,6 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       ],
                     ),
                     SizedBox(height: 8.h),
-
-
                     Row(
                       children: [
                         Icon(Icons.location_on,
@@ -447,8 +453,6 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       ],
                     ),
                     SizedBox(height: 8.h),
-
-
                     BlocBuilder<ReviewBloc, ReviewState>(
                       builder: (context, state) {
                         return Row(
@@ -490,11 +494,8 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       },
                     ),
                     SizedBox(height: 20.h),
-
                     Divider(color: Colors.grey[200], thickness: 1.5),
                     SizedBox(height: 16.h),
-
-                    // ── Description ──
                     Text(
                       "Description",
                       style: TextStyle(
@@ -515,11 +516,8 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       ),
                     ),
                     SizedBox(height: 20.h),
-
                     Divider(color: Colors.grey[200], thickness: 1.5),
                     SizedBox(height: 16.h),
-
-                    // ── Location Details ──
                     Text(
                       "Location",
                       style: TextStyle(
@@ -569,11 +567,8 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       ),
                     ),
                     SizedBox(height: 20.h),
-
                     Divider(color: Colors.grey[200], thickness: 1.5),
                     SizedBox(height: 16.h),
-
-                    // ── Reviews Section ──
                     BlocBuilder<ReviewBloc, ReviewState>(
                       builder: (context, state) {
                         return Row(
@@ -684,11 +679,41 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                 offset: Offset(0, -2)),
           ],
         ),
-        child: CustomButton.button(
-          texts: "Rent Now",
-          onPressed: () {},
-          context: context,
-          padding: EdgeInsets.symmetric(vertical: 14.h),
+        child: BlocConsumer<RentsBloc, RentsState>(
+          listener: (context, state) {
+            if (state.message != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message!),
+                  backgroundColor: Colors.green,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            }
+            if (state.error != null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error!),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            }
+          },
+          builder: (context, state) {
+            return CustomButton.button(
+              texts: state.isAdding ? "Renting..." : "Rent Now",
+              onPressed: state.isAdding
+                  ? null
+                  : () {
+                context.read<RentsBloc>().add(
+                  AddToRents(houseId: widget.houseId),
+                );
+              },
+              context: context,
+              padding: EdgeInsets.symmetric(vertical: 14.h),
+            );
+          },
         ),
       ),
     );
