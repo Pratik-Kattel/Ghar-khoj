@@ -5,6 +5,8 @@ import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Bloc/hot_deals/hot_deals_bloc.dart';
 import 'package:frontend/features/HomeScreen/Repository/hotdeals_repo.dart';
 import 'package:frontend/features/HomeScreen/Repository/nearby_house_repo.dart';
+import 'package:frontend/features/Recommendation/Repository/recommendation_repo.dart';
+import 'package:frontend/features/Recommendation/bloc/recommendation_bloc.dart';
 import 'package:frontend/features/Review%20and%20ratings/Repository/review_repo.dart';
 import 'package:frontend/features/Review%20and%20ratings/bloc/reviews_bloc.dart';
 import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_bloc.dart';
@@ -49,6 +51,7 @@ void main() async{
   final hotDealsRepo=HotDealsRepo(apiClient: apiClient);
   final wishlistrepo=WishlistRepo(apiClient: apiClient);
   final reviewRepo=ReviewRepo(apiClient: apiClient);
+  final recommendedRepo=RecommendedRepo(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -69,6 +72,7 @@ void main() async{
         BlocProvider(create: (_)=>HotDealsBloc(repo: hotDealsRepo)),
         BlocProvider(create: (_)=>ReviewBloc(repo: reviewRepo)),
         BlocProvider(create: (_)=>WishlistBloc(repo: wishlistrepo)),
+        BlocProvider(create: (_)=>RecommendedBloc(repo: recommendedRepo))
       ],
       child:  myApp(isLoggedIn:token!=null),
     ),

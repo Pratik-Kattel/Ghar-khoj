@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,10 @@ import 'package:frontend/widgets/custom_house_recommended_cart.dart';
 import 'package:frontend/widgets/custom_textfield.dart';
 import '../../../services/location_service.dart';
 import '../../../themes/app_themes.dart';
+import '../../Recommendation/bloc/recommendation_bloc.dart';
+import '../../Recommendation/bloc/recommendation_event.dart';
+import '../../Recommendation/bloc/recommendation_state.dart';
+import '../../Recommendation/screen/all_recommendation_screen.dart';
 import '../Bloc/fetch_nearby_house/nearby_house_bloc.dart';
 import '../Bloc/fetch_nearby_house/nearby_house_event.dart';
 import '../Bloc/fetch_nearby_house/nearby_house_state.dart';
@@ -18,9 +23,7 @@ import '../Bloc/hot_deals/hot_deals_event.dart';
 import '../Bloc/hot_deals/hot_deals_state.dart';
 import '../Screen/all_nearby_houses_screen.dart';
 import 'package:geolocator/geolocator.dart';
-
 import 'all_hot_deals_screen.dart';
-
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});
@@ -36,10 +39,13 @@ class HomescreenState extends State<Homescreen> {
   @override
   void initState() {
     super.initState();
-    print("HomeScreen initialized");
+    if (kDebugMode) {
+      print("HomeScreen initialized");
+    }
     context.read<HomeScreenBloc>().add(HomeStarted());
     context.read<HotDealsBloc>().add(FetchHotDeals());
     _fetchNearbyHouses();
+    context.read<RecommendedBloc>().add(FetchRecommendedHouses());
   }
 
   void _fetchNearbyHouses() async {
@@ -60,13 +66,6 @@ class HomescreenState extends State<Homescreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> dummyHouses = [
-      "Assets/Images/house 2.jpg",
-      "Assets/Images/house 3.jpg",
-      "Assets/Images/house 4.jpg",
-      "Assets/Images/house5.jpeg",
-    ];
-
     return Scaffold(
       body: SafeArea(
         child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
@@ -141,7 +140,7 @@ class HomescreenState extends State<Homescreen> {
                         ),
                         SizedBox(height: 10.h),
 
-                        // ── Recommended Section ──
+                        SizedBox(height: 1.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -156,7 +155,19 @@ class HomescreenState extends State<Homescreen> {
                               ),
                             ),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                final houses = context
+                                    .read<RecommendedBloc>()
+                                    .state
+                                    .houses;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        AllRecommendedScreen(houses: houses),
+                                  ),
+                                );
+                              },
                               child: Text(
                                 "See all",
                                 style: TextStyle(fontSize: 15.sp),
@@ -165,16 +176,33 @@ class HomescreenState extends State<Homescreen> {
                           ],
                         ),
                         SizedBox(height: 1.h),
-                        CustomHouseCart.houseCart(
-                          ItemCount: dummyHouses.length,
-                          ImagePath: dummyHouses,
-                          houseName: "Pratik HomeStay",
-                          location: "Biratnagar, Nepal",
-                          price: "\$300",
+                        BlocBuilder<RecommendedBloc, RecommendedState>(
+                          builder: (context, state) {
+                            if (state.isLoading) {
+                              return Center(child: CircularProgressIndicator());
+                            } else if (state.error != null) {
+                              return Text("Error: ${state.error}");
+                            } else if (state.houses.isEmpty) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20.h),
+                                child: Text(
+                                  "No recommended houses found",
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return CustomHouseCart.houseCart(
+                                houses: state.houses,
+                                limit: 5,
+                              );
+                            }
+                          },
                         ),
                         SizedBox(height: 10.h),
 
-                        // ── Nearby Section ──
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -211,9 +239,11 @@ class HomescreenState extends State<Homescreen> {
                         ),
                         BlocBuilder<NearbyHouseBloc, NearbyHouseState>(
                           builder: (context, state) {
-                            print(
+                            if (kDebugMode) {
+                              print(
                               "NearbyHouseState: isLoading=${state.isLoading}, houses=${state.houses.length}, error=${state.error}",
                             );
+                            }
                             if (state.isLoading) {
                               return Center(child: CircularProgressIndicator());
                             } else if (state.error != null) {
@@ -231,7 +261,6 @@ class HomescreenState extends State<Homescreen> {
                         ),
                         SizedBox(height: 10.h),
 
-                        // ── Hot Deals Section ──
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
