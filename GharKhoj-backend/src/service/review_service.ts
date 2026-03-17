@@ -45,6 +45,7 @@ export const getReviewsService = async (houseId: string) => {
   `;
   const result = await pool.query(query, [houseId]);
   return result.rows;
+  
 };
 
 export const getAverageRatingService = async (houseId: string) => {
@@ -56,4 +57,15 @@ export const getAverageRatingService = async (houseId: string) => {
     average: parseFloat(result.rows[0].average) || 0.0,
     total: parseInt(result.rows[0].total) || 0,
   };
+};
+
+export const checkReviewStatusService = async (
+  houseId: string,
+  tenantEmail: string
+) => {
+  const result = await pool.query(
+    "SELECT review_id FROM reviews WHERE house_id = $1 AND tenant_email = $2",
+    [houseId, tenantEmail]
+  );
+  return { hasReviewed: result.rows.length > 0 };
 };

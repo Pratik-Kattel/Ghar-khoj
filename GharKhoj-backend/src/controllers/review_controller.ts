@@ -1,9 +1,5 @@
 import { Request, Response } from "express";
-import {
-  addReviewService,
-  getReviewsService,
-  getAverageRatingService,
-} from "../service/review_service";
+import {addReviewService,getReviewsService,getAverageRatingService,checkReviewStatusService} from "../service/review_service";
 
 export const addReviewController = async (req: Request, res: Response) => {
   try {
@@ -35,6 +31,16 @@ export const getAverageRatingController = async (req: Request, res: Response) =>
   try {
     const { houseId } = req.params;
     const result = await getAverageRatingService(houseId);
+    res.status(200).json(result);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const checkReviewStatusController = async (req: Request, res: Response) => {
+  try {
+    const { houseId, tenantEmail } = req.params;
+    const result = await checkReviewStatusService(houseId, tenantEmail);
     res.status(200).json(result);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

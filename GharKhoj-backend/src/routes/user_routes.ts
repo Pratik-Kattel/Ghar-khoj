@@ -9,7 +9,8 @@ import { getNearbyHousesController } from "../controllers/nearby_house_controlle
 import { upload } from "../utils/multer";
 import { getHotDealsController } from "../controllers/get_hot_deals_controller";
 import { addToWishListController,getWishlistController,checkWishlistStatusController } from "../controllers/wishlist_controller";
-import { addReviewController,getReviewsController,getAverageRatingController } from "../controllers/review_controller";
+import { addReviewController,getReviewsController,getAverageRatingController,checkReviewStatusController } from "../controllers/review_controller";
+import { getRecommendedHousesController } from "../controllers/recommended_controller";
 
 const router=express.Router();
 
@@ -30,5 +31,7 @@ router.get("/checkWishlist/:userEmail/:houseId", checkWishlistStatusController);
 router.post("/addReview", addReviewController);
 router.get("/getReviews/:houseId", getReviewsController);
 router.get("/getAverageRating/:houseId", getAverageRatingController);
+router.get("/checkReview/:houseId/:tenantEmail", checkReviewStatusController);
+router.get("/recommendedHouses", getRecommendedHousesController);
 
 export default router;
