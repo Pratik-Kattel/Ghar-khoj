@@ -181,12 +181,12 @@ model HouseImage {
 model Reviews {
   reviewId  String   @id @default(cuid()) @map("review_id")
   houseId   String   @map("house_id")
-  tenantId  String   @map("tenant_id")
+  tenantEmail  String   @map("tenant_email")
   rating    Int      @map("ratings")
   comment   String   @map("comment")
   createdAt DateTime @default(now()) @map("created_at")
 
-  tenant Users  @relation(fields: [tenantId], references: [id])
+  tenant Users  @relation(fields: [tenantEmail], references: [email])
   house  Houses @relation(fields: [houseId], references: [houseId])
 
   @@map("reviews")
