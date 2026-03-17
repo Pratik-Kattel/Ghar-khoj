@@ -11,6 +11,7 @@ import { getHotDealsController } from "../controllers/get_hot_deals_controller";
 import { addToWishListController,getWishlistController,checkWishlistStatusController } from "../controllers/wishlist_controller";
 import { addReviewController,getReviewsController,getAverageRatingController,checkReviewStatusController } from "../controllers/review_controller";
 import { getRecommendedHousesController } from "../controllers/recommended_controller";
+import { searchHousesController } from "../controllers/search_controller";
 
 const router=express.Router();
 
@@ -33,5 +34,6 @@ router.get("/getReviews/:houseId", getReviewsController);
 router.get("/getAverageRating/:houseId", getAverageRatingController);
 router.get("/checkReview/:houseId/:tenantEmail", checkReviewStatusController);
 router.get("/recommendedHouses", getRecommendedHousesController);
+router.get("/searchHouses", searchHousesController);
 
 export default router;
