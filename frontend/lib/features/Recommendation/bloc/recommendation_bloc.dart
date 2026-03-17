@@ -1,13 +1,21 @@
-import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/features/Recommendation/bloc/recommendation_event.dart';
+import 'package:frontend/features/Recommendation/bloc/recommendation_state.dart';
+import '../Repository/recommendation_repo.dart';
 
-part 'recommendation_event.dart';
-part 'recommendation_state.dart';
 
-class RecommendationBloc extends Bloc<RecommendationEvent, RecommendationState> {
-  RecommendationBloc() : super(RecommendationInitial()) {
-    on<RecommendationEvent>((event, emit) {
-      // TODO: implement event handler
+class RecommendedBloc extends Bloc<RecommendedEvent, RecommendedState> {
+  final RecommendedRepo repo;
+
+  RecommendedBloc({required this.repo}) : super(RecommendedState()) {
+    on<FetchRecommendedHouses>((event, emit) async {
+      emit(state.copyWith(isLoading: true, error: null));
+      try {
+        final houses = await repo.fetchRecommendedHouses();
+        emit(state.copyWith(isLoading: false, houses: houses));
+      } catch (e) {
+        emit(state.copyWith(isLoading: false, error: e.toString()));
+      }
     });
   }
 }

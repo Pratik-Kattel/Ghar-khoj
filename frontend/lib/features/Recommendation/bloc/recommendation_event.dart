@@ -1,4 +1,3 @@
-part of 'recommendation_bloc.dart';
+abstract class RecommendedEvent {}
 
-@immutable
-sealed class RecommendationEvent {}
+class FetchRecommendedHouses extends RecommendedEvent {}
