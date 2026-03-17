@@ -1,14 +1,15 @@
 import pool from "../config/db";
 
-export const searchHousesService = async (query: string,sortBy: string = "none") => {
-  let orderClause = "";
+export const searchHousesService = async (query: string,sortBy?: string) => {
+  let orderClause = "ORDER BY h.created_at DESC";
+
   if (sortBy === "low_to_high") {
     orderClause = "ORDER BY h.price ASC";
   } else if (sortBy === "high_to_low") {
     orderClause = "ORDER BY h.price DESC";
   }
 
-  const searchQuery = `
+  const sql = `
     SELECT 
       h.house_id,
       h.title,
@@ -26,6 +27,6 @@ export const searchHousesService = async (query: string,sortBy: string = "none")
     GROUP BY h.house_id
     ${orderClause}
   `;
-  const result = await pool.query(searchQuery, [`%${query}%`]);
+  const result = await pool.query(sql, [`%${query}%`]);
   return result.rows;
 };
