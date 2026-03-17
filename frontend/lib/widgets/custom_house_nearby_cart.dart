@@ -173,16 +173,8 @@ class CustomHouseNearbyCart {
                       ),
                     ),
                     SizedBox(width: 15.w),
-                    Icon(Icons.star, color: Colors.amber, size: 16),
+                    Icon(Icons.location_on_outlined, color: Colors.amber, size: 20),
                     SizedBox(width: 3.w),
-                    Text(
-                      "4.5",
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black,
-                      ),
-                    ),
                   ],
                 ),
               ],

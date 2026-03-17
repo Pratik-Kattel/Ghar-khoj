@@ -157,19 +157,21 @@ class CustomHotDealsHousesCart {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  SizedBox(width: 15.w),
+                  SizedBox(
+                    width: 10.w,
+                  ),
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFFFE5B4),
+                      color:Color(0xFFFFCDD2),
                       borderRadius: BorderRadius.circular(5.r),
                     ),
                     child: Row(
                       children: [
                         SizedBox(width: 5.w),
-                        Icon(Icons.star, color: Color(0xFFFFC107), size: 16),
+                        Icon(Icons.local_fire_department_rounded, color: Color(0xFFFFC107), size: 18),
                         SizedBox(width: 5.w),
                         Text(
-                          "4.5",
+                          "Hot",
                           style: TextStyle(color: Colors.black),
                         ),
                         SizedBox(width: 7.w),
