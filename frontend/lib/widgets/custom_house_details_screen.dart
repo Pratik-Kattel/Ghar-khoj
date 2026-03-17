@@ -76,7 +76,12 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              content: Column(
+              content:
+              SizedBox(
+                height: 230.h,
+              width: 400.w,
+              child:
+              Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -87,7 +92,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 10.h),
                   Row(
                     children: List.generate(5, (i) {
                       return GestureDetector(
@@ -127,7 +132,11 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                   ),
                 ],
               ),
+              ),
               actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogContext),
                   child: Text("Cancel"),
@@ -183,6 +192,8 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                   },
                 ),
               ],
+            )
+            ]
             );
           },
         );

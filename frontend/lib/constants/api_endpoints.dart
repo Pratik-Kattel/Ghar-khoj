@@ -21,4 +21,5 @@ class ApiEndpoints{
   static String getAverageRating = "$baseUrl/getAverageRating";
   static String checkReview = "$baseUrl/checkReview";
   static String recommendedHouses = "$baseUrl/recommendedHouses";
+  static String searchHouses = "$baseUrl/searchHouses";
 }

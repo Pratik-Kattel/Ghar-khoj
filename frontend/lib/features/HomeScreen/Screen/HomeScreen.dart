@@ -6,12 +6,17 @@ import 'package:frontend/widgets/custom_hot_deals_houses_cart.dart';
 import 'package:frontend/widgets/custom_house_nearby_cart.dart';
 import 'package:frontend/widgets/custom_house_recommended_cart.dart';
 import 'package:frontend/widgets/custom_textfield.dart';
+import '../../../constants/api_endpoints.dart';
+import '../../../services/api_clients.dart';
 import '../../../services/location_service.dart';
 import '../../../themes/app_themes.dart';
 import '../../Recommendation/bloc/recommendation_bloc.dart';
 import '../../Recommendation/bloc/recommendation_event.dart';
 import '../../Recommendation/bloc/recommendation_state.dart';
 import '../../Recommendation/screen/all_recommendation_screen.dart';
+import '../../Search Property/Repository/search_repo.dart';
+import '../../Search Property/bloc/search_property_bloc.dart';
+import '../../Search Property/screen/search_screen.dart';
 import '../Bloc/fetch_nearby_house/nearby_house_bloc.dart';
 import '../Bloc/fetch_nearby_house/nearby_house_event.dart';
 import '../Bloc/fetch_nearby_house/nearby_house_state.dart';
@@ -50,17 +55,25 @@ class HomescreenState extends State<Homescreen> {
 
   void _fetchNearbyHouses() async {
     try {
-      print("Fetching user location...");
+      if (kDebugMode) {
+        print("Fetching user location...");
+      }
       Position position = await LocationService.getUserLocation();
       double lat = position.latitude;
       double long = position.longitude;
-      print("User location: lat=$lat, long=$long");
+      if (kDebugMode) {
+        print("User location: lat=$lat, long=$long");
+      }
 
       final nearbyBloc = context.read<NearbyHouseBloc>();
-      print("Dispatching FetchNearbyHouses event to NearbyHouseBloc");
+      if (kDebugMode) {
+        print("Dispatching FetchNearbyHouses event to NearbyHouseBloc");
+      }
       nearbyBloc.add(FetchNearbyHouses(latitude: lat, longitude: long));
     } catch (e) {
-      print("Nearby fetch error: $e");
+      if (kDebugMode) {
+        print("Nearby fetch error: $e");
+      }
     }
   }
 
@@ -71,9 +84,11 @@ class HomescreenState extends State<Homescreen> {
         child: BlocConsumer<HomeScreenBloc, HomeScreenState>(
           listener: (context, state) {},
           builder: (context, state) {
-            print(
+            if (kDebugMode) {
+              print(
               "HomeScreenState rebuilt: isLoading=${state.isLoading}, name=${state.name}, place=${state.place}",
             );
+            }
             return Column(
               children: [
                 SizedBox(height: 5.h),
@@ -114,28 +129,44 @@ class HomescreenState extends State<Homescreen> {
                       children: [
                         SizedBox(height: 40.h),
                         InkWell(
-                          onTap: () {},
-                          child: CustomTextField.textField(
-                            width: 1.5,
-                            hintText: "Search property",
-                            borderColor: Colors.grey,
-                            focus: searchFocus,
-                            controller: searchController,
-                            prefixIcon: Icon(
-                              Icons.search_outlined,
-                              color: AppColors.primary,
-                            ),
-                            contentPadding: 19,
-                            iconPadding: 10,
-                            suffixIcon: Padding(
-                              padding: EdgeInsets.only(top: 5.h),
-                              child: IconButton(
-                                color: AppColors.primary,
-                                onPressed: () {},
-                                icon: Icon(Icons.tune),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => BlocProvider(
+                                  create: (context) => SearchBloc(
+                                    repo: SearchRepo(
+                                      apiClient: ApiClient(baseUrl: ApiEndpoints.baseUrl),
+                                    ),
+                                  ),
+                                  child: const SearchScreen(),
+                                ),
                               ),
+                            );
+                          },
+                          child: AbsorbPointer(
+                            child: CustomTextField.textField(
+                              width: 1.5,
+                              hintText: "Search property",
+                              borderColor: Colors.grey,
+                              focus: searchFocus,
+                              controller: searchController,
+                              prefixIcon: Icon(
+                                Icons.search_outlined,
+                                color: AppColors.primary,
+                              ),
+                              contentPadding: 19,
+                              iconPadding: 10,
+                              suffixIcon: Padding(
+                                padding: EdgeInsets.only(top: 5.h),
+                                child: IconButton(
+                                  color: AppColors.primary,
+                                  onPressed: () {},
+                                  icon: Icon(Icons.tune),
+                                ),
+                              ),
+                              Validator: (value) {},
                             ),
-                            Validator: (value) {},
                           ),
                         ),
                         SizedBox(height: 10.h),
