@@ -30,9 +30,7 @@ class WishlistRepo {
     if (email == null) throw Exception("User not logged in");
 
     final res = await apiClient.get("${ApiEndpoints.getWishlist}/$email");
-    if (kDebugMode) {
-      print("Wishlist RAW RESPONSE: $res");
-    }
+    if (kDebugMode) print("Wishlist RAW RESPONSE: $res");
 
     List rawList = [];
     if (res is Map && res["wishlist"] != null) {
@@ -51,25 +49,20 @@ class WishlistRepo {
             final lng = (e["longitude"] as num).toDouble();
             place = await PlaceName.getPlace(lng, lat) ?? "Unknown";
           } catch (geoError) {
-            if (kDebugMode) {
-              print("Geocoding failed: $geoError");
-            }
+            if (kDebugMode) print("Geocoding failed: $geoError");
           }
           parsed.add(WishlistModel.fromJson(e, place: place));
         }
       } catch (err) {
-        if (kDebugMode) {
-          print("Error parsing wishlist item: $err");
-        }
+        if (kDebugMode) print("Error parsing wishlist item: $err");
       }
     }
 
-    if (kDebugMode) {
-      print("Parsed ${parsed.length} wishlist items");
-    }
+    if (kDebugMode) print("Parsed ${parsed.length} wishlist items");
     return parsed;
   }
 
+  // ADD THIS
   Future<bool> checkWishlistStatus(String houseId) async {
     final email = await GetUserDataRepo.getUserEmail();
     if (email == null) return false;

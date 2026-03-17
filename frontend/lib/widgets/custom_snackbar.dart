@@ -32,7 +32,7 @@ class CustomSnackBar{
         width: 0.005.w
       )
     ),
-    duration: Duration(seconds: 4),
+    duration: Duration(seconds: 3),
   );
 }
 }

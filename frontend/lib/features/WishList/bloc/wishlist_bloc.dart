@@ -39,5 +39,10 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
         emit(state.copyWith(error: e.toString()));
       }
     });
+
+
+    on<ResetWishlistState>((event, emit) {
+      emit(WishlistState());
+    });
   }
 }

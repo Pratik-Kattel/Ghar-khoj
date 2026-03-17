@@ -11,3 +11,5 @@ class CheckWishlistStatus extends WishlistEvent {
   final String houseId;
   CheckWishlistStatus({required this.houseId});
 }
+
+class ResetWishlistState extends WishlistEvent {}

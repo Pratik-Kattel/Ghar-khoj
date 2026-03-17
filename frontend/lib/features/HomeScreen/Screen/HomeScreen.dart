@@ -19,7 +19,8 @@ import '../Bloc/hot_deals/hot_deals_state.dart';
 import '../Screen/all_nearby_houses_screen.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'all_hot_details_screen.dart';
+import 'all_hot_deals_screen.dart';
+
 
 class Homescreen extends StatefulWidget {
   const Homescreen({super.key});

@@ -7,6 +7,8 @@ import 'package:frontend/features/HomeScreen/Repository/hotdeals_repo.dart';
 import 'package:frontend/features/HomeScreen/Repository/nearby_house_repo.dart';
 import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_bloc.dart';
 import 'package:frontend/features/Settings/Repository/change_user_name_repo.dart';
+import 'package:frontend/features/WishList/Repository/wishlist_repo.dart';
+import 'package:frontend/features/WishList/bloc/wishlist_bloc.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/change_password_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_email_repo.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/validate_otp_repo.dart';
@@ -43,6 +45,7 @@ void main() async{
   final houseRepo = HouseRepository(apiClient: apiClient);
   final nearbyHouserepo=NearbyHouseRepo(apiClient: apiClient);
   final hotDealsRepo=HotDealsRepo(apiClient: apiClient);
+  final wishlistrepo=WishlistRepo(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -60,7 +63,8 @@ void main() async{
         BlocProvider(create: (_)=>HouseUploadBloc(repository: houseRepo)),
         BlocProvider(create: (_) => NearbyHouseBloc(repo: nearbyHouserepo)),
         BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo)),
-        BlocProvider(create: (_)=>HotDealsBloc(repo: hotDealsRepo))
+        BlocProvider(create: (_)=>HotDealsBloc(repo: hotDealsRepo)),
+        BlocProvider(create: (_)=>WishlistBloc(repo: wishlistrepo)),
       ],
       child:  myApp(isLoggedIn:token!=null),
     ),
