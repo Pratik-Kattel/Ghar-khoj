@@ -8,6 +8,10 @@ import 'package:frontend/features/WishList/bloc/wishlist_state.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import 'custom_snackbar.dart';
+import '../features/Review and ratings/Model/review_model.dart';
+import '../features/Review and ratings/bloc/reviews_bloc.dart';
+import '../features/Review and ratings/bloc/reviews_event.dart';
+import '../features/Review and ratings/bloc/reviews_state.dart';
 
 class CustomHouseDetailScreen extends StatefulWidget {
   final String houseId;
@@ -43,6 +47,191 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
     context.read<WishlistBloc>().add(ResetWishlistState());
     context.read<WishlistBloc>().add(
       CheckWishlistStatus(houseId: widget.houseId),
+    );
+    context.read<ReviewBloc>().add(ResetReviewState());
+    context.read<ReviewBloc>().add(
+      FetchAverageRating(houseId: widget.houseId),
+    );
+    context.read<ReviewBloc>().add(
+      FetchReviews(houseId: widget.houseId),
+    );
+    context.read<ReviewBloc>().add(
+      CheckReviewStatus(houseId: widget.houseId),
+    );
+  }
+
+  void _showAddReviewDialog(BuildContext context) {
+    int selectedRating = 0;
+    final commentController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: Text(
+                "Add Review",
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Rating",
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Row(
+                    children: List.generate(5, (i) {
+                      return GestureDetector(
+                        onTap: () {
+                          setDialogState(() {
+                            selectedRating = i + 1;
+                          });
+                        },
+                        child: Icon(
+                          i < selectedRating
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: Color(0xFFFFC107),
+                          size: 32,
+                        ),
+                      );
+                    }),
+                  ),
+                  SizedBox(height: 16.h),
+                  Text(
+                    "Comment",
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 8.h),
+                  TextField(
+                    controller: commentController,
+                    maxLines: 3,
+                    decoration: InputDecoration(
+                      hintText: "Write your review...",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(dialogContext),
+                  child: Text("Cancel"),
+                ),
+                BlocBuilder<ReviewBloc, ReviewState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                      ),
+                      onPressed: state.isSubmitting
+                          ? null
+                          : () {
+                        if (selectedRating == 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Please select a rating"),
+                            ),
+                          );
+                          return;
+                        }
+                        if (commentController.text.trim().isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("Please write a comment"),
+                            ),
+                          );
+                          return;
+                        }
+                        context.read<ReviewBloc>().add(
+                          SubmitReview(
+                            houseId: widget.houseId,
+                            rating: selectedRating,
+                            comment: commentController.text.trim(),
+                          ),
+                        );
+                        Navigator.pop(dialogContext);
+                      },
+                      child: state.isSubmitting
+                          ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                          : Text(
+                        "Submit",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildReviewItem(ReviewModel review) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.all(12.r),
+      decoration: BoxDecoration(
+        color: Colors.grey[50],
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: Colors.grey[200]!),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                review.tenantName,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+              ),
+              Row(
+                children: List.generate(
+                  5,
+                      (i) => Icon(
+                    i < review.rating ? Icons.star : Icons.star_border,
+                    color: Color(0xFFFFC107),
+                    size: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 6.h),
+          Text(
+            review.comment,
+            style: TextStyle(fontSize: 13.sp, color: Colors.grey[600]),
+          ),
+        ],
+      ),
     );
   }
 
@@ -112,7 +301,6 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
                           GestureDetector(
                             onTap: () => Navigator.pop(context),
                             child: Container(
@@ -129,8 +317,6 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                   color: Colors.black, size: 18),
                             ),
                           ),
-
-
                           BlocConsumer<WishlistBloc, WishlistState>(
                             listener: (context, state) {
                               if (state.message != null) {
@@ -252,45 +438,52 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                     SizedBox(height: 8.h),
 
 
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10.w, vertical: 4.h),
-                          decoration: BoxDecoration(
-                            color: Color(0xFFFFE5B4),
-                            borderRadius: BorderRadius.circular(5.r),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.star,
-                                  color: Color(0xFFFFC107), size: 18),
-                              SizedBox(width: 4.w),
-                              Text(
-                                "4.5",
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                ),
+                    BlocBuilder<ReviewBloc, ReviewState>(
+                      builder: (context, state) {
+                        return Row(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10.w, vertical: 4.h),
+                              decoration: BoxDecoration(
+                                color: Color(0xFFFFE5B4),
+                                borderRadius: BorderRadius.circular(5.r),
                               ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10.w),
-                        Text(
-                          "(128 reviews)",
-                          style: TextStyle(
-                              fontSize: 13.sp, color: Colors.grey),
-                        ),
-                      ],
+                              child: Row(
+                                children: [
+                                  Icon(Icons.star,
+                                      color: Color(0xFFFFC107), size: 18),
+                                  SizedBox(width: 4.w),
+                                  Text(
+                                    state.averageRating == 0.0
+                                        ? "N/A"
+                                        : state.averageRating
+                                        .toStringAsFixed(1),
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 10.w),
+                            Text(
+                              "(${state.totalReviews} reviews)",
+                              style: TextStyle(
+                                  fontSize: 13.sp, color: Colors.grey),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     SizedBox(height: 20.h),
 
                     Divider(color: Colors.grey[200], thickness: 1.5),
                     SizedBox(height: 16.h),
 
-
+                    // ── Description ──
                     Text(
                       "Description",
                       style: TextStyle(
@@ -315,7 +508,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                     Divider(color: Colors.grey[200], thickness: 1.5),
                     SizedBox(height: 16.h),
 
-
+                    // ── Location Details ──
                     Text(
                       "Location",
                       style: TextStyle(
@@ -363,6 +556,103 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                           ),
                         ],
                       ),
+                    ),
+                    SizedBox(height: 20.h),
+
+                    Divider(color: Colors.grey[200], thickness: 1.5),
+                    SizedBox(height: 16.h),
+
+                    // ── Reviews Section ──
+                    BlocBuilder<ReviewBloc, ReviewState>(
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Reviews",
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                            if (!state.hasReviewed)
+                              TextButton(
+                                onPressed: () =>
+                                    _showAddReviewDialog(context),
+                                child: Text(
+                                  "Add Review",
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                              ),
+                            if (state.hasReviewed)
+                              Padding(
+                                padding: EdgeInsets.only(right: 8.w),
+                                child: Row(
+                                  children: [
+                                    Icon(Icons.check_circle,
+                                        color: Colors.green, size: 16),
+                                    SizedBox(width: 4.w),
+                                    Text(
+                                      "Reviewed",
+                                      style: TextStyle(
+                                        fontSize: 13.sp,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        );
+                      },
+                    ),
+                    SizedBox(height: 8.h),
+                    BlocConsumer<ReviewBloc, ReviewState>(
+                      listener: (context, state) {
+                        if (state.message != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(state.message!),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        }
+                        if (state.error != null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(state.error!),
+                              backgroundColor: Colors.red,
+                            ),
+                          );
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state.isLoading) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                        if (state.reviews.isEmpty) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            child: Text(
+                              "No reviews yet. Be the first to review!",
+                              style: TextStyle(
+                                  fontSize: 13.sp, color: Colors.grey),
+                            ),
+                          );
+                        }
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: state.reviews.length,
+                          itemBuilder: (context, index) {
+                            return _buildReviewItem(state.reviews[index]);
+                          },
+                        );
+                      },
                     ),
                     SizedBox(height: 100.h),
                   ],

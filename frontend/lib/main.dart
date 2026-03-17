@@ -5,6 +5,8 @@ import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/HomeScreen/Bloc/hot_deals/hot_deals_bloc.dart';
 import 'package:frontend/features/HomeScreen/Repository/hotdeals_repo.dart';
 import 'package:frontend/features/HomeScreen/Repository/nearby_house_repo.dart';
+import 'package:frontend/features/Review%20and%20ratings/Repository/review_repo.dart';
+import 'package:frontend/features/Review%20and%20ratings/bloc/reviews_bloc.dart';
 import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_bloc.dart';
 import 'package:frontend/features/Settings/Repository/change_user_name_repo.dart';
 import 'package:frontend/features/WishList/Repository/wishlist_repo.dart';
@@ -46,6 +48,7 @@ void main() async{
   final nearbyHouserepo=NearbyHouseRepo(apiClient: apiClient);
   final hotDealsRepo=HotDealsRepo(apiClient: apiClient);
   final wishlistrepo=WishlistRepo(apiClient: apiClient);
+  final reviewRepo=ReviewRepo(apiClient: apiClient);
 
   runApp(
     MultiBlocProvider(
@@ -64,6 +67,7 @@ void main() async{
         BlocProvider(create: (_) => NearbyHouseBloc(repo: nearbyHouserepo)),
         BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo)),
         BlocProvider(create: (_)=>HotDealsBloc(repo: hotDealsRepo)),
+        BlocProvider(create: (_)=>ReviewBloc(repo: reviewRepo)),
         BlocProvider(create: (_)=>WishlistBloc(repo: wishlistrepo)),
       ],
       child:  myApp(isLoggedIn:token!=null),
