@@ -12,6 +12,11 @@ import { addToWishListController,getWishlistController,checkWishlistStatusContro
 import { addReviewController,getReviewsController,getAverageRatingController,checkReviewStatusController } from "../controllers/review_controller";
 import { getRecommendedHousesController } from "../controllers/recommended_controller";
 import { searchHousesController } from "../controllers/search_controller";
+import { addToRentsController,getRentsController } from "../controllers/my_rents_controller";
+import { getMyHousesController } from "../controllers/my_houses_controller";
+import { changeLandlordController } from "../controllers/assign_landlord_controller";
+import { uploadProfilePicController,getProfilePicController } from "../controllers/upload_profilepic_controller";
+
 
 const router=express.Router();
 
@@ -35,5 +40,11 @@ router.get("/getAverageRating/:houseId", getAverageRatingController);
 router.get("/checkReview/:houseId/:tenantEmail", checkReviewStatusController);
 router.get("/recommendedHouses", getRecommendedHousesController);
 router.get("/searchHouses", searchHousesController);
+router.post("/addRent", addToRentsController);
+router.get("/getRents/:userEmail", getRentsController);
+router.get("/myHouses/:landlordEmail", getMyHousesController);
+router.post("/changeRole",changeLandlordController);
+router.post("/uploadProfilePic", upload.single("image"), uploadProfilePicController);
+router.get("/getProfilePic/:email", getProfilePicController);
 
 export default router;
