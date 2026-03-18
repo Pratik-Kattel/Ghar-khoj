@@ -1,7 +1,5 @@
-// lib/features/house/bloc/house_upload_state.dart
-import 'dart:io';
 
-import '../../HomeScreen/Model/nearby_house_model.dart';
+import 'dart:io';
 
 class HouseUploadState {
   final String title;

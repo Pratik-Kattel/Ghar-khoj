@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../services/get_user_data.dart';
 import '../../../services/location_service.dart';
-import '../../HomeScreen/Repository/nearby_house_repo.dart';
 import '../Model/add_house_model.dart';
 import '../Repository/upload_house-repo.dart';
 import 'add_house_event.dart';

@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/services/secure_storage.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_list_tile.dart';
-import '../../HomeScreen/Bloc/home_screen/home_screen_bloc.dart';
+import '../../Home/Bloc/home_screen/home_screen_bloc.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -110,15 +110,6 @@ class SettingsScreenState extends State<SettingsScreen> {
               },
               icon: Icons.perm_contact_cal_outlined,
               title: "Contact Us",
-              trailing: Icons.arrow_forward_ios_outlined,
-            ),
-            SizedBox(height: 15.h),
-            CustomListTile.listTile(
-              onTap: () {
-                Navigator.pushNamed(context, '/addHouse');
-              },
-              icon: Icons.home,
-              title: "Add home",
               trailing: Icons.arrow_forward_ios_outlined,
             ),
             SizedBox(height: 15.h),

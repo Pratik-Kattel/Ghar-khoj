@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/HomeScreen/Screen/HomeScreen.dart';
-import 'package:frontend/features/My%20rents/Screens/my_rents_screen.dart';
 import 'package:frontend/features/Settings/Screen/profile_page.dart';
 import 'package:frontend/features/WishList/screens/wishlist_screen.dart';
-
 import '../Add_house/Screen/add_house_screen.dart';
+import '../Home/Screen/HomeScreen.dart';
+import '../Home/Screen/my_houses_screen.dart';
+import '../My houses/Screens/my_rents_screen.dart';
 
 class BottomNavigator extends StatefulWidget {
   final String role;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants/api_endpoints.dart';
-import '../features/HomeScreen/Model/hotdeals_model.dart';
+import '../features/Home/Model/hotdeals_model.dart';
 import 'custom_house_details_screen.dart';
 
 class CustomHotDealsHousesCart {

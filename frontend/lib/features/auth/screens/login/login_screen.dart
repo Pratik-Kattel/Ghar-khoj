@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   iconColor: Colors.green,
                 ),
               );
-              Navigator.push(context,  MaterialPageRoute(
+              Navigator.pushReplacement(context,  MaterialPageRoute(
                 builder: (_) => BottomNavigator(role: state.role ?? 'TENANT'),
               ),
               );

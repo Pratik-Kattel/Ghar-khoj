@@ -24,4 +24,5 @@ class ApiEndpoints{
   static String searchHouses = "$baseUrl/searchHouses";
   static String addRent = "$baseUrl/addRent";
   static String getRents = "$baseUrl/getRents";
+  static String myHouses = "$baseUrl/myHouses";
 }

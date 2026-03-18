@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/constants/api_endpoints.dart';
-import '../features/HomeScreen/Model/nearby_house_model.dart';
+import '../features/Home/Model/nearby_house_model.dart';
 import 'custom_house_details_screen.dart';
 
 class CustomHouseNearbyCart {

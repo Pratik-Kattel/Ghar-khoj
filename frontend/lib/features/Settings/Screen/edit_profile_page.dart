@@ -8,7 +8,7 @@ import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import 'package:frontend/widgets/custom_textfield.dart';
 import '../../../widgets/custom_snackbar.dart';
-import '../../HomeScreen/Bloc/home_screen/home_screen_bloc.dart';
+import '../../Home/Bloc/home_screen/home_screen_bloc.dart';
 import '../Bloc/profile_page/profile_page_state.dart';
 
 class EditProfilePage extends StatefulWidget {

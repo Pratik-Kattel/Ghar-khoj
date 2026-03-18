@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/features/Add_house/bloc/add_house_bloc.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
-import 'package:frontend/features/HomeScreen/Bloc/hot_deals/hot_deals_bloc.dart';
-import 'package:frontend/features/HomeScreen/Repository/hotdeals_repo.dart';
-import 'package:frontend/features/HomeScreen/Repository/nearby_house_repo.dart';
-import 'package:frontend/features/My%20rents/Repository/rents_repo.dart';
-import 'package:frontend/features/My%20rents/bloc/my_rents_bloc.dart';
 import 'package:frontend/features/Recommendation/Repository/recommendation_repo.dart';
 import 'package:frontend/features/Recommendation/bloc/recommendation_bloc.dart';
 import 'package:frontend/features/Review%20and%20ratings/Repository/review_repo.dart';
@@ -35,8 +30,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import './features/auth/bloc/login/login_bloc.dart';
 import './features/auth/Repository/login/login_repo.dart';
 import 'features/Add_house/Repository/upload_house-repo.dart';
-import 'package:frontend/features/HomeScreen/Bloc/home_screen/home_screen_bloc.dart';
-import 'features/HomeScreen/Bloc/fetch_nearby_house/nearby_house_bloc.dart';
+import 'features/Home/Bloc/fetch_nearby_house/nearby_house_bloc.dart';
+import 'features/Home/Bloc/home_screen/home_screen_bloc.dart';
+import 'features/Home/Bloc/hot_deals/hot_deals_bloc.dart';
+import 'features/Home/Repository/hotdeals_repo.dart';
+import 'features/Home/Repository/nearby_house_repo.dart';
+import 'features/My houses/Repository/rents_repo.dart';
+import 'features/My houses/bloc/my_rents_bloc.dart';
+
 
 void main() async{
   await WidgetsFlutterBinding.ensureInitialized();
