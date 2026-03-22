@@ -18,3 +18,7 @@ export interface UserInfo{
     email:string,
     role?:string
 }
+
+export interface UserEmail {
+  email: string;
+}
