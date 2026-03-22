@@ -1,5 +1,9 @@
+import 'dart:core';
+import 'dart:core';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/constants/stripe_keys.dart';
 import 'package:frontend/features/Add_house/bloc/add_house_bloc.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
 import 'package:frontend/features/Recommendation/Repository/recommendation_repo.dart';
@@ -23,6 +27,7 @@ import 'package:frontend/routes/app_routes.dart';
 import 'package:frontend/features/splash/screens/splash_screen.dart';
 import 'package:frontend/services/get_user_data.dart';
 import 'package:frontend/services/secure_storage.dart';
+import 'package:frontend/services/stripe_service.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/services/api_clients.dart';
 import 'package:frontend/constants/api_endpoints.dart';
@@ -41,6 +46,7 @@ import 'features/My houses/bloc/my_rents_bloc.dart';
 
 void main() async{
   await WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey=publishableKey;
   String?token=await SecureStorage.getToken();
   String? role;
   if(token!=null){
@@ -64,6 +70,7 @@ void main() async{
   final searchSystemRepo=SearchRepo(apiClient: apiClient);
   final myRentsRepo=RentsRepo(apiClient: apiClient);
 
+  StripeService.init(apiClient);
   runApp(
     MultiBlocProvider(
       providers: [

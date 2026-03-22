@@ -20,15 +20,16 @@ class ApiClient {
   Future<Map<String, dynamic>> post(
     String endpoint,
     dynamic body,
-  //       Map<String, dynamic>? headers,
-  // }
+      {
+        Map<String, dynamic>? headers,
+  }
   ) async {
     try {
       final response = await dio.post(
         endpoint,
         data: body,
         options: Options(
-          // headers: headers,
+          headers: headers,
           contentType: body is FormData
               ? "multipart/form-data"
               : Headers.formUrlEncodedContentType,

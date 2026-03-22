@@ -53,15 +53,9 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
       CheckWishlistStatus(houseId: widget.houseId),
     );
     context.read<ReviewBloc>().add(ResetReviewState());
-    context.read<ReviewBloc>().add(
-      FetchAverageRating(houseId: widget.houseId),
-    );
-    context.read<ReviewBloc>().add(
-      FetchReviews(houseId: widget.houseId),
-    );
-    context.read<ReviewBloc>().add(
-      CheckReviewStatus(houseId: widget.houseId),
-    );
+    context.read<ReviewBloc>().add(FetchAverageRating(houseId: widget.houseId));
+    context.read<ReviewBloc>().add(FetchReviews(houseId: widget.houseId));
+    context.read<ReviewBloc>().add(CheckReviewStatus(houseId: widget.houseId));
   }
 
   void _showAddReviewDialog(BuildContext context) {
@@ -75,10 +69,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
             return AlertDialog(
               title: Text(
                 "Add Review",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
               ),
               content: SizedBox(
                 height: 230.h,
@@ -104,9 +95,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                             });
                           },
                           child: Icon(
-                            i < selectedRating
-                                ? Icons.star
-                                : Icons.star_border,
+                            i < selectedRating ? Icons.star : Icons.star_border,
                             color: Color(0xFFFFC107),
                             size: 32,
                           ),
@@ -152,56 +141,49 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                           onPressed: state.isSubmitting
                               ? null
                               : () {
-                            if (selectedRating == 0) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Please select a rating"),
-                                ),
-                              );
-                              return;
-                            }
-                            if (commentController.text
-                                .trim()
-                                .isEmpty) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      "Please write a comment"),
-                                ),
-                              );
-                              return;
-                            }
-                            context.read<ReviewBloc>().add(
-                              SubmitReview(
-                                houseId: widget.houseId,
-                                rating: selectedRating,
-                                comment: commentController.text
-                                    .trim(),
-                              ),
-                            );
-                            Navigator.pop(dialogContext);
-                          },
+                                  if (selectedRating == 0) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text("Please select a rating"),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  if (commentController.text.trim().isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text("Please write a comment"),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  context.read<ReviewBloc>().add(
+                                    SubmitReview(
+                                      houseId: widget.houseId,
+                                      rating: selectedRating,
+                                      comment: commentController.text.trim(),
+                                    ),
+                                  );
+                                  Navigator.pop(dialogContext);
+                                },
                           child: state.isSubmitting
                               ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
                               : Text(
-                            "Submit",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                                  "Submit",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                         );
                       },
                     ),
                   ],
-                )
+                ),
               ],
             );
           },
@@ -236,7 +218,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
               Row(
                 children: List.generate(
                   5,
-                      (i) => Icon(
+                  (i) => Icon(
                     i < review.rating ? Icons.star : Icons.star_border,
                     color: Color(0xFFFFC107),
                     size: 16,
@@ -259,8 +241,8 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
   Widget build(BuildContext context) {
     final imageFullUrl = widget.imageUrl.isNotEmpty
         ? (widget.imageUrl.startsWith("http")
-        ? widget.imageUrl
-        : "${ApiEndpoints.imageBaseUrl}${widget.imageUrl}")
+              ? widget.imageUrl
+              : "${ApiEndpoints.imageBaseUrl}${widget.imageUrl}")
         : null;
 
     final priceDisplay = widget.price == 0
@@ -285,39 +267,42 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                     ),
                     child: imageFullUrl != null
                         ? Image.network(
-                      imageFullUrl,
-                      width: double.infinity,
-                      height: 360.h,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Container(
-                          width: double.infinity,
-                          height: 360.h,
-                          color: Colors.grey[200],
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              value: loadingProgress
-                                  .expectedTotalBytes !=
-                                  null
-                                  ? loadingProgress
-                                  .cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) =>
-                          _fallbackImage(),
-                    )
+                            imageFullUrl,
+                            width: double.infinity,
+                            height: 360.h,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                width: double.infinity,
+                                height: 360.h,
+                                color: Colors.grey[200],
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    value:
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                  .cumulativeBytesLoaded /
+                                              loadingProgress
+                                                  .expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) =>
+                                _fallbackImage(),
+                          )
                         : _fallbackImage(),
                   ),
                   SafeArea(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 12.w, vertical: 8.h),
+                        horizontal: 12.w,
+                        vertical: 8.h,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -330,11 +315,16 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                 shape: BoxShape.circle,
                                 boxShadow: [
                                   BoxShadow(
-                                      color: Colors.black12, blurRadius: 6),
+                                    color: Colors.black12,
+                                    blurRadius: 6,
+                                  ),
                                 ],
                               ),
-                              child: Icon(Icons.arrow_back_ios_new,
-                                  color: Colors.black, size: 18),
+                              child: Icon(
+                                Icons.arrow_back_ios_new,
+                                color: Colors.black,
+                                size: 18,
+                              ),
                             ),
                           ),
                           BlocConsumer<WishlistBloc, WishlistState>(
@@ -364,8 +354,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                               return GestureDetector(
                                 onTap: () {
                                   context.read<WishlistBloc>().add(
-                                    AddToWishlist(
-                                        houseId: widget.houseId),
+                                    AddToWishlist(houseId: widget.houseId),
                                   );
                                 },
                                 child: Container(
@@ -375,26 +364,27 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                     shape: BoxShape.circle,
                                     boxShadow: [
                                       BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 6),
+                                        color: Colors.black12,
+                                        blurRadius: 6,
+                                      ),
                                     ],
                                   ),
                                   child: state.isLoading
                                       ? SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.red,
-                                    ),
-                                  )
+                                          width: 20,
+                                          height: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.red,
+                                          ),
+                                        )
                                       : Icon(
-                                    state.isWishlisted
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color: Colors.red,
-                                    size: 20,
-                                  ),
+                                          state.isWishlisted
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: Colors.red,
+                                          size: 20,
+                                        ),
                                 ),
                               );
                             },
@@ -417,9 +407,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       children: [
                         Expanded(
                           child: Text(
-                            widget.title.isNotEmpty
-                                ? widget.title
-                                : "No title",
+                            widget.title.isNotEmpty ? widget.title : "No title",
                             style: TextStyle(
                               fontSize: 22.sp,
                               fontWeight: FontWeight.bold,
@@ -441,15 +429,20 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                     SizedBox(height: 8.h),
                     Row(
                       children: [
-                        Icon(Icons.location_on,
-                            color: AppColors.primary, size: 20),
+                        Icon(
+                          Icons.location_on,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
                         SizedBox(width: 5.w),
                         Text(
                           widget.place.isNotEmpty
                               ? widget.place
                               : "Unknown location",
                           style: TextStyle(
-                              fontSize: 14.sp, color: Colors.grey[600]),
+                            fontSize: 14.sp,
+                            color: Colors.grey[600],
+                          ),
                         ),
                       ],
                     ),
@@ -460,21 +453,27 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                           children: [
                             Container(
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10.w, vertical: 4.h),
+                                horizontal: 10.w,
+                                vertical: 4.h,
+                              ),
                               decoration: BoxDecoration(
                                 color: Color(0xFFFFE5B4),
                                 borderRadius: BorderRadius.circular(5.r),
                               ),
                               child: Row(
                                 children: [
-                                  Icon(Icons.star,
-                                      color: Color(0xFFFFC107), size: 18),
+                                  Icon(
+                                    Icons.star,
+                                    color: Color(0xFFFFC107),
+                                    size: 18,
+                                  ),
                                   SizedBox(width: 4.w),
                                   Text(
                                     state.averageRating == 0.0
                                         ? "N/A"
-                                        : state.averageRating
-                                        .toStringAsFixed(1),
+                                        : state.averageRating.toStringAsFixed(
+                                            1,
+                                          ),
                                     style: TextStyle(
                                       fontSize: 14.sp,
                                       fontWeight: FontWeight.w600,
@@ -488,7 +487,9 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                             Text(
                               "(${state.totalReviews} reviews)",
                               style: TextStyle(
-                                  fontSize: 13.sp, color: Colors.grey),
+                                fontSize: 13.sp,
+                                color: Colors.grey,
+                              ),
                             ),
                           ],
                         );
@@ -537,8 +538,11 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.location_on,
-                              color: AppColors.primary, size: 20),
+                          Icon(
+                            Icons.location_on,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
                           SizedBox(width: 8.w),
                           Expanded(
                             child: Column(
@@ -557,9 +561,11 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                 SizedBox(height: 2.h),
                                 Text(
                                   "Lat: ${widget.latitude.toStringAsFixed(6)}, "
-                                      "Lng: ${widget.longitude.toStringAsFixed(6)}",
+                                  "Lng: ${widget.longitude.toStringAsFixed(6)}",
                                   style: TextStyle(
-                                      fontSize: 12.sp, color: Colors.grey),
+                                    fontSize: 12.sp,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
@@ -585,8 +591,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                             ),
                             if (!state.hasReviewed)
                               TextButton(
-                                onPressed: () =>
-                                    _showAddReviewDialog(context),
+                                onPressed: () => _showAddReviewDialog(context),
                                 child: Text(
                                   "Add Review",
                                   style: TextStyle(
@@ -600,8 +605,11 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                 padding: EdgeInsets.only(right: 8.w),
                                 child: Row(
                                   children: [
-                                    Icon(Icons.check_circle,
-                                        color: Colors.green, size: 16),
+                                    Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
+                                      size: 16,
+                                    ),
                                     SizedBox(width: 4.w),
                                     Text(
                                       "Reviewed",
@@ -647,7 +655,9 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                             child: Text(
                               "No reviews yet. Be the first to review!",
                               style: TextStyle(
-                                  fontSize: 13.sp, color: Colors.grey),
+                                fontSize: 13.sp,
+                                color: Colors.grey,
+                              ),
                             ),
                           );
                         }
@@ -675,9 +685,10 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-                color: Colors.black12,
-                blurRadius: 10,
-                offset: Offset(0, -2)),
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: Offset(0, -2),
+            ),
           ],
         ),
         child: BlocConsumer<RentsBloc, RentsState>(
@@ -703,14 +714,32 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
           },
           builder: (context, state) {
             return CustomButton.button(
-              texts: state.isAdding ? "Renting..." : "Rent Now",
+              texts: state.isAdding ? "Processing..." : "Rent Now",
               onPressed: state.isAdding
                   ? null
-                  : () {
-                // StripeService.instance.makePayment();
-                context.read<RentsBloc>().add(
-                  AddToRents(houseId: widget.houseId),
+                  : () async {
+                // Step 1 — Process payment first
+                final paymentSuccess = await StripeService.instance.makePayment(
+                  houseId: widget.houseId,
+                  amount: widget.price,
                 );
+
+                // Step 2 — Only rent if payment succeeded
+                if (paymentSuccess) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Payment successful! House rented."),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Payment cancelled or failed."),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
               context: context,
               padding: EdgeInsets.symmetric(vertical: 14.h),
