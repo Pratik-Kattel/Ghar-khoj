@@ -5,6 +5,7 @@ import 'package:frontend/constants/api_endpoints.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_bloc.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_event.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_state.dart';
+import 'package:frontend/services/get_user_data.dart';
 import 'package:frontend/services/stripe_service.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
@@ -38,13 +39,13 @@ class CustomHouseDetailScreen extends StatefulWidget {
     required this.longitude,
     required this.description,
   });
-
   @override
   State<CustomHouseDetailScreen> createState() =>
       _CustomHouseDetailScreenState();
 }
 
 class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
+  String? role;
   @override
   void initState() {
     super.initState();
@@ -56,7 +57,17 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
     context.read<ReviewBloc>().add(FetchAverageRating(houseId: widget.houseId));
     context.read<ReviewBloc>().add(FetchReviews(houseId: widget.houseId));
     context.read<ReviewBloc>().add(CheckReviewStatus(houseId: widget.houseId));
+    _getUserRole();
   }
+
+  Future<String?> _getUserRole()async{
+    final fetchedRole=await GetUserDataRepo.getUserRole();
+    setState(() {
+      role=fetchedRole;
+    });
+  }
+
+
 
   void _showAddReviewDialog(BuildContext context) {
     int selectedRating = 0;
@@ -679,7 +690,13 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: role==null ?
+          SizedBox(
+            height: 80.h,
+            child: CircularProgressIndicator(),
+          )
+      : role=='TENANT'?
+      Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -746,7 +763,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
             );
           },
         ),
-      ),
+      ) : null,
     );
   }
 

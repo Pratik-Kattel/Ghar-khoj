@@ -23,7 +23,6 @@ class StripeService {
       final email = await GetUserDataRepo.getUserEmail();
       if (email == null) throw Exception("User not logged in");
 
-
       final res = await apiClient.post(ApiEndpoints.createPaymentIntent, {
         "amount": amount.toInt(),
         "currency": "usd",
@@ -42,12 +41,9 @@ class StripeService {
         ),
       );
 
-
       await Stripe.instance.presentPaymentSheet();
 
-
       final paymentIntentId = clientSecret.split("_secret_")[0];
-
 
       final confirmRes = await apiClient.post(ApiEndpoints.confirmPayment, {
         "paymentIntentId": paymentIntentId,

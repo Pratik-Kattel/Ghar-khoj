@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontend/constants/api_endpoints.dart';
+import 'package:frontend/services/api_clients.dart';
+import 'package:frontend/services/get_user_data.dart';
 import 'package:frontend/services/secure_storage.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_list_tile.dart';
@@ -20,9 +23,13 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   final ImagePicker _picker = ImagePicker();
+  String? email;
+  String? name;
 
   @override
   void initState() {
+    final apiClient=ApiClient(baseUrl: ApiEndpoints.baseUrl);
+    final getUserDataRepo=GetUserDataRepo(apiClient);
     super.initState();
     final homeState = context.read<HomeScreenBloc>().state;
     context.read<ProfilePageBloc>().add(
@@ -32,6 +39,8 @@ class SettingsScreenState extends State<SettingsScreen> {
       NameChangedEvent(name: homeState.name ?? ""),
     );
     context.read<ProfilePageBloc>().add(FetchProfilePicEvent());
+    _fetchUserEmail();
+    _fetchUserName(getUserDataRepo);
   }
 
   Future<void> _pickAndUploadImage() async {
@@ -42,6 +51,20 @@ class SettingsScreenState extends State<SettingsScreen> {
       );
       context.read<ProfilePageBloc>().add(ProfilePicSubmittedEvent());
     }
+  }
+
+  Future<void> _fetchUserEmail() async{
+  final fetchedEmail= await GetUserDataRepo.getUserEmail();
+   setState(() {
+     email=fetchedEmail;
+   });
+  }
+  Future<void> _fetchUserName(GetUserDataRepo getUserDataRepo) async{
+    final getUsername=GetUserName(getUserDataRepo:getUserDataRepo);
+  final fetchedName= await getUsername.getuserName();
+  setState(() {
+    name=fetchedName;
+  });
   }
 
   @override
@@ -92,21 +115,25 @@ class SettingsScreenState extends State<SettingsScreen> {
                     children: [
                       CircleAvatar(
                         radius: 60.r,
-                        backgroundColor: Colors.grey[300],
+                        backgroundColor: Colors.grey,
                         backgroundImage: state.isUploadingPic
                             ? null
                             : state.profilePicFile != null
                             ? FileImage(state.profilePicFile!)
-                        as ImageProvider
                             : state.profilePicUrl != null
                             ? NetworkImage(state.profilePicUrl!)
-                        as ImageProvider
-                            : const AssetImage(
-                            "Assets/Images/ronaldo.webp")
-                        as ImageProvider,
-                        child: state.isUploadingPic
-                            ? const CircularProgressIndicator(
-                            color: Colors.white)
+                            : null,
+                        child: state.profilePicFile == null && state.profilePicUrl == null
+                            ? Text(
+                          name != null && name!.isNotEmpty
+                              ? name![0].toUpperCase()
+                              : ".",
+                          style: TextStyle(
+                            fontSize: 40.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        )
                             : null,
                       ),
                       Positioned(
@@ -127,12 +154,12 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ),
                 SizedBox(height: 20.h),
                 Text(
-                  state.name.trim().isEmpty ? " " : state.name,
+                  name ?? "Loading...",
                   style: TextStyle(fontSize: 17.sp, color: Colors.black),
                 ),
                 SizedBox(height: 5.h),
                 Text(
-                  state.email.trim().isEmpty ? " " : state.email,
+                  email ?? "Loading...",
                   style: TextStyle(fontSize: 17.sp, color: Colors.black),
                 ),
                 SizedBox(height: 70.h),

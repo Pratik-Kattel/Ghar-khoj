@@ -7,6 +7,7 @@ import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_event.
 import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_state.dart';
 import 'package:frontend/features/Settings/Repository/change_user_name_repo.dart';
 import 'package:frontend/services/api_clients.dart';
+import 'package:frontend/services/get_user_data.dart';
 
 class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
   ChangeUserNameRepo changeUserNameRepo;
@@ -78,8 +79,9 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
     on<FetchProfilePicEvent>((event, emit) async {
       try {
         final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
+        final email=await GetUserDataRepo.getUserEmail();
         final res = await apiClient
-            .get("${ApiEndpoints.getProfilePic}/${state.email}");
+            .get("${ApiEndpoints.getProfilePic}/${email}");
         final profilePic = res["profilePic"];
         if (profilePic != null && profilePic.isNotEmpty) {
           emit(state.copyWith(
