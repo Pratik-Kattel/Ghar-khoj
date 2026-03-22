@@ -5,6 +5,7 @@ import 'package:frontend/constants/api_endpoints.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_bloc.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_event.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_state.dart';
+import 'package:frontend/services/stripe_service.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
 import '../features/My houses/bloc/my_rents_bloc.dart';
@@ -706,6 +707,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
               onPressed: state.isAdding
                   ? null
                   : () {
+                // StripeService.instance.makePayment();
                 context.read<RentsBloc>().add(
                   AddToRents(houseId: widget.houseId),
                 );

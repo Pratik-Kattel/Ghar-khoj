@@ -17,18 +17,22 @@ class ApiClient {
     );
   }
 
-
   Future<Map<String, dynamic>> post(
-      String endpoint,
-      dynamic body, //
-      ) async {
+    String endpoint,
+    dynamic body,
+  //       Map<String, dynamic>? headers,
+  // }
+  ) async {
     try {
       final response = await dio.post(
         endpoint,
         data: body,
-        options: body is FormData
-            ? Options(contentType: "multipart/form-data")
-            : null,
+        options: Options(
+          // headers: headers,
+          contentType: body is FormData
+              ? "multipart/form-data"
+              : Headers.formUrlEncodedContentType,
+        ),
       );
       if (kDebugMode) {
         print("SUCCESS RESPONSE: ${response.data}");

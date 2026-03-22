@@ -48,6 +48,7 @@ dependencies:
   jwt_decode: ^0.3.1
   geocoding: ^4.0.0
   image_picker: ^1.2.1
+  flutter_stripe: ^12.4.0
 
 dev_dependencies:
   flutter_test:

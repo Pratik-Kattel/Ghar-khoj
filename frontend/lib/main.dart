@@ -72,6 +72,8 @@ void main() async{
         BlocProvider(create: (_)=> ForgotPasswordBloc(validateEmailRepository: validateEmailRepository,),),
         BlocProvider(create: (_)=>PasswordChangeBloc(changePasswordRepo: changePasswordRepo)),
         BlocProvider(create: (_)=>HomeScreenBloc(getUserDataRepo: getUserDataRepo, locationResponseRepo: locationResponseRepo, )),
+        BlocProvider(create: (_)=> PasswordChangeBloc(changePasswordRepo: changePasswordRepo)),
+        BlocProvider(create: (_)=> OTPValidationBloc(validateOtpRepo: validateOTPRepository)),
         BlocProvider(create: (_)=>HouseUploadBloc(repository: houseRepo)),
         BlocProvider(create: (_)=> NearbyHouseBloc(repo: nearbyHouserepo)),
         BlocProvider(create: (_)=>ProfilePageBloc(changeUserNameRepo: changeUsernameRepo)),
