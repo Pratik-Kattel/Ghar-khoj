@@ -215,7 +215,8 @@ model Bookings {
   tenantId  String        @map("tenant_id")
   status    BookingStatus @default(PENDING) // enum
   createdAt DateTime      @default(now()) @map("created_at")
-
+  startDate DateTime
+  endDate DateTime
   house    Houses   @relation(fields: [houseId], references: [houseId])
   tenant   Users    @relation(fields: [tenantId], references: [id])
   payments Payments[]
