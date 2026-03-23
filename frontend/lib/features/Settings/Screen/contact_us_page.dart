@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:frontend/services/open_default_app.dart';
 import 'package:frontend/themes/app_themes.dart';
+import 'package:frontend/widgets/svg_Icons.dart';
 
 class ContactUsInfoScreen extends StatelessWidget {
   const ContactUsInfoScreen({super.key});
@@ -23,11 +26,7 @@ class ContactUsInfoScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Logo / title
-              Icon(
-                Icons.home_filled,
-                size: 60.sp,
-                color: AppColors.primary,
-              ),
+              Icon(Icons.home_filled, size: 60.sp, color: AppColors.primary),
               SizedBox(height: 15.h),
               Text(
                 "Ghar Khoj",
@@ -54,7 +53,51 @@ class ContactUsInfoScreen extends StatelessWidget {
               // Location
               contactRow(Icons.location_on_outlined, "Sundar Dulari, Nepal"),
               SizedBox(height: 50.h),
-
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  SvgIcons.icons(
+                      pathname: 'Assets/Images/Facebook.svg',
+                      height: 35,
+                      width: 35,
+                      onTap: (){
+                        OpenDefaultApp.openFacebook();
+                      }
+                  ),
+                  SvgIcons.icons(
+                      pathname: 'Assets/Images/Facebook.svg',
+                      height: 35,
+                      width: 35,
+                      onTap: (){
+                        OpenDefaultApp.openFacebook();
+                      }
+                  ),
+                  SvgIcons.icons(
+                      pathname: 'Assets/Images/Facebook.svg',
+                      height: 35,
+                      width: 35,
+                      onTap: (){
+                        OpenDefaultApp.openFacebook();
+                      }
+                  ),
+                  SvgIcons.icons(
+                      pathname: 'Assets/Images/Facebook.svg',
+                      height: 35,
+                      width: 35,
+                      onTap: (){
+                        OpenDefaultApp.openFacebook();
+                      }
+                  ),
+                  SvgIcons.icons(
+                      pathname: 'Assets/Images/Facebook.svg',
+                      height: 35,
+                      width: 35,
+                      onTap: (){
+                        OpenDefaultApp.openFacebook();
+                      }
+                  ),
+                ],
+              ),
               Spacer(),
 
               // Footer

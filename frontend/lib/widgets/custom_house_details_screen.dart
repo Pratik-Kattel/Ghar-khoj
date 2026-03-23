@@ -600,6 +600,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                 color: Colors.black,
                               ),
                             ),
+                            if(role=='TENANT')
                             if (!state.hasReviewed)
                               TextButton(
                                 onPressed: () => _showAddReviewDialog(context),
@@ -696,37 +697,29 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
             child: CircularProgressIndicator(),
           )
       : role=='TENANT'?
-      Container(
+           Container(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 10,
-              offset: Offset(0, -2),
-            ),
+            BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -2)),
           ],
         ),
         child: BlocConsumer<RentsBloc, RentsState>(
           listener: (context, state) {
             if (state.message != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message!),
-                  backgroundColor: Colors.green,
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.message!),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ));
             }
             if (state.error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.error!),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(state.error!),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 2),
+              ));
             }
           },
           builder: (context, state) {
@@ -735,27 +728,31 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
               onPressed: state.isAdding
                   ? null
                   : () async {
-                // Step 1 — Process payment first
+                print("Rent button clicked");
+                final result = await _showDatePickerDialog(context);
+                if (result == null) return;
+
+                final startDate = result['startDate']!;
+                final endDate = result['endDate']!;
+                final totalAmount = result['totalAmount']!;
+
                 final paymentSuccess = await StripeService.instance.makePayment(
                   houseId: widget.houseId,
-                  amount: widget.price,
+                  amount: double.parse(totalAmount),
+                  startDate: startDate,
+                  endDate: endDate,
                 );
 
-                // Step 2 — Only rent if payment succeeded
                 if (paymentSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Payment successful! House rented."),
-                      backgroundColor: Colors.green,
-                    ),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Payment successful! House rented."),
+                    backgroundColor: Colors.green,
+                  ));
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Payment cancelled or failed."),
-                      backgroundColor: Colors.red,
-                    ),
-                  );
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("Payment cancelled or failed."),
+                    backgroundColor: Colors.red,
+                  ));
                 }
               },
               context: context,
@@ -764,6 +761,183 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
           },
         ),
       ) : null,
+    );
+  }
+  Future<Map<String, String>?> _showDatePickerDialog(BuildContext context) async {
+    DateTime? startDate;
+    DateTime? endDate;
+
+    return await showDialog<Map<String, String>>(
+      context: context,
+      builder: (dialogContext) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            int months = 0;
+            double totalAmount = 0;
+
+            if (startDate != null && endDate != null) {
+              months = ((endDate!.difference(startDate!).inDays) / 30).ceil();
+              totalAmount = months * widget.price;
+            }
+
+            return AlertDialog(
+              title: Center(
+                child:
+                Text(
+                "Select Rental Period",
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
+              ),
+              ),
+              content: SizedBox(
+                width: 400.w,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Start Date
+                    Text("Start Date",
+                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                    SizedBox(height: 8.h),
+                    GestureDetector(
+                      onTap: () async {
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now().add(Duration(days: 365 * 2)),
+                        );
+                        if (picked != null) {
+                          setDialogState(() {
+                            startDate = picked;
+                            if (endDate != null && endDate!.isBefore(startDate!)) {
+                              endDate = null;
+                            }
+                          });
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.primary),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Text(
+                          startDate == null
+                              ? "Select start date"
+                              : "${startDate!.day}/${startDate!.month}/${startDate!.year}",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: startDate == null ? Colors.grey : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+
+                    // End Date
+                    Text("End Date",
+                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                    SizedBox(height: 8.h),
+                    GestureDetector(
+                      onTap: () async {
+                        if (startDate == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Please select start date first")),
+                          );
+                          return;
+                        }
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: startDate!.add(Duration(days: 30)),
+                          firstDate: startDate!.add(Duration(days: 1)),
+                          lastDate: DateTime.now().add(Duration(days: 365 * 2)),
+                        );
+                        if (picked != null) {
+                          setDialogState(() => endDate = picked);
+                        }
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.primary),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Text(
+                          endDate == null
+                              ? "Select end date"
+                              : "${endDate!.day}/${endDate!.month}/${endDate!.year}",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: endDate == null ? Colors.grey : Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // Total
+                    if (startDate != null && endDate != null) ...[
+                      SizedBox(height: 16.h),
+                      Container(
+                        padding: EdgeInsets.all(12.r),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("$months month(s)",
+                                style: TextStyle(fontSize: 14.sp, color: Colors.black)),
+                            Text(
+                              "\$${totalAmount.toStringAsFixed(0)}",
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(dialogContext),
+                      child: Text("Cancel"),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                      onPressed: startDate == null || endDate == null
+                          ? null
+                          : () {
+                        final fmt = (DateTime d) =>
+                        "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
+                        final months =
+                        ((endDate!.difference(startDate!).inDays) / 30).ceil();
+                        final total = months * widget.price;
+                        Navigator.pop(dialogContext, {
+                          "startDate": fmt(startDate!),
+                          "endDate": fmt(endDate!),
+                          "totalAmount": total.toString(),
+                        });
+                      },
+                      child: Text("Confirm", style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 

@@ -11,6 +11,8 @@ class RentsModel {
   final String place;
   final String status;
   final String createdAt;
+  final String start_date;
+  final String end_date;
 
   RentsModel({
     required this.bookingId,
@@ -25,6 +27,8 @@ class RentsModel {
     required this.place,
     required this.status,
     required this.createdAt,
+    required this.start_date,
+    required this.end_date
   });
 
   factory RentsModel.fromJson(Map<String, dynamic> json,
@@ -42,6 +46,8 @@ class RentsModel {
       place: place,
       status: json["status"] ?? "PENDING",
       createdAt: json["created_at"] ?? "",
+      start_date: json["start_date"] ?? "",
+      end_date: json["end_date"] ?? ""
     );
   }
 

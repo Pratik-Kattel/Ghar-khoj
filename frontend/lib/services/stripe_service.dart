@@ -18,6 +18,8 @@ class StripeService {
   Future<bool> makePayment({
     required String houseId,
     required double amount,
+    required String startDate,
+    required String endDate
   }) async {
     try {
       final email = await GetUserDataRepo.getUserEmail();
@@ -28,6 +30,8 @@ class StripeService {
         "currency": "usd",
         "houseId": houseId,
         "userEmail": email,
+        "startDate":startDate,
+        "endDate":endDate
       });
 
       final clientSecret = res["clientsecret"];
@@ -49,15 +53,28 @@ class StripeService {
         "paymentIntentId": paymentIntentId,
         "houseId": houseId,
         "userEmail": email,
+        "startDate":startDate,
+        "endDate":endDate
       });
 
-      if (kDebugMode) print("Payment confirmed: $confirmRes");
+   if (kDebugMode) {
+     print("Payment confirmed: $confirmRes");
+   }
       return true;
     } on StripeException catch (e) {
-      if (kDebugMode) print("Stripe cancelled or failed: $e");
+      if (kDebugMode) {
+        print("Stripe ERROR TYPE: ${e.error.code}");
+      }
+      if (kDebugMode) {
+        print("Stripe ERROR MESSAGE: ${e.error.message}");
+      }
+      if (kDebugMode) {
+        print("Stripe ERROR DETAILS: ${e.error.localizedMessage}");
+      }
       return false;
     } catch (e) {
-      if (kDebugMode) print("Payment error: $e");
+       print("Payment error TYPE: ${e.runtimeType}");
+       print("Payment error DETAIL: $e");
       return false;
     }
   }
