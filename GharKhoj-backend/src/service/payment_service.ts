@@ -6,7 +6,7 @@ import cuid from 'cuid';
 
 const stripe=new Stripe(env.stripeSecretKey!);
 export const createPaymentIntentService=async(amount:number,currency:string,houseID:string,email:string,startDate:string,endDate:string)=>{
-  const conflict=await pool.query(`Select booking_id from Bookings where house_id=$1 AND status!='CANCELLED' AND "startDate"<$3 AND "endDate">$2`,[houseID,startDate,endDate]);
+  const conflict=await pool.query(`Select booking_id from bookings where house_id=$1 AND status!='CANCELLED' AND "startDate"<$3 AND "endDate">$2`,[houseID,startDate,endDate]);
   if(conflict.rows.length>0){
     throw new Error("House is already booked for that time period");
   }
@@ -47,9 +47,10 @@ if(paymentIntent.status!="succeeded"){
   // Create booking
   const bookingId = cuid();
   const booking = await pool.query(
-    `INSERT INTO bookings (booking_id, house_id, tenant_id, status,"startDate","endDate") VALUES ($1, $2, $3, 'CONFIRMED',$4,$5) RETURNING *`,
-    [bookingId, houseID, tenantId,startDate,endDate]
-  );
+  `INSERT INTO bookings (booking_id, house_id, tenant_id, status, "startDate", "endDate") 
+   VALUES ($1, $2, $3, 'CONFIRMED', $4, $5) RETURNING *`,
+  [bookingId, houseID, tenantId, startDate, endDate]
+);
 
   // Store payment record
   const paymentId = cuid();

@@ -16,7 +16,7 @@ import { addToRentsController,getRentsController } from "../controllers/my_rents
 import { getMyHousesController } from "../controllers/my_houses_controller";
 import { changeLandlordController } from "../controllers/assign_landlord_controller";
 import { uploadProfilePicController,getProfilePicController } from "../controllers/upload_profilepic_controller";
-import { confirmPaymentController,createPaymentIntentController } from "../controllers/payment_controller";
+import { confirmPaymentController,createPaymentIntentController,getBookingStatusController } from "../controllers/payment_controller";
 
 const router=express.Router();
 
@@ -48,5 +48,6 @@ router.post("/uploadProfilePic", upload.single("image"), uploadProfilePicControl
 router.get("/getProfilePic/:email", getProfilePicController);
 router.post("/createPaymentIntent", createPaymentIntentController);
 router.post("/confirmPayment", confirmPaymentController);
+router.get("/getBookingStatus/:houseId", getBookingStatusController);
 
 export default router;
