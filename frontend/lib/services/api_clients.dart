@@ -105,4 +105,38 @@ class ApiClient {
       );
     }
   }
+  Future<Map<String, dynamic>> delete(String endpoint) async {
+    try {
+      final res = await dio.delete(endpoint);
+      if (kDebugMode) {
+        print("DELETE RESPONSE: ${res.data}");
+      }
+      return res.data;
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print("DIO DELETE ERROR: ${e.response?.statusCode} | ${e.response?.data}");
+      }
+      if (e.response != null) {
+        String error = "Something went wrong";
+        final data = e.response?.data;
+        if (data is Map) {
+          error = data['message'] ?? "Something went wrong";
+        } else if (data is String) {
+          error = data;
+        }
+        throw DioException(
+          requestOptions: e.requestOptions,
+          type: DioExceptionType.badResponse,
+          error: error,
+          message: error,
+        );
+      }
+      throw DioException(
+        requestOptions: e.requestOptions,
+        type: DioExceptionType.connectionError,
+        error: "Couldn't connect to the server try again later",
+        message: "Couldn't connect to the server try again later",
+      );
+    }
+  }
 }

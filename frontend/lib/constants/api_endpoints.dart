@@ -30,4 +30,6 @@ class ApiEndpoints{
   static String createPaymentIntent = "$baseUrl/createPaymentIntent";
   static String confirmPayment = "$baseUrl/confirmPayment";
   static String getBookingStatus = "$baseUrl/getBookingStatus";
+  static String updateHouse = "$baseUrl/updateHouse";
+  static String deleteHouse = "$baseUrl/deleteHouse";
 }

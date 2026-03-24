@@ -9,6 +9,7 @@ import 'package:frontend/services/secure_storage.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_list_tile.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../widgets/custom_snackbar.dart';
 import '../../Home/Bloc/home_screen/home_screen_bloc.dart';
 import '../../Settings/Bloc/profile_page/profile_page_bloc.dart';
 import '../../Settings/Bloc/profile_page/profile_page_event.dart';
@@ -76,17 +77,19 @@ class SettingsScreenState extends State<SettingsScreen> {
           listener: (context, state) {
             if (state.generalError != null) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.generalError!),
-                  backgroundColor: Colors.red,
+                CustomSnackBar.buildSnackBar(
+                  message: state.generalError!,
+                  bgColor: Colors.red,
+                  context: context
                 ),
               );
             }
             if (state.justUpdatedPic) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Profile picture updated!"),
-                  backgroundColor: Colors.green,
+                CustomSnackBar.buildSnackBar(
+                  message: "Profile picture updated!",
+                 bgColor: Colors.green,
+                  context: context
                 ),
               );
             }

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/constants/api_endpoints.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_house_details_screen.dart';
+import 'package:frontend/widgets/custom_snackbar.dart';
 import '../Model/rents_model.dart';
 import '../bloc/my_rents_bloc.dart';
 import '../bloc/my_rents_event.dart';
@@ -47,9 +48,10 @@ class _MyRentsScreenState extends State<MyRentsScreen> {
         listener: (context, state) {
           if (state.error != null) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.error!),
-                backgroundColor: Colors.red,
+              CustomSnackBar.buildSnackBar(
+               message: state.error!,
+              bgColor: Colors.red,
+                context: context
               ),
             );
           }
@@ -152,7 +154,7 @@ class _MyRentsScreenState extends State<MyRentsScreen> {
         ),
         child: Row(
           children: [
-            // ── Image ──
+
             ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(12.r),
@@ -171,7 +173,7 @@ class _MyRentsScreenState extends State<MyRentsScreen> {
             ),
             SizedBox(width: 12.w),
 
-            // ── Details ──
+
             Expanded(
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 12.h),

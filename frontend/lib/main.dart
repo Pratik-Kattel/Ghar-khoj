@@ -1,11 +1,12 @@
 import 'dart:core';
-import 'dart:core';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/constants/stripe_keys.dart';
 import 'package:frontend/features/Add_house/bloc/add_house_bloc.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
+import 'package:frontend/features/My%20houses/Repository/my_houses_repo.dart';
+import 'package:frontend/features/My%20houses/bloc/my_houses_bloc.dart';
 import 'package:frontend/features/Recommendation/Repository/recommendation_repo.dart';
 import 'package:frontend/features/Recommendation/bloc/recommendation_bloc.dart';
 import 'package:frontend/features/Review%20and%20ratings/Repository/review_repo.dart';
@@ -40,8 +41,8 @@ import 'features/Home/Bloc/home_screen/home_screen_bloc.dart';
 import 'features/Home/Bloc/hot_deals/hot_deals_bloc.dart';
 import 'features/Home/Repository/hotdeals_repo.dart';
 import 'features/Home/Repository/nearby_house_repo.dart';
-import 'features/My houses/Repository/rents_repo.dart';
-import 'features/My houses/bloc/my_rents_bloc.dart';
+import 'features/My rents/Repository/rents_repo.dart';
+import 'features/My rents/bloc/my_rents_bloc.dart';
 
 
 void main() async{
@@ -69,6 +70,7 @@ void main() async{
   final recommendedRepo=RecommendedRepo(apiClient: apiClient);
   final searchSystemRepo=SearchRepo(apiClient: apiClient);
   final myRentsRepo=RentsRepo(apiClient: apiClient);
+  final myHousesRepo=MyHousesRepo(apiClient: apiClient);
 
   StripeService.init(apiClient);
   runApp(
@@ -90,6 +92,7 @@ void main() async{
         BlocProvider(create: (_)=>RecommendedBloc(repo: recommendedRepo)),
         BlocProvider(create: (_)=>SearchBloc(repo: searchSystemRepo)),
         BlocProvider(create: (_)=>RentsBloc(repo: myRentsRepo)),
+        BlocProvider(create: (_)=>MyHousesBloc(repo: myHousesRepo))
       ],
       child: myApp(isLoggedIn: token != null, role: role ?? 'TENANT'),
     ),

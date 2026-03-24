@@ -7,8 +7,8 @@ import '../Add_house/Screen/add_house_screen.dart';
 import '../Home/Bloc/home_screen/home_screen_bloc.dart';
 import '../Home/Bloc/home_screen/home_screen_event.dart';
 import '../Home/Screen/HomeScreen.dart';
-import '../Home/Screen/my_houses_screen.dart';
-import '../My houses/Screens/my_rents_screen.dart';
+import '../My houses/Screen/my_houses_screen.dart';
+import '../My rents/Screens/my_rents_screen.dart';
 
 class BottomNavigator extends StatefulWidget {
   final String role;

@@ -6,8 +6,15 @@ class OpenDefaultApp {
       throw Exception("Targeted URL not found, $url");
     }
   }
-  static Future<void> openInstagram() async{
-    final Uri url=Uri.parse("https://www.instagram.com/_ppprrraaatttiiikkk_/");
+  static Future<void> openGit() async{
+    final Uri url=Uri.parse("https://github.com/Pratik-Kattel");
+    if(!await launchUrl(url,mode: LaunchMode.externalApplication)){
+      throw Exception("Targeted URL not found, $url");
+    }
+  }
+
+  static Future<void> openLinkedin() async{
+    final Uri url=Uri.parse("https://www.linkedin.com/in/pratik-kattel-281a71326/");
     if(!await launchUrl(url,mode: LaunchMode.externalApplication)){
       throw Exception("Targeted URL not found, $url");
     }

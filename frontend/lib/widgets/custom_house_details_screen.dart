@@ -9,9 +9,9 @@ import 'package:frontend/services/get_user_data.dart';
 import 'package:frontend/services/stripe_service.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/custom_button.dart';
-import '../features/My houses/bloc/my_rents_bloc.dart';
-import '../features/My houses/bloc/my_rents_event.dart';
-import '../features/My houses/bloc/my_rents_state.dart';
+import '../features/My rents/bloc/my_rents_bloc.dart';
+import '../features/My rents/bloc/my_rents_event.dart';
+import '../features/My rents/bloc/my_rents_state.dart';
 import 'custom_snackbar.dart';
 import '../features/Review and ratings/Model/review_model.dart';
 import '../features/Review and ratings/bloc/reviews_bloc.dart';
@@ -340,6 +340,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                               ),
                             ),
                           ),
+                          ?role=="TENANT"?
                           BlocConsumer<WishlistBloc, WishlistState>(
                             listener: (context, state) {
                               if (state.message != null) {
@@ -401,7 +402,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                 ),
                               );
                             },
-                          ),
+                          ):null,
                         ],
                       ),
                     ),

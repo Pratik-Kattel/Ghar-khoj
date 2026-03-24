@@ -65,35 +65,27 @@ class ContactUsInfoScreen extends StatelessWidget {
                       }
                   ),
                   SvgIcons.icons(
-                      pathname: 'Assets/Images/Facebook.svg',
+                      pathname: 'Assets/Images/github.svg',
                       height: 35,
                       width: 35,
                       onTap: (){
-                        OpenDefaultApp.openFacebook();
+                        OpenDefaultApp.openGit();
                       }
                   ),
                   SvgIcons.icons(
-                      pathname: 'Assets/Images/Facebook.svg',
+                      pathname: 'Assets/Images/linkedin.svg',
                       height: 35,
                       width: 35,
                       onTap: (){
-                        OpenDefaultApp.openFacebook();
+                        OpenDefaultApp.openLinkedin();
                       }
                   ),
                   SvgIcons.icons(
-                      pathname: 'Assets/Images/Facebook.svg',
+                      pathname: 'Assets/Images/phone.svg',
                       height: 35,
                       width: 35,
                       onTap: (){
-                        OpenDefaultApp.openFacebook();
-                      }
-                  ),
-                  SvgIcons.icons(
-                      pathname: 'Assets/Images/Facebook.svg',
-                      height: 35,
-                      width: 35,
-                      onTap: (){
-                        OpenDefaultApp.openFacebook();
+                        OpenDefaultApp.openPhone();
                       }
                   ),
                 ],
