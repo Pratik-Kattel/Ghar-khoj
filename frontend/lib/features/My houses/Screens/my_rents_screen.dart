@@ -40,7 +40,7 @@ class _MyRentsScreenState extends State<MyRentsScreen> {
         ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new, color: Colors.black, size: 18),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pushNamed(context, '/bottomNavigator')
         ),
       ),
       body: BlocConsumer<RentsBloc, RentsState>(

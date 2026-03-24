@@ -25,7 +25,18 @@ class RentsBloc extends Bloc<RentsEvent, RentsState> {
       emit(state.copyWith(isLoading: true, error: null, message: null));
       try {
         final rents = await repo.getRents();
-        emit(state.copyWith(isLoading: false, rents: rents));
+        final now = DateTime.now();
+        final activeRents = rents.where((rent) {
+          if (rent.end_date.isEmpty) return true;
+          try {
+            final endDate = DateTime.parse(rent.end_date);
+            return endDate.isAfter(now);
+          } catch (_) {
+            return true;
+          }
+        }).toList();
+
+        emit(state.copyWith(isLoading: false, rents: activeRents));
       } catch (e) {
         emit(state.copyWith(isLoading: false, error: e.toString()));
       }

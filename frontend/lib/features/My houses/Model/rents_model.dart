@@ -46,8 +46,8 @@ class RentsModel {
       place: place,
       status: json["status"] ?? "PENDING",
       createdAt: json["created_at"] ?? "",
-      start_date: json["start_date"] ?? "",
-      end_date: json["end_date"] ?? ""
+      start_date: json["startDate"] ?? json["start_date"] ?? "",
+      end_date: json["endDate"] ?? json["end_date"] ?? "",
     );
   }
 
