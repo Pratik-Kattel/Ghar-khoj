@@ -28,8 +28,8 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   void initState() {
-    final apiClient=ApiClient(baseUrl: ApiEndpoints.baseUrl);
-    final getUserDataRepo=GetUserDataRepo(apiClient);
+    final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
+    final getUserDataRepo = GetUserDataRepo(apiClient);
     super.initState();
     final homeState = context.read<HomeScreenBloc>().state;
     context.read<ProfilePageBloc>().add(
@@ -53,18 +53,19 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<void> _fetchUserEmail() async{
-  final fetchedEmail= await GetUserDataRepo.getUserEmail();
-   setState(() {
-     email=fetchedEmail;
-   });
+  Future<void> _fetchUserEmail() async {
+    final fetchedEmail = await GetUserDataRepo.getUserEmail();
+    setState(() {
+      email = fetchedEmail;
+    });
   }
-  Future<void> _fetchUserName(GetUserDataRepo getUserDataRepo) async{
-    final getUsername=GetUserName(getUserDataRepo:getUserDataRepo);
-  final fetchedName= await getUsername.getuserName();
-  setState(() {
-    name=fetchedName;
-  });
+
+  Future<void> _fetchUserName(GetUserDataRepo getUserDataRepo) async {
+    final getUsername = GetUserName(getUserDataRepo: getUserDataRepo);
+    final fetchedName = await getUsername.getuserName();
+    setState(() {
+      name = fetchedName;
+    });
   }
 
   @override
@@ -83,7 +84,10 @@ class SettingsScreenState extends State<SettingsScreen> {
             }
             if (state.justUpdatedPic) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text("Profile picture updated!"), backgroundColor: Colors.green),
+                SnackBar(
+                  content: Text("Profile picture updated!"),
+                  backgroundColor: Colors.green,
+                ),
               );
             }
           },
@@ -104,7 +108,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ),
                 SizedBox(height: 18.h),
 
-                // ── Profile Picture ──
                 GestureDetector(
                   onTap: _pickAndUploadImage,
                   child: Stack(
@@ -120,17 +123,19 @@ class SettingsScreenState extends State<SettingsScreen> {
                             : state.profilePicUrl != null
                             ? NetworkImage(state.profilePicUrl!)
                             : null,
-                        child: state.profilePicFile == null && state.profilePicUrl == null
+                        child:
+                            state.profilePicFile == null &&
+                                state.profilePicUrl == null
                             ? Text(
-                          name != null && name!.isNotEmpty
-                              ? name![0].toUpperCase()
-                              : ".",
-                          style: TextStyle(
-                            fontSize: 40.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        )
+                                name != null && name!.isNotEmpty
+                                    ? name![0].toUpperCase()
+                                    : ".",
+                                style: TextStyle(
+                                  fontSize: 40.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              )
                             : null,
                       ),
                       Positioned(
@@ -190,6 +195,15 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ),
                 SizedBox(height: 15.h),
                 CustomListTile.listTile(
+                  icon: Icons.password,
+                  title: "Change Password",
+                  trailing: Icons.arrow_forward_ios,
+                  onTap: () {
+                    Navigator.pushNamed(context, '/forgotPassword');
+                  },
+                ),
+                SizedBox(height: 15.h),
+                CustomListTile.listTile(
                   onTap: () {
                     showDialog(
                       context: context,
@@ -206,13 +220,14 @@ class SettingsScreenState extends State<SettingsScreen> {
                             child: Text(
                               "Sure want to logout?",
                               style: TextStyle(
-                                  fontSize: 18.sp, color: Colors.black),
+                                fontSize: 18.sp,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
                           actions: [
                             Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextButton(
                                   onPressed: () async {
@@ -222,8 +237,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                                   child: Text(
                                     "Yes",
                                     style: TextStyle(
-                                        color: AppColors.redColor,
-                                        fontSize: 16.sp),
+                                      color: AppColors.redColor,
+                                      fontSize: 16.sp,
+                                    ),
                                   ),
                                 ),
                                 TextButton(
@@ -233,8 +249,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                                   child: Text(
                                     "No",
                                     style: TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 16.sp),
+                                      color: AppColors.primary,
+                                      fontSize: 16.sp,
+                                    ),
                                   ),
                                 ),
                               ],
