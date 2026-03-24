@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { env } from "../config/env";
 import pool from "../config/db";
 import cuid from 'cuid';
-
+import { sendRentalConfirmationToLandlord } from "../utils/mailer";
 
 const stripe=new Stripe(env.stripeSecretKey!);
 export const createPaymentIntentService=async(amount:number,currency:string,houseID:string,email:string,startDate:string,endDate:string)=>{
@@ -27,13 +27,14 @@ if(paymentIntent.status!="succeeded"){
     throw new Error("Payment unsuccessful");
 }
  const userResult = await pool.query(
-    "SELECT user_id FROM users WHERE email = $1",
+    "SELECT user_id,name FROM users WHERE email = $1",
     [email]
   );
   if (userResult.rows.length === 0) {
     throw new Error("User not found");
   }
   const tenantId = userResult.rows[0].user_id;
+  const tenantName=userResult.rows[0].name;
 
   // Check if already rented
   const existing = await pool.query(
@@ -59,6 +60,26 @@ if(paymentIntent.status!="succeeded"){
      VALUES ($1, $2, $3, $4, 'CARD', 'SUCCESS')`,
     [paymentId, bookingId, tenantId, paymentIntent.amount / 100]
   );
+  const houseResult = await pool.query(
+    `SELECT h.title, h.landlord_email, u.name AS landlord_name
+     FROM houses h
+     JOIN users u ON u.email = h.landlord_email
+     WHERE h.house_id = $1`,
+    [houseID]
+  );
+
+  if (houseResult.rows.length > 0) {
+    const { title, landlord_email, landlord_name } = houseResult.rows[0];
+    sendRentalConfirmationToLandlord(
+      landlord_email,
+      landlord_name,
+      tenantName,
+      title,
+      startDate,
+      endDate,
+      paymentIntent.amount / 100
+    ).catch(err => console.error("Landlord email failed:", err));
+  }
 
   return { message: "Payment successful and house rented", alreadyRented: false };
 };

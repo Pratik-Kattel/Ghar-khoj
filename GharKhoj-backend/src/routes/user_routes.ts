@@ -17,6 +17,7 @@ import { getMyHousesController } from "../controllers/my_houses_controller";
 import { changeLandlordController } from "../controllers/assign_landlord_controller";
 import { uploadProfilePicController,getProfilePicController } from "../controllers/upload_profilepic_controller";
 import { confirmPaymentController,createPaymentIntentController,getBookingStatusController } from "../controllers/payment_controller";
+import { updateHouseController,deleteHouseController } from "../controllers/upload_house_controller";
 
 const router=express.Router();
 
@@ -49,5 +50,7 @@ router.get("/getProfilePic/:email", getProfilePicController);
 router.post("/createPaymentIntent", createPaymentIntentController);
 router.post("/confirmPayment", confirmPaymentController);
 router.get("/getBookingStatus/:houseId", getBookingStatusController);
+router.post("/updateHouse", updateHouseController);
+router.delete("/deleteHouse/:houseId", deleteHouseController);
 
 export default router;
