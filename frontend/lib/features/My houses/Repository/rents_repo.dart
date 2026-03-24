@@ -61,4 +61,12 @@ class RentsRepo {
     if (kDebugMode) print("Parsed ${parsed.length} rents");
     return parsed;
   }
+  Future<Map<String, dynamic>?> getBookingStatus(String houseId) async {
+    try {
+      final res = await apiClient.get("${ApiEndpoints.getBookingStatus}/$houseId");
+      return res as Map<String, dynamic>?;
+    } catch (e) {
+      return null;
+    }
+  }
 }

@@ -30,5 +30,27 @@ class RentsBloc extends Bloc<RentsEvent, RentsState> {
         emit(state.copyWith(isLoading: false, error: e.toString()));
       }
     });
+    on<ResetBookingStatus>((event, emit) {
+      emit(state.copyWith(
+        isBooked: false,
+        clearBookedDates: true,
+      ));
+    });
+    on<CheckBookingStatus>((event, emit) async {
+      try {
+        final result = await repo.getBookingStatus(event.houseId);
+        if (result != null && result['startDate'] != null) {
+          emit(state.copyWith(
+            isBooked: true,
+            bookedStartDate: result['startDate'],
+            bookedEndDate: result['endDate'],
+          ));
+        } else {
+          emit(state.copyWith(isBooked: false));
+        }
+      } catch (e) {
+        emit(state.copyWith(isBooked: false));
+      }
+    });
   }
 }

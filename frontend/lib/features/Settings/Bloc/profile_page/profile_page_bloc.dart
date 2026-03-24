@@ -68,7 +68,9 @@ class ProfilePageBloc extends Bloc<ProfilePageEvent, ProfilePageState> {
         emit(state.copyWith(
           isUploadingPic: false,
           profilePicUrl: profilePicUrl,
+          justUpdatedPic: true
         ));
+        emit(state.copyWith(justUpdatedPic: false));
       } catch (e) {
         if (kDebugMode) print(e.toString());
         emit(state.copyWith(

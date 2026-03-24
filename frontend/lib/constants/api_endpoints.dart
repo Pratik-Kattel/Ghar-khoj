@@ -29,4 +29,5 @@ class ApiEndpoints{
   static String getProfilePic = "$baseUrl/getProfilePic";
   static String createPaymentIntent = "$baseUrl/createPaymentIntent";
   static String confirmPayment = "$baseUrl/confirmPayment";
+  static String getBookingStatus = "$baseUrl/getBookingStatus";
 }

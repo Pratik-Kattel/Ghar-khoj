@@ -25,7 +25,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
-  final countryController = TextEditingController();
+  final countryController = TextEditingController(text: "Nepal");
   final placeController = TextEditingController();
 
   final FocusNode titleFocus = FocusNode();
@@ -124,14 +124,13 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
               countryController.clear();
               placeController.clear();
 
-              // Reset the focus nodes (optional)
+
               titleFocus.unfocus();
               descriptionFocus.unfocus();
               priceFocus.unfocus();
               countryFocus.unfocus();
               placeFocus.unfocus();
 
-              // Reset bloc to initial state
               context.read<HouseUploadBloc>().add(HouseResetState());
             }
           },
@@ -336,6 +335,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
                       contentPadding: 20,
                       iconPadding: 17,
                       hintText: "Enter Country",
+                      readonly: true,
                       borderColor: countryFocus.hasFocus
                           ? AppColors.primary
                           : AppColors.grey,

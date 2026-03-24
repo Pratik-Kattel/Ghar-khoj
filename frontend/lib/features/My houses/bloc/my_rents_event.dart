@@ -10,3 +10,9 @@ class AddToRents extends RentsEvent {
 }
 
 class FetchRents extends RentsEvent {}
+
+class CheckBookingStatus extends RentsEvent {
+  final String houseId;
+  CheckBookingStatus({required this.houseId});
+}
+class ResetBookingStatus extends RentsEvent {}

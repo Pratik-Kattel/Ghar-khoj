@@ -81,12 +81,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                 ),
               );
             }
-            if (!state.isUploadingPic && state.profilePicUrl != null) {
+            if (state.justUpdatedPic) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text("Profile picture updated!"),
-                  backgroundColor: Colors.green,
-                ),
+                SnackBar(content: Text("Profile picture updated!"), backgroundColor: Colors.green),
               );
             }
           },

@@ -11,6 +11,7 @@ class ProfilePageState extends Equatable {
   final File? profilePicFile;
   final String? profilePicUrl;
   final bool isUploadingPic;
+  final bool justUpdatedPic;
 
   const ProfilePageState({
     this.name = " ",
@@ -22,6 +23,7 @@ class ProfilePageState extends Equatable {
     this.profilePicFile,
     this.profilePicUrl,
     this.isUploadingPic = false,
+    this.justUpdatedPic = false,
   });
 
   ProfilePageState copyWith({
@@ -34,6 +36,7 @@ class ProfilePageState extends Equatable {
     File? profilePicFile,
     String? profilePicUrl,
     bool? isUploadingPic,
+    bool ?justUpdatedPic,
   }) {
     return ProfilePageState(
       name: name ?? this.name,
@@ -45,6 +48,7 @@ class ProfilePageState extends Equatable {
       profilePicFile: profilePicFile ?? this.profilePicFile,
       profilePicUrl: profilePicUrl ?? this.profilePicUrl,
       isUploadingPic: isUploadingPic ?? this.isUploadingPic,
+      justUpdatedPic: justUpdatedPic ?? this.justUpdatedPic
     );
   }
 
@@ -59,5 +63,6 @@ class ProfilePageState extends Equatable {
     profilePicFile,
     profilePicUrl,
     isUploadingPic,
+    justUpdatedPic
   ];
 }

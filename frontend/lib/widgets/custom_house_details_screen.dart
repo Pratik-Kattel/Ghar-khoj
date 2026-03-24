@@ -39,6 +39,7 @@ class CustomHouseDetailScreen extends StatefulWidget {
     required this.longitude,
     required this.description,
   });
+
   @override
   State<CustomHouseDetailScreen> createState() =>
       _CustomHouseDetailScreenState();
@@ -46,6 +47,7 @@ class CustomHouseDetailScreen extends StatefulWidget {
 
 class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
   String? role;
+
   @override
   void initState() {
     super.initState();
@@ -57,17 +59,17 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
     context.read<ReviewBloc>().add(FetchAverageRating(houseId: widget.houseId));
     context.read<ReviewBloc>().add(FetchReviews(houseId: widget.houseId));
     context.read<ReviewBloc>().add(CheckReviewStatus(houseId: widget.houseId));
+    context.read<RentsBloc>().add(ResetBookingStatus());
+    context.read<RentsBloc>().add(CheckBookingStatus(houseId: widget.houseId));
     _getUserRole();
   }
 
-  Future<String?> _getUserRole()async{
-    final fetchedRole=await GetUserDataRepo.getUserRole();
+  Future<String?> _getUserRole() async {
+    final fetchedRole = await GetUserDataRepo.getUserRole();
     setState(() {
-      role=fetchedRole;
+      role = fetchedRole;
     });
   }
-
-
 
   void _showAddReviewDialog(BuildContext context) {
     int selectedRating = 0;
@@ -600,18 +602,19 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                                 color: Colors.black,
                               ),
                             ),
-                            if(role=='TENANT')
-                            if (!state.hasReviewed)
-                              TextButton(
-                                onPressed: () => _showAddReviewDialog(context),
-                                child: Text(
-                                  "Add Review",
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    color: AppColors.primary,
+                            if (role == 'TENANT')
+                              if (!state.hasReviewed)
+                                TextButton(
+                                  onPressed: () =>
+                                      _showAddReviewDialog(context),
+                                  child: Text(
+                                    "Add Review",
+                                    style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: AppColors.primary,
+                                    ),
                                   ),
                                 ),
-                              ),
                             if (state.hasReviewed)
                               Padding(
                                 padding: EdgeInsets.only(right: 8.w),
@@ -691,79 +694,165 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: role==null ?
-          SizedBox(
-            height: 80.h,
-            child: CircularProgressIndicator(),
-          )
-      : role=='TENANT'?
-           Container(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, -2)),
-          ],
-        ),
-        child: BlocConsumer<RentsBloc, RentsState>(
-          listener: (context, state) {
-            if (state.message != null) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(state.message!),
-                backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
-              ));
-            }
-            if (state.error != null) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(state.error!),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 2),
-              ));
-            }
-          },
-          builder: (context, state) {
-            return CustomButton.button(
-              texts: state.isAdding ? "Processing..." : "Rent Now",
-              onPressed: state.isAdding
-                  ? null
-                  : () async {
-                print("Rent button clicked");
-                final result = await _showDatePickerDialog(context);
-                if (result == null) return;
+      bottomNavigationBar: role == null
+          ? SizedBox(height: 80.h, child: CircularProgressIndicator())
+          : role == 'TENANT'
+          ? Container(
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, -2),
+                  ),
+                ],
+              ),
+              child: BlocConsumer<RentsBloc, RentsState>(
+                listener: (context, state) {
+                  if (state.message != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.message!),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                  if (state.error != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(state.error!),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                },
+                builder: (context, state) {
+                  if (state.isBooked) {
+                    String formatDate(String? raw) {
+                      if (raw == null) return '';
+                      try {
+                        final dt = DateTime.parse(raw);
+                        const months = [
+                          'Jan',
+                          'Feb',
+                          'Mar',
+                          'Apr',
+                          'May',
+                          'Jun',
+                          'Jul',
+                          'Aug',
+                          'Sep',
+                          'Oct',
+                          'Nov',
+                          'Dec',
+                        ];
+                        return '${months[dt.month - 1]} ${dt.day}, ${dt.year}';
+                      } catch (_) {
+                        return raw;
+                      }
+                    }
 
-                final startDate = result['startDate']!;
-                final endDate = result['endDate']!;
-                final totalAmount = result['totalAmount']!;
+                    return Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        vertical: 14.h,
+                        horizontal: 16.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.orange[50],
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: Colors.orange[300]!),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.event_busy,
+                            color: Colors.orange[700],
+                            size: 22,
+                          ),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Already Booked",
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.orange[800],
+                                  ),
+                                ),
+                                SizedBox(height: 2.h),
+                                Text(
+                                  "${formatDate(state.bookedStartDate)} → ${formatDate(state.bookedEndDate)}",
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                    color: Colors.orange[700],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
 
-                final paymentSuccess = await StripeService.instance.makePayment(
-                  houseId: widget.houseId,
-                  amount: double.parse(totalAmount),
-                  startDate: startDate,
-                  endDate: endDate,
-                );
-
-                if (paymentSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Payment successful! House rented."),
-                    backgroundColor: Colors.green,
-                  ));
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text("Payment cancelled or failed."),
-                    backgroundColor: Colors.red,
-                  ));
-                }
-              },
-              context: context,
-              padding: EdgeInsets.symmetric(vertical: 14.h),
-            );
-          },
-        ),
-      ) : null,
+                  return CustomButton.button(
+                    texts: state.isAdding ? "Processing..." : "Rent Now",
+                    onPressed: state.isAdding
+                        ? null
+                        : () async {
+                            final result = await _showDatePickerDialog(context);
+                            if (result == null) return;
+                            final startDate = result['startDate']!;
+                            final endDate = result['endDate']!;
+                            final totalAmount = result['totalAmount']!;
+                            final paymentSuccess = await StripeService.instance
+                                .makePayment(
+                                  houseId: widget.houseId,
+                                  amount: double.parse(totalAmount),
+                                  startDate: startDate,
+                                  endDate: endDate,
+                                );
+                            if (paymentSuccess) {
+                              context.read<RentsBloc>().add(CheckBookingStatus(houseId: widget.houseId));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "Payment successful! House rented.",
+                                  ),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("Payment cancelled or failed."),
+                                  backgroundColor: Colors.red,
+                                ),
+                              );
+                            }
+                          },
+                    context: context,
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                  );
+                },
+              ),
+            )
+          : null,
     );
   }
-  Future<Map<String, String>?> _showDatePickerDialog(BuildContext context) async {
+
+  Future<Map<String, String>?> _showDatePickerDialog(
+    BuildContext context,
+  ) async {
     DateTime? startDate;
     DateTime? endDate;
 
@@ -782,11 +871,13 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
 
             return AlertDialog(
               title: Center(
-                child:
-                Text(
-                "Select Rental Period",
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w700),
-              ),
+                child: Text(
+                  "Select Rental Period",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
               ),
               content: SizedBox(
                 width: 400.w,
@@ -795,8 +886,13 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Start Date
-                    Text("Start Date",
-                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                    Text(
+                      "Start Date",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     SizedBox(height: 8.h),
                     GestureDetector(
                       onTap: () async {
@@ -809,7 +905,8 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                         if (picked != null) {
                           setDialogState(() {
                             startDate = picked;
-                            if (endDate != null && endDate!.isBefore(startDate!)) {
+                            if (endDate != null &&
+                                endDate!.isBefore(startDate!)) {
                               endDate = null;
                             }
                           });
@@ -817,7 +914,10 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       },
                       child: Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 12.h,
+                        ),
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColors.primary),
                           borderRadius: BorderRadius.circular(8.r),
@@ -828,7 +928,9 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                               : "${startDate!.day}/${startDate!.month}/${startDate!.year}",
                           style: TextStyle(
                             fontSize: 14.sp,
-                            color: startDate == null ? Colors.grey : Colors.black,
+                            color: startDate == null
+                                ? Colors.grey
+                                : Colors.black,
                           ),
                         ),
                       ),
@@ -836,14 +938,21 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                     SizedBox(height: 16.h),
 
                     // End Date
-                    Text("End Date",
-                        style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
+                    Text(
+                      "End Date",
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     SizedBox(height: 8.h),
                     GestureDetector(
                       onTap: () async {
                         if (startDate == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("Please select start date first")),
+                            SnackBar(
+                              content: Text("Please select start date first"),
+                            ),
                           );
                           return;
                         }
@@ -859,7 +968,10 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       },
                       child: Container(
                         width: double.infinity,
-                        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 12.w,
+                          vertical: 12.h,
+                        ),
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColors.primary),
                           borderRadius: BorderRadius.circular(8.r),
@@ -888,8 +1000,13 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("$months month(s)",
-                                style: TextStyle(fontSize: 14.sp, color: Colors.black)),
+                            Text(
+                              "$months month(s)",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.black,
+                              ),
+                            ),
                             Text(
                               "\$${totalAmount.toStringAsFixed(0)}",
                               style: TextStyle(
@@ -914,22 +1031,29 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       child: Text("Cancel"),
                     ),
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                      ),
                       onPressed: startDate == null || endDate == null
                           ? null
                           : () {
-                        final fmt = (DateTime d) =>
-                        "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
-                        final months =
-                        ((endDate!.difference(startDate!).inDays) / 30).ceil();
-                        final total = months * widget.price;
-                        Navigator.pop(dialogContext, {
-                          "startDate": fmt(startDate!),
-                          "endDate": fmt(endDate!),
-                          "totalAmount": total.toString(),
-                        });
-                      },
-                      child: Text("Confirm", style: TextStyle(color: Colors.white)),
+                              final fmt = (DateTime d) =>
+                                  "${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}";
+                              final months =
+                                  ((endDate!.difference(startDate!).inDays) /
+                                          30)
+                                      .ceil();
+                              final total = months * widget.price;
+                              Navigator.pop(dialogContext, {
+                                "startDate": fmt(startDate!),
+                                "endDate": fmt(endDate!),
+                                "totalAmount": total.toString(),
+                              });
+                            },
+                      child: Text(
+                        "Confirm",
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
