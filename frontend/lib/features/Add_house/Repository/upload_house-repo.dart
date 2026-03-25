@@ -40,7 +40,7 @@ class HouseRepository {
         ),
       });
 
-      // Post request
+
       final res = await apiClient.post(ApiEndpoints.uploadHouse, formData);
 
       return HouseUploadResponse.fromJson(res);

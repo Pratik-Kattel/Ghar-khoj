@@ -37,7 +37,7 @@ class StripeService {
       final clientSecret = res["clientsecret"];
       if (clientSecret == null) throw Exception("No client secret");
 
-      // Step 2 — Init payment sheet
+
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: clientSecret,

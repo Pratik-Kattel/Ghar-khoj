@@ -10,11 +10,6 @@ class BoardingScreenBuilder{
       'image':BoardingScreenData.welcome
     },
     {
-      'title':ConstantTexts.boardingScreen2Title,
-      'description':ConstantTexts.boardingScreen2Description,
-      'image':BoardingScreenData.chatSystemImage
-    },
-    {
       'title':ConstantTexts.boardingScreen3Title,
       'description':ConstantTexts.boardingScreen3Description,
       'image':BoardingScreenData.findHomeImage

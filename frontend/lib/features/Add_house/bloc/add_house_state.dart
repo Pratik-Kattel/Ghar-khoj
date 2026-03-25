@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 class HouseUploadState {
@@ -51,6 +50,7 @@ class HouseUploadState {
       message: message ?? this.message,
     );
   }
+
   factory HouseUploadState.initial() {
     return HouseUploadState(
       imageFile: null,
@@ -66,6 +66,3 @@ class HouseUploadState {
     );
   }
 }
-
-
-

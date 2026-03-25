@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:frontend/services/open_default_app.dart';
 import 'package:frontend/themes/app_themes.dart';
 import 'package:frontend/widgets/svg_Icons.dart';
@@ -25,7 +24,6 @@ class ContactUsInfoScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Logo / title
               Icon(Icons.home_filled, size: 60.sp, color: AppColors.primary),
               SizedBox(height: 15.h),
               Text(
@@ -38,19 +36,19 @@ class ContactUsInfoScreen extends StatelessWidget {
               ),
               SizedBox(height: 40.h),
 
-              // Phone
+
               contactRow(Icons.phone, "9827388429"),
               SizedBox(height: 20.h),
 
-              // Email
+
               contactRow(Icons.email_outlined, "gharkhojrental@gmail.com"),
               SizedBox(height: 20.h),
 
-              // Instagram
+
               contactRow(Icons.camera_alt_outlined, "@gharKhoj"),
               SizedBox(height: 20.h),
 
-              // Location
+
               contactRow(Icons.location_on_outlined, "Sundar Dulari, Nepal"),
               SizedBox(height: 50.h),
               Row(
@@ -92,7 +90,7 @@ class ContactUsInfoScreen extends StatelessWidget {
               ),
               Spacer(),
 
-              // Footer
+
               Text(
                 "© 2026 Ghar Khoj®. All rights reserved.",
                 style: TextStyle(fontSize: 14.sp, color: AppColors.grey),

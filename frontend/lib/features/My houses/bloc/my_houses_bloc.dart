@@ -22,7 +22,7 @@ class MyHousesBloc extends Bloc<MyHousesEvent, MyHousesState> {
       try {
         await repo.updateHouse(event.houseId, event.title, event.description, event.price);
         emit(state.copyWith(isUpdating: false, message: "House updated successfully"));
-        add(FetchMyHouses()); // refresh
+        add(FetchMyHouses());
       } catch (e) {
         emit(state.copyWith(isUpdating: false, error: e.toString()));
       }
@@ -33,7 +33,7 @@ class MyHousesBloc extends Bloc<MyHousesEvent, MyHousesState> {
       try {
         await repo.deleteHouse(event.houseId);
         emit(state.copyWith(isDeleting: false, message: "House deleted successfully"));
-        add(FetchMyHouses()); // refresh
+        add(FetchMyHouses());
       } catch (e) {
         emit(state.copyWith(isDeleting: false, error: e.toString()));
       }

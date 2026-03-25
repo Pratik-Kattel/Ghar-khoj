@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-
 import '../../Model/nearby_house_model.dart';
 
 class NearbyHouseState extends Equatable {

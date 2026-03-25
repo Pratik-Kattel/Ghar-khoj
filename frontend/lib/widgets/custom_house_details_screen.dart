@@ -938,7 +938,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                     ),
                     SizedBox(height: 16.h),
 
-                    // End Date
+
                     Text(
                       "End Date",
                       style: TextStyle(
@@ -989,7 +989,7 @@ class _CustomHouseDetailScreenState extends State<CustomHouseDetailScreen> {
                       ),
                     ),
 
-                    // Total
+
                     if (startDate != null && endDate != null) ...[
                       SizedBox(height: 16.h),
                       Container(

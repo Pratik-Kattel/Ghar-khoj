@@ -1,4 +1,3 @@
-// lib/features/house/bloc/house_upload_event.dart
 import 'dart:io';
 
 sealed class HouseUploadEvent {}

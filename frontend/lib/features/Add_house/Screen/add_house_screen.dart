@@ -149,7 +149,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
                   ),
                   SizedBox(height: 25.h),
 
-                  // Image Picker
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: GestureDetector(
@@ -239,7 +239,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
 
                   SizedBox(height: 25.h),
 
-                  // Title
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomTextField.textField(
@@ -267,7 +267,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
 
                   SizedBox(height: 25.h),
 
-                  // Description
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomTextField.textField(
@@ -295,7 +295,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
 
                   SizedBox(height: 25.h),
 
-                  // Price
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomTextField.textField(
@@ -327,7 +327,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
 
                   SizedBox(height: 25.h),
 
-                  // Country
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomTextField.textField(
@@ -356,7 +356,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
 
                   SizedBox(height: 25.h),
 
-                  // Place
+
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 12.w),
                     child: CustomTextField.textField(
@@ -384,7 +384,7 @@ class _UploadHouseScreenState extends State<UploadHouseScreen> {
 
                   SizedBox(height: 30.h),
 
-                  // Upload Button
+
                   CustomButton.button(
                     padding: EdgeInsets.symmetric(horizontal: 0.25.sw),
                     texts: "Upload House",
