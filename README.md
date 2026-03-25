@@ -7,8 +7,8 @@ Built with **Flutter** and **Node.js**, it provides a seamless experience to sea
 
 ## ✨ Features
 
-- 🔍 **Search & Filter** – Find homes by location, price range, or type  
-- 📍 **Map Integration** – View nearby properties on an interactive map  
+- 🔍 **Search & Filter** – Find homes by price range, or type.  
+- 📍 **Nearby properties** – View nearby properties using geo-locator.
 - 🏡 **Add Listings** – Owners can post their properties with images and details  
 - ❤️ **Favorites** – Save your favorite homes for quick access  
 - 👤 **Secure Authentication** – Signup and login with OTP verification  
