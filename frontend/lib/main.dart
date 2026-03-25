@@ -36,11 +36,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import './features/auth/bloc/login/login_bloc.dart';
 import './features/auth/Repository/login/login_repo.dart';
 import 'features/Add_house/Repository/upload_house-repo.dart';
+import 'features/Admin Dashboard/Repository/admin_dashboard_repo.dart';
+import 'features/Admin Dashboard/Screen/admin_dashboard_screen.dart';
+import 'features/Admin Dashboard/bloc/admin_dashboard_bloc.dart';
 import 'features/Home/Bloc/fetch_nearby_house/nearby_house_bloc.dart';
 import 'features/Home/Bloc/home_screen/home_screen_bloc.dart';
 import 'features/Home/Bloc/hot_deals/hot_deals_bloc.dart';
 import 'features/Home/Repository/hotdeals_repo.dart';
 import 'features/Home/Repository/nearby_house_repo.dart';
+import 'features/Landlord Request/Repository/landlord_request_repo.dart';
+import 'features/Landlord Request/bloc/landlord_request_bloc.dart';
 import 'features/My rents/Repository/rents_repo.dart';
 import 'features/My rents/bloc/my_rents_bloc.dart';
 
@@ -71,6 +76,8 @@ void main() async{
   final searchSystemRepo=SearchRepo(apiClient: apiClient);
   final myRentsRepo=RentsRepo(apiClient: apiClient);
   final myHousesRepo=MyHousesRepo(apiClient: apiClient);
+  final landlordRequestRepo = LandlordRequestRepo(apiClient: apiClient);
+  final adminDashboardRepo = AdminDashboardRepo(apiClient: apiClient);
 
   StripeService.init(apiClient);
   runApp(
@@ -92,7 +99,9 @@ void main() async{
         BlocProvider(create: (_)=>RecommendedBloc(repo: recommendedRepo)),
         BlocProvider(create: (_)=>SearchBloc(repo: searchSystemRepo)),
         BlocProvider(create: (_)=>RentsBloc(repo: myRentsRepo)),
-        BlocProvider(create: (_)=>MyHousesBloc(repo: myHousesRepo))
+        BlocProvider(create: (_)=>MyHousesBloc(repo: myHousesRepo)),
+        BlocProvider(create: (_) => LandlordRequestBloc(repo: landlordRequestRepo)),
+        BlocProvider(create: (_) => AdminDashboardBloc(repo: adminDashboardRepo)),
       ],
       child: myApp(isLoggedIn: token != null, role: role ?? 'TENANT'),
     ),
@@ -114,8 +123,8 @@ class myApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppThemes.purpleTheme,
         routes: AppRoutes.routes,
-        home: isLoggedIn
-          ? BottomNavigator(role: role)
+       home: isLoggedIn
+      ? BottomNavigator(role: role ?? 'TENANT')
             : SplashScreen(),
       ),
     );

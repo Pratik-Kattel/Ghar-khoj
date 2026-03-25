@@ -51,10 +51,15 @@ dependencies:
   flutter_stripe: ^12.4.0
   url_launcher: ^6.3.2
   flutter_svg: ^2.2.4
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "Assets/Images/gharkhoj.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -89,6 +94,7 @@ flutter:
      - Assets/Images/github.svg
      - Assets/Images/linkedin.svg
      - Assets/Images/phone.svg
+     - Assets/Images/gharkhoj.png
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

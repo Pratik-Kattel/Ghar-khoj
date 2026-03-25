@@ -4,6 +4,7 @@ import 'package:frontend/features/Settings/Screen/profile_page.dart';
 import 'package:frontend/features/WishList/screens/wishlist_screen.dart';
 import 'package:frontend/services/get_user_data.dart';
 import '../Add_house/Screen/add_house_screen.dart';
+import '../Admin Dashboard/Screen/admin_dashboard_screen.dart';
 import '../Home/Bloc/home_screen/home_screen_bloc.dart';
 import '../Home/Bloc/home_screen/home_screen_event.dart';
 import '../Home/Screen/HomeScreen.dart';
@@ -48,23 +49,38 @@ class BottomNavigatorstate extends State<BottomNavigator> {
     MyHousesScreen(),
     SettingsScreen(),
   ];
-
+  List<Widget> get _adminPages=>[
+    AdminDashboardScreen(),
+    SettingsScreen(),
+  ];
+  @override
   @override
   Widget build(BuildContext context) {
-    final isLandlord = widget.role == 'LANDLORD';
-    final pages = isLandlord ? _landlordPages : _tenantPages;
+    final isLandlord = _role == 'LANDLORD';
+    final isAdmin = _role == 'ADMIN';
+
+    final pages = isAdmin
+        ? _adminPages
+        : isLandlord
+        ? _landlordPages
+        : _tenantPages;
+
+    final safeIndex = _currentIndex < pages.length ? _currentIndex : 0;
 
     return Scaffold(
-      body: pages[_currentIndex],
+      body: pages[safeIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: isLandlord
+        currentIndex: safeIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: isAdmin
+            ? const [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard), label: "Dashboard"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.person), label: "Profile"),
+        ]
+            : isLandlord
             ? const [
           BottomNavigationBarItem(
               icon: Icon(Icons.add_home), label: "Add House"),
@@ -86,4 +102,4 @@ class BottomNavigatorstate extends State<BottomNavigator> {
       ),
     );
   }
-}
+  }

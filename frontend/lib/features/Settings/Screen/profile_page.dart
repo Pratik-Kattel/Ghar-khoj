@@ -11,6 +11,7 @@ import 'package:frontend/widgets/custom_list_tile.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../Home/Bloc/home_screen/home_screen_bloc.dart';
+import '../../Landlord Request/Screen/become_landlord_screen.dart';
 import '../../Settings/Bloc/profile_page/profile_page_bloc.dart';
 import '../../Settings/Bloc/profile_page/profile_page_event.dart';
 import '../../Settings/Bloc/profile_page/profile_page_state.dart';
@@ -26,13 +27,16 @@ class SettingsScreenState extends State<SettingsScreen> {
   final ImagePicker _picker = ImagePicker();
   String? email;
   String? name;
+  String? role;
 
   @override
   void initState() {
     final apiClient = ApiClient(baseUrl: ApiEndpoints.baseUrl);
     final getUserDataRepo = GetUserDataRepo(apiClient);
     super.initState();
-    final homeState = context.read<HomeScreenBloc>().state;
+    final homeState = context
+        .read<HomeScreenBloc>()
+        .state;
     context.read<ProfilePageBloc>().add(
       EmailChangedEvent(email: homeState.email ?? ""),
     );
@@ -40,7 +44,7 @@ class SettingsScreenState extends State<SettingsScreen> {
       NameChangedEvent(name: homeState.name ?? ""),
     );
     context.read<ProfilePageBloc>().add(FetchProfilePicEvent());
-    _fetchUserEmail();
+    _loadUserInfo();
     _fetchUserName(getUserDataRepo);
   }
 
@@ -54,10 +58,12 @@ class SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
-  Future<void> _fetchUserEmail() async {
-    final fetchedEmail = await GetUserDataRepo.getUserEmail();
+  Future<void> _loadUserInfo() async {
+    role = await GetUserDataRepo.getUserRole();
+    email = await GetUserDataRepo.getUserEmail();
     setState(() {
-      email = fetchedEmail;
+      role = role;
+      email = email;
     });
   }
 
@@ -73,23 +79,26 @@ class SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: BlocConsumer<ProfilePageBloc, ProfilePageState>(
+        child:
+        SingleChildScrollView(
+          child:
+        BlocConsumer<ProfilePageBloc, ProfilePageState>(
           listener: (context, state) {
             if (state.generalError != null) {
               ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.buildSnackBar(
-                  message: state.generalError!,
-                  bgColor: Colors.red,
-                  context: context
+                    message: state.generalError!,
+                    bgColor: Colors.red,
+                    context: context
                 ),
               );
             }
             if (state.justUpdatedPic) {
               ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar.buildSnackBar(
-                  message: "Profile picture updated!",
-                 bgColor: Colors.green,
-                  context: context
+                    message: "Profile picture updated!",
+                    bgColor: Colors.green,
+                    context: context
                 ),
               );
             }
@@ -127,18 +136,18 @@ class SettingsScreenState extends State<SettingsScreen> {
                             ? NetworkImage(state.profilePicUrl!)
                             : null,
                         child:
-                            state.profilePicFile == null &&
-                                state.profilePicUrl == null
+                        state.profilePicFile == null &&
+                            state.profilePicUrl == null
                             ? Text(
-                                name != null && name!.isNotEmpty
-                                    ? name![0].toUpperCase()
-                                    : ".",
-                                style: TextStyle(
-                                  fontSize: 40.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                ),
-                              )
+                          name != null && name!.isNotEmpty
+                              ? name![0].toUpperCase()
+                              : ".",
+                          style: TextStyle(
+                            fontSize: 40.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        )
                             : null,
                       ),
                       Positioned(
@@ -196,6 +205,13 @@ class SettingsScreenState extends State<SettingsScreen> {
                   title: "Contact Us",
                   trailing: Icons.arrow_forward_ios_outlined,
                 ),
+                if (role == 'TENANT')
+                  CustomListTile.listTile(icon: Icons.person_2_outlined,
+                      title: "Want to become a landlord?",
+                      trailing: Icons.arrow_forward_ios,
+                      onTap: () {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BecomeLandlordScreen()));
+                      }),
                 SizedBox(height: 15.h),
                 CustomListTile.listTile(
                   icon: Icons.password,
@@ -274,6 +290,7 @@ class SettingsScreenState extends State<SettingsScreen> {
           },
         ),
       ),
+      )
     );
   }
 }

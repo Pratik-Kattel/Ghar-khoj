@@ -39,6 +39,7 @@ class GetUserDataRepo {
     if (token == null) return null;
     Map<String, dynamic> jwtPayload = Jwt.parseJwt(token);
     if (kDebugMode) print("Role: ${jwtPayload['role']}");
+    print("FULL JWT PAYLOAD: $jwtPayload");
     return jwtPayload['role'] as String?;
   }
 
