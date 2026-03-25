@@ -18,6 +18,7 @@ import { changeLandlordController } from "../controllers/assign_landlord_control
 import { uploadProfilePicController,getProfilePicController } from "../controllers/upload_profilepic_controller";
 import { confirmPaymentController,createPaymentIntentController,getBookingStatusController } from "../controllers/payment_controller";
 import { updateHouseController,deleteHouseController } from "../controllers/upload_house_controller";
+import {createLandlordRequestController,getAllLandlordRequestsController,approveLandlordRequestController,rejectLandlordRequestController} from "../controllers/landlord_request_controller";
 
 const router=express.Router();
 
@@ -52,5 +53,9 @@ router.post("/confirmPayment", confirmPaymentController);
 router.get("/getBookingStatus/:houseId", getBookingStatusController);
 router.post("/updateHouse", updateHouseController);
 router.delete("/deleteHouse/:houseId", deleteHouseController);
+router.post("/landlord/request",upload.single("citizenship"),createLandlordRequestController);
+router.get("/admin/landlordRequests",getAllLandlordRequestsController);
+router.post("/admin/approveLandlord/:id",approveLandlordRequestController);
+router.post("/admin/rejectLandlord/:id",rejectLandlordRequestController);
 
 export default router;
