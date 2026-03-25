@@ -19,6 +19,7 @@ import { uploadProfilePicController,getProfilePicController } from "../controlle
 import { confirmPaymentController,createPaymentIntentController,getBookingStatusController } from "../controllers/payment_controller";
 import { updateHouseController,deleteHouseController } from "../controllers/upload_house_controller";
 import {createLandlordRequestController,getAllLandlordRequestsController,approveLandlordRequestController,rejectLandlordRequestController} from "../controllers/landlord_request_controller";
+import { createAdminController } from "../controllers/create_admin_controller";
 
 const router=express.Router();
 
@@ -57,5 +58,6 @@ router.post("/landlord/request",upload.single("citizenship"),createLandlordReque
 router.get("/admin/landlordRequests",getAllLandlordRequestsController);
 router.post("/admin/approveLandlord/:id",approveLandlordRequestController);
 router.post("/admin/rejectLandlord/:id",rejectLandlordRequestController);
+router.post("/admin/create", createAdminController);
 
 export default router;

@@ -1,9 +1,15 @@
 import pool from "../config/db";
-import { sendEmail } from "../utils/mailer";
+import {sendLandlordRequestNotificationToAdmin,sendLandlordApprovalEmail,sendLandlordRejectionEmail,} from "../utils/mailer";
 
 
-export const createLandlordRequestService = async (email: string, file: any) => {
- 
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "gharkhojrental@gmail.com";
+
+
+
+export const createLandlordRequestService = async (
+  email: string,
+  file: any
+) => {
   const userRes = await pool.query(
     "SELECT user_id, role, name FROM users WHERE email=$1",
     [email]
@@ -19,9 +25,8 @@ export const createLandlordRequestService = async (email: string, file: any) => 
     throw new Error("Already a landlord");
   }
 
-  
   const existing = await pool.query(
-    "SELECT * FROM landlordrequests WHERE userId=$1",
+    'SELECT * FROM landlord_requests WHERE "userId"=$1',
     [user.user_id]
   );
 
@@ -29,9 +34,8 @@ export const createLandlordRequestService = async (email: string, file: any) => 
     throw new Error("Request already submitted");
   }
 
-  
   const requestRes = await pool.query(
-    `INSERT INTO landlordrequests (id, userId, status, createdAt)
+    `INSERT INTO landlord_requests (id, "userId", status, "createdAt")
      VALUES (gen_random_uuid(), $1, 'PENDING', NOW())
      RETURNING *`,
     [user.user_id]
@@ -39,26 +43,35 @@ export const createLandlordRequestService = async (email: string, file: any) => 
 
   const request = requestRes.rows[0];
 
-  
   await pool.query(
-    `INSERT INTO landlorddocuments (id, requestId, docName, docPath)
+    `INSERT INTO landlord_documents (id, "requestId", "docName", "docPath")
      VALUES (gen_random_uuid(), $1, 'citizenship', $2)`,
     [request.id, file.filename]
   );
 
+  const submittedAt = new Date(request.createdAt).toLocaleString("en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+
+  await sendLandlordRequestNotificationToAdmin(
+    ADMIN_EMAIL,
+    user.name,
+    email,
+    submittedAt
+  );
+
   return request;
 };
-
-
 
 export const getAllLandlordRequestsService = async () => {
   const res = await pool.query(`
     SELECT lr.id, lr.status, lr."createdAt",
            u.name, u.email,
            ld."docPath"
-    FROM landlordrequests lr
+    FROM landlord_requests lr
     JOIN users u ON lr."userId" = u.user_id
-    LEFT JOIN landlorddocuments ld ON ld."requestId" = lr.id
+    LEFT JOIN landlord_documents ld ON ld."requestId" = lr.id
     ORDER BY lr."createdAt" DESC
   `);
 
@@ -66,15 +79,14 @@ export const getAllLandlordRequestsService = async () => {
 };
 
 
-
 export const approveLandlordRequestService = async (requestId: string) => {
-
-  const res = await pool.query(`
-    SELECT lr.id, u.email, u.name, u.user_id
-    FROM landlordrequests lr
-    JOIN users u ON lr."userId" = u.user_id
-    WHERE lr.id=$1
-  `, [requestId]);
+  const res = await pool.query(
+    `SELECT lr.id, u.email, u.name, u.user_id
+     FROM landlord_requests lr
+     JOIN users u ON lr."userId" = u.user_id
+     WHERE lr.id=$1`,
+    [requestId]
+  );
 
   if (res.rows.length === 0) {
     throw new Error("Request not found");
@@ -82,20 +94,17 @@ export const approveLandlordRequestService = async (requestId: string) => {
 
   const data = res.rows[0];
 
+  await pool.query("UPDATE users SET role='LANDLORD' WHERE user_id=$1", [
+    data.user_id,
+  ]);
 
   await pool.query(
-    "UPDATE users SET role='LANDLORD' WHERE user_id=$1",
-    [data.user_id]
-  );
-
-
-  await pool.query(
-    "UPDATE landlordrequests SET status='APPROVED' WHERE id=$1",
+    "UPDATE landlord_requests SET status='APPROVED' WHERE id=$1",
     [requestId]
   );
 
 
-  await sendEmail(data.email, "APPROVED", data.name);
+  await sendLandlordApprovalEmail(data.email, data.name);
 
   return { message: "Approved successfully" };
 };
@@ -103,12 +112,13 @@ export const approveLandlordRequestService = async (requestId: string) => {
 
 
 export const rejectLandlordRequestService = async (requestId: string) => {
-  const res = await pool.query(`
-    SELECT lr.id, u.email, u.name
-    FROM landlordrequests lr
-    JOIN users u ON lr."userId" = u.user_id
-    WHERE lr.id=$1
-  `, [requestId]);
+  const res = await pool.query(
+    `SELECT lr.id, u.email, u.name
+     FROM landlord_requests lr
+     JOIN users u ON lr."userId" = u.user_id
+     WHERE lr.id=$1`,
+    [requestId]
+  );
 
   if (res.rows.length === 0) {
     throw new Error("Request not found");
@@ -117,11 +127,12 @@ export const rejectLandlordRequestService = async (requestId: string) => {
   const data = res.rows[0];
 
   await pool.query(
-    "UPDATE landlordrequests SET status='REJECTED' WHERE id=$1",
+    "UPDATE landlord_requests SET status='REJECTED' WHERE id=$1",
     [requestId]
   );
 
-  await sendEmail(data.email, "REJECTED", data.name);
+
+  await sendLandlordRejectionEmail(data.email, data.name);
 
   return { message: "Rejected successfully" };
 };

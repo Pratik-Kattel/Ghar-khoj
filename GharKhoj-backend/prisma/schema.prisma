@@ -75,10 +75,11 @@ model LandlordRequests {
   userId    String                @unique
   status    LandlordRequestStatus @default(PENDING) // CHANGE: status for verification
   createdAt DateTime              @default(now())
-  updatedAt DateTime              @updatedAt
+  updatedAt DateTime              @updatedAt @default(now())
 
   user      Users                  @relation(fields: [userId], references: [id])
   documents LandlordDocuments[]
+   @@map("landlord_requests")  
 }
 
 
@@ -90,6 +91,8 @@ model LandlordDocuments {
   docName   String
   docPath   String
   request   LandlordRequests  @relation(fields: [requestId], references: [id])
+
+    @@map("landlord_documents")  
 }
 
 /// USER LOCATIONS

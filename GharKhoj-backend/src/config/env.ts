@@ -7,7 +7,9 @@ export const env={
     DATABASE_URL:process.env.DATABASE_URL!,
     ACCESS_TOKEN_SECRET:process.env.ACCESS_TOKEN_SECRET! || "",
     stripePublishableKey:process.env.stripePublishableKey,
-    stripeSecretKey:process.env.stripeSecretKey
+    stripeSecretKey:process.env.stripeSecretKey,
+    ADMIN_EMAIL:process.env.ADMIN_EMAIL,
+    ADMIN_SECRET_KEY:process.env.ADMIN_SECRET_KEY
 
 };
 
