@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontend/constants/stripe_keys.dart';
 import 'package:frontend/features/Add_house/bloc/add_house_bloc.dart';
 import 'package:frontend/features/Bottom_Navigator/Bottom_Navigator.dart';
-import 'package:frontend/features/My%20houses/Repository/my_houses_repo.dart';
+import 'package:frontend/features/My houses/Repository/my_houses_repo.dart';
 import 'package:frontend/features/My%20houses/bloc/my_houses_bloc.dart';
 import 'package:frontend/features/Recommendation/Repository/recommendation_repo.dart';
 import 'package:frontend/features/Recommendation/bloc/recommendation_bloc.dart';
@@ -15,6 +15,7 @@ import 'package:frontend/features/Search%20Property/Repository/search_repo.dart'
 import 'package:frontend/features/Search%20Property/bloc/search_property_bloc.dart';
 import 'package:frontend/features/Settings/Bloc/profile_page/profile_page_bloc.dart';
 import 'package:frontend/features/Settings/Repository/change_user_name_repo.dart';
+import 'package:frontend/features/Theme_switch/cubit/theme_switch_cubit.dart';
 import 'package:frontend/features/WishList/Repository/wishlist_repo.dart';
 import 'package:frontend/features/WishList/bloc/wishlist_bloc.dart';
 import 'package:frontend/features/auth/Repository/forgot_password/change_password_repo.dart';
@@ -37,7 +38,6 @@ import './features/auth/bloc/login/login_bloc.dart';
 import './features/auth/Repository/login/login_repo.dart';
 import 'features/Add_house/Repository/upload_house-repo.dart';
 import 'features/Admin Dashboard/Repository/admin_dashboard_repo.dart';
-import 'features/Admin Dashboard/Screen/admin_dashboard_screen.dart';
 import 'features/Admin Dashboard/bloc/admin_dashboard_bloc.dart';
 import 'features/Home/Bloc/fetch_nearby_house/nearby_house_bloc.dart';
 import 'features/Home/Bloc/home_screen/home_screen_bloc.dart';
@@ -102,6 +102,7 @@ void main() async{
         BlocProvider(create: (_)=>MyHousesBloc(repo: myHousesRepo)),
         BlocProvider(create: (_) => LandlordRequestBloc(repo: landlordRequestRepo)),
         BlocProvider(create: (_) => AdminDashboardBloc(repo: adminDashboardRepo)),
+        BlocProvider(create: (_)=>ThemeSwitchCubit())
       ],
       child: myApp(isLoggedIn: token != null, role: role ?? 'TENANT'),
     ),
@@ -124,7 +125,7 @@ class myApp extends StatelessWidget {
         theme: AppThemes.purpleTheme,
         routes: AppRoutes.routes,
        home: isLoggedIn
-      ? BottomNavigator(role: role ?? 'TENANT')
+      ? BottomNavigator(role: role )
             : SplashScreen(),
       ),
     );
