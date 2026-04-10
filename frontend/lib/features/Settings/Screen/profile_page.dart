@@ -15,6 +15,7 @@ import '../../Landlord Request/Screen/become_landlord_screen.dart';
 import '../../Settings/Bloc/profile_page/profile_page_bloc.dart';
 import '../../Settings/Bloc/profile_page/profile_page_event.dart';
 import '../../Settings/Bloc/profile_page/profile_page_state.dart';
+import '../../Theme_switch/cubit/theme_switch_cubit.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -221,6 +222,19 @@ class SettingsScreenState extends State<SettingsScreen> {
                     Navigator.pushNamed(context, '/forgotPassword');
                   },
                 ),
+                // SizedBox(
+                //   height: 15.h,
+                // ),
+                // BlocBuilder<ThemeSwitchCubit, bool>(
+                //   builder: (context, isDarkMode) {
+                //     return SwitchListTile(
+                //       title: Text('Dark Mode'),
+                //       secondary: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
+                //       value: isDarkMode,
+                //       onChanged: (_) => context.read<ThemeSwitchCubit>().toggleTheme(),
+                //     );
+                //   },
+                // ),
                 SizedBox(height: 15.h),
                 CustomListTile.listTile(
                   onTap: () {

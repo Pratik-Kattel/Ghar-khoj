@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frontend/features/Admin%20Dashboard/Screen/admin_house_screen.dart';
 import 'package:frontend/features/Settings/Screen/profile_page.dart';
 import 'package:frontend/features/WishList/screens/wishlist_screen.dart';
 import 'package:frontend/services/get_user_data.dart';
@@ -51,7 +52,9 @@ class BottomNavigatorstate extends State<BottomNavigator> {
   ];
   List<Widget> get _adminPages=>[
     AdminDashboardScreen(),
+    AdminHousesScreen(),
     SettingsScreen(),
+
   ];
   @override
   @override
@@ -77,8 +80,10 @@ class BottomNavigatorstate extends State<BottomNavigator> {
             ? const [
           BottomNavigationBarItem(
               icon: Icon(Icons.dashboard), label: "Dashboard"),
+          BottomNavigationBarItem(icon: Icon(Icons.house),label: "Manage Houses"),
           BottomNavigationBarItem(
               icon: Icon(Icons.person), label: "Profile"),
+
         ]
             : isLandlord
             ? const [

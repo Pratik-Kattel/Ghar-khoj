@@ -11,7 +11,7 @@ class ThemeSwitchCubit extends Cubit<bool>{
     emit(prefs.getBool('isDarkMode') ?? false);
   }
 
-  Future<void> _toggleTheme() async{
+  Future<void> toggleTheme() async{
     final prefs=await SharedPreferences.getInstance();
     final newValue=!state;
     await prefs.setBool('isDarkMode', newValue);

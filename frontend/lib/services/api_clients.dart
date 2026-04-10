@@ -2,11 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import '../services/Custom_Exception.dart';
 
+// A client class to handle network requests using the Dio package.
 class ApiClient {
   final String baseUrl;
   late Dio dio;
 
   ApiClient({required this.baseUrl}) {
+    // Initialize Dio with base configuration.
     dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
@@ -17,6 +19,7 @@ class ApiClient {
     );
   }
 
+  // Performs a POST request to the specified endpoint.
   Future<Map<String, dynamic>> post(
     String endpoint,
     dynamic body,
@@ -45,6 +48,7 @@ class ApiClient {
       }
       if (e.response != null) {
         final validationError = e.response?.data;
+        // Handle validation errors specifically if they exist.
         if (validationError != null && validationError['errors'] != null) {
           throw ValidationException(validationError);
         }
@@ -56,6 +60,7 @@ class ApiClient {
           message: message,
         );
       }
+      // Handle cases where no response was received (e.g., connection issues).
       throw DioException(
         requestOptions: e.requestOptions,
         type: DioExceptionType.connectionError,
@@ -64,10 +69,12 @@ class ApiClient {
     }
   }
 
+  // Sets the authorization token for subsequent requests.
   void setToken(String token) {
     dio.options.headers["Authorization"] = "Bearer $token";
   }
 
+  // Performs a GET request to the specified endpoint.
   Future<dynamic> get(String endpoint) async {
     try {
       final res = await dio.get(endpoint);
@@ -105,6 +112,8 @@ class ApiClient {
       );
     }
   }
+
+  // Performs a DELETE request to the specified endpoint.
   Future<Map<String, dynamic>> delete(String endpoint) async {
     try {
       final res = await dio.delete(endpoint);

@@ -51,4 +51,24 @@ class AppThemes{
       )
     );
 }
+  static final darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    colorScheme: ColorScheme.dark(
+      primary: Color(0xFF7C3AED),
+      secondary: Color(0xFF9F67FF),
+      surface: Color(0xFF1E1E2E),
+      background: Color(0xFF121212),
+    ),
+    scaffoldBackgroundColor: Color(0xFF121212),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Color(0xFF1E1E2E),
+      foregroundColor: Colors.white,
+      elevation: 0,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFF1E1E2E),
+      selectedItemColor: Color(0xFF7C3AED),
+      unselectedItemColor: Colors.grey,
+    ),
+  );
 }

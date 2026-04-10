@@ -1,6 +1,6 @@
 class ApiEndpoints{
-  static final String baseUrl="http://10.107.83.104:5000/api/gharKhoj";
-  static final String imageBaseUrl = "http://10.107.83.104:5000/uploads/";
+  static final String baseUrl="http://10.0.2.2:5000/api/gharKhoj";
+  static final String imageBaseUrl = "http://10.0.2.2:5000/uploads/";
   // static const String imageBaseUrl = "http://10.0.2.2:5000/uploads/";
   static  String login="$baseUrl/loginUser";
   static String register="$baseUrl/registerUser";
@@ -36,4 +36,6 @@ class ApiEndpoints{
   static String adminLandlordRequests = "$baseUrl/admin/landlordRequests";
   static String approveLandlord = "$baseUrl/admin/approveLandlord";
   static String rejectLandlord = "$baseUrl/admin/rejectLandlord";
+  static const String adminAllHouses = '/admin/allHouses';
+  static const String adminDeleteHouse = '/admin/deleteHouse';
 }

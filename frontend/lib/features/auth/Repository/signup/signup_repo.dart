@@ -19,9 +19,9 @@ class SignupRepository {
       "name": name,
       "password": password,
     });
-    if (res.containsKey('errors')) {
-      throw SignupException(SignupErrorModel.fromJson(res));
-    }
+    // if (res.containsKey('errors')) {
+    //   throw SignupException(SignupErrorModel.fromJson(res));
+    // }
     return SignupResponseModel.fromJson(res);
   }
 }
